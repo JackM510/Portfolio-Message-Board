@@ -9,5 +9,6 @@
 </head>
 <body>
     <h1>Message Board</h1>
+    <a href="login.php">Login</a>
 </body>
 </html>

@@ -1,0 +1,33 @@
+-- Create the database
+CREATE DATABASE messageboard CHARACTER SET=utf8mb4;
+
+-- Create user 'jackm' for localhost
+CREATE USER 'jackm'@'localhost' IDENTIFIED BY 'example';
+GRANT ALL ON messageboard.* TO 'jackm'@'localhost';
+
+-- Create user 'jackm' for 127.0.0.1
+CREATE USER 'jackm'@'127.0.0.1' IDENTIFIED BY 'example';
+GRANT ALL ON messageboard.* TO 'jackm'@'127.0.0.1';
+
+-- Create 'users' table
+CREATE TABLE users (
+  user_id INTEGER NOT NULL AUTO_INCREMENT,
+  first_name VARCHAR(50) NOT NULL,
+  last_name VARCHAR(50) NOT NULL,
+  email VARCHAR(254) UNIQUE NOT NULL,
+  password VARCHAR(255) NOT NULL,
+  role ENUM('admin', 'user') DEFAULT 'user' NOT NULL,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY(user_id)
+) ENGINE = InnoDB DEFAULT CHARSET=utf8;
+
+-- Create 'profiles' table
+CREATE TABLE profiles (
+  profile_id INTEGER NOT NULL AUTO_INCREMENT,
+  user_id INTEGER NOT NULL,
+  bio VARCHAR(500),
+  profile_picture VARCHAR(255),
+  location VARCHAR(100),
+  PRIMARY KEY(profile_id),
+  FOREIGN KEY(user_id) REFERENCES users(user_id)
+) ENGINE = InnoDB DEFAULT CHARSET=utf8;

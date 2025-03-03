@@ -9,5 +9,6 @@
 </head>
 <body>
     <h1>Profile</h1>
+    <a href="index.php">Message Board</a>
 </body>
 </html>
