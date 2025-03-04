@@ -2,11 +2,11 @@
 CREATE DATABASE messageboard CHARACTER SET=utf8mb4;
 
 -- Create user 'jackm' for localhost
-CREATE USER 'jackm'@'localhost' IDENTIFIED BY 'example';
+CREATE USER 'jackm'@'localhost' IDENTIFIED BY 'password3490';
 GRANT ALL ON messageboard.* TO 'jackm'@'localhost';
 
 -- Create user 'jackm' for 127.0.0.1
-CREATE USER 'jackm'@'127.0.0.1' IDENTIFIED BY 'example';
+CREATE USER 'jackm'@'127.0.0.1' IDENTIFIED BY 'password3490';
 GRANT ALL ON messageboard.* TO 'jackm'@'127.0.0.1';
 
 -- Create 'users' table

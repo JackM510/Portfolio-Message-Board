@@ -12,7 +12,7 @@
     <?php require_once "nav.php"; ?>
 
     <div class="container" id="login-form">
-        <div class="d-flex justify-content-center mt-3 mb-3">
+        <div class="d-flex justify-content-center mt-5 mb-3">
             <h2>Login</h2>
         </div>
         <div class="d-flex justify-content-center">
