@@ -4,12 +4,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <?php require_once "head.php" ?>
+    <?php require_once "head.php"; ?>
     <title>Messageboard - Login</title>
 </head>
 <body>
     
-    <a href="index.php">Messageboard</a></br>
+    <?php require_once "nav.php"; ?>
 
     <div class="container">
         <h2>Login</h2>
