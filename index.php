@@ -1,5 +1,7 @@
 <?php
-
+// Logic to determine whether a user is logged in
+    // If logged in; can post and comment.
+    // Else can't comment or post
 ?>
 <!DOCTYPE html>
 <html lang="en">

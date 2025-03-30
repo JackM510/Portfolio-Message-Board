@@ -1,5 +1,21 @@
 <?php
+    session_start();
+    // If a user is already logged in
+    if (isset($_SESSION['name']) && isset($_SESSION['email'])) {
+        header("Location: index.php");
+        exit();
+    }
 
+    // Function to validate login credentials
+    if (isset($_POST['email']) && $_POST(['password'])) {
+
+    }
+
+
+    // Function to create a new user/profile
+    if (isset($_POST['first_name']) && isset($_POST['last_name']) && isset($_POST['email']) && isset($_POST['password'])) {
+
+    }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -59,8 +75,7 @@
             </form>
         </div>
         <div class="text-center mt-3" onclick="showLogin()" style="cursor:pointer;">Already have an account? Login</div>
-    </div>
-    
+    </div>  
     <script>
         function showSignUp() {
             document.getElementById("login-form").style.display = "none";
@@ -72,6 +87,5 @@
             document.getElementById("signup-form").style.display = "none";
         }
     </script>
-
 </body>
 </html>

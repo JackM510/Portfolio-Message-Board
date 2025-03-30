@@ -1,5 +1,5 @@
 <?php
-
+    //If user not logged in; redirect to login.php to login/signup
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -11,6 +11,5 @@
     <!-- Navbar -->
     <?php require_once "nav.php"; ?>
     <h1>Profile</h1>
-    <a href="index.php">Message Board</a>
 </body>
 </html>
