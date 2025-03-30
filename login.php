@@ -8,10 +8,10 @@
     <title>Messageboard - Login</title>
 </head>
 <body>
-    
+    <!-- Navbar -->
     <?php require_once "nav.php"; ?>
-
-    <div class="container" id="login-form">
+    <!-- Login form -->
+    <div class="container mt-5" id="login-form">
         <div class="d-flex justify-content-center mt-5 mb-3">
             <h2>Login</h2>
         </div>
@@ -32,8 +32,8 @@
         </div>
         <div class="text-center mt-3" onclick="showSignUp()" style="cursor:pointer;">Don't have an account? Sign Up</div>
     </div>
-    
-    <div class="container" id="signup-form" style="display:none;">
+    <!-- Signup form -->
+    <div class="container mt-5" id="signup-form" style="display:none;">
         <div class="d-flex justify-content-center mt-3 mb-3">
             <h2>Sign Up</h2>
         </div>
