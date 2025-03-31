@@ -9,12 +9,15 @@
     // Function to validate login credentials
     if (isset($_POST['email']) && $_POST(['password'])) {
 
+
+        // If login successful redirect to index.php
     }
 
 
     // Function to create a new user/profile
     if (isset($_POST['first_name']) && isset($_POST['last_name']) && isset($_POST['email']) && isset($_POST['password'])) {
 
+        // If signup successful redirect to profile.php
     }
 ?>
 <!DOCTYPE html>
