@@ -1,7 +1,5 @@
 <?php
     session_start(); // Start the session
-    $_SESSION['name'] = 'name';
-    $_SESSION['email'] = 'name';
     $isLoggedIn = isset($_SESSION['name']) && isset($_SESSION['email']); // Check login status
 ?>
 

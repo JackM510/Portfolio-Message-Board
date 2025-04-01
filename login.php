@@ -1,5 +1,7 @@
 <?php
     session_start();
+    require('connect_db.php');
+
     // If a user is already logged in
     if (isset($_SESSION['name']) && isset($_SESSION['email'])) {
         header("Location: index.php");
