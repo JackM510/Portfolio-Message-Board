@@ -1,6 +1,6 @@
 <?php
     session_start();
-    require('connect_db.php');
+    require('db_connection.php');
 
     // If a user is already logged in
     if (isset($_SESSION['name']) && isset($_SESSION['email'])) {
@@ -9,11 +9,44 @@
     }
 
     // Function to validate login credentials
-    if (isset($_POST['email']) && $_POST(['password'])) {
+    // Include database connection
+include 'db_connection.php'; // Update with your DB connection file
 
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
+    // Retrieve email and password from form
+    $email = $_POST['email'];
+    $password = $_POST['password'];
 
-        // If login successful redirect to index.php
+    try {
+        // Prepare SQL query to get user by email
+        $stmt = $pdo->prepare("SELECT * FROM users WHERE email = :email");
+        $stmt->bindParam(':email', $email, PDO::PARAM_STR);
+        $stmt->execute();
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($user) {
+            // Verify password
+            if (password_verify($password, $user['password'])) {
+                // Successful login: Set session variables
+                $_SESSION['user_id'] = $user['user_id'];
+                $_SESSION['first_name'] = $user['first_name'];
+                $_SESSION['role'] = $user['role'];
+
+                // Redirect to dashboard or another page
+                header("Location: dashboard.php");
+                exit();
+            } else {
+                // Password doesn't match
+                echo "Invalid password.";
+            }
+        } else {
+            // Email not found
+            echo "No user found with this email address.";
+        }
+    } catch (PDOException $e) {
+        echo "Error: " . $e->getMessage();
     }
+}
 
 
     // Function to create a new user/profile

@@ -21,6 +21,9 @@ CREATE TABLE users (
   PRIMARY KEY(user_id)
 ) ENGINE = InnoDB DEFAULT CHARSET=utf8;
 
+INSERT INTO `users` (`first_name`, `last_name`, `email`, `password`, `role`)
+VALUES ('Jack', 'M', 'jackm510@example.com', 'test123', 'admin');
+
 -- Create 'profiles' table
 CREATE TABLE profiles (
   profile_id INTEGER NOT NULL AUTO_INCREMENT,
