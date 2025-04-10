@@ -6,6 +6,9 @@
 
 <!-- Custom CSS -->
 <link href="css/nav.css" rel="stylesheet">
+<link href="css/index.css" rel="stylesheet">
+<link href="css/login.css" rel="stylesheet">
+<link href="css/profile.css" rel="stylesheet">
 
 <!-- Icon -->
 <link rel="icon" href="icon/forum2.png">

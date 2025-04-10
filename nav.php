@@ -1,6 +1,5 @@
 <?php
-    session_start(); // Start the session
-    $isLoggedIn = isset($_SESSION['name']) && isset($_SESSION['email']); // Check login status
+    $isLoggedIn = isset($_SESSION['user_id']) && isset($_SESSION['email']); // Check login status
 ?>
 
 <nav class="navbar navbar-expand-lg sticky-top bg-light shadow-lg">
@@ -22,8 +21,8 @@
                 <a id="avatarDropdown" class="navbar-brand nav-profile m-0 dropdown-toggle" href="#" data-bs-toggle="dropdown" aria-expanded="false">
                     <img src="icon/profile.png" alt="Profile icon" style="width:40px;">
                 </a>
-                <ul class="dropdown-menu" aria-labelledby="avatarDropdown">
-                    <li><a class="dropdown-item" href="edit-profile.php">Edit Profile</a></li>
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="avatarDropdown">
+                    <li><a class="dropdown-item" href="profile.php">View Profile</a></li>
                     <li><a class="dropdown-item" href="logout.php">Logout</a></li>
                 </ul>
             </div>

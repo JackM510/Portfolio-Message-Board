@@ -5,10 +5,6 @@ CREATE DATABASE messageboard CHARACTER SET=utf8mb4;
 CREATE USER 'jackm'@'localhost' IDENTIFIED BY 'password3490';
 GRANT ALL ON messageboard.* TO 'jackm'@'localhost';
 
--- Create user 'jackm' for 127.0.0.1
-CREATE USER 'jackm'@'127.0.0.1' IDENTIFIED BY 'password3490';
-GRANT ALL ON messageboard.* TO 'jackm'@'127.0.0.1';
-
 -- Create 'users' table
 CREATE TABLE users (
   user_id INTEGER NOT NULL AUTO_INCREMENT,
@@ -22,7 +18,7 @@ CREATE TABLE users (
 ) ENGINE = InnoDB DEFAULT CHARSET=utf8;
 
 INSERT INTO `users` (`first_name`, `last_name`, `email`, `password`, `role`)
-VALUES ('Jack', 'M', 'jackm510@example.com', 'test123', 'admin');
+VALUES ('Jack', 'Marshall', 'jackmashall@example.com', '$2y$10$Y6ld32Af8dtZmTWb0nwOPOKz2LJMOK/Py3yPBQovEopqiO8lmsN.a', 'admin');
 
 -- Create 'profiles' table
 CREATE TABLE profiles (
@@ -34,3 +30,6 @@ CREATE TABLE profiles (
   PRIMARY KEY(profile_id),
   FOREIGN KEY(user_id) REFERENCES users(user_id)
 ) ENGINE = InnoDB DEFAULT CHARSET=utf8;
+
+INSERT INTO `profiles` (`user_id`, `bio`, `profile_picture`, `location`)
+VALUES ('2', 'Creator of the Message Board application', 'uploads/jackm.png', 'VIC, Australia');

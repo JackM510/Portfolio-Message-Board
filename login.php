@@ -3,56 +3,81 @@
     require('db_connection.php');
 
     // If a user is already logged in
-    if (isset($_SESSION['name']) && isset($_SESSION['email'])) {
+    if (isset($_SESSION['user_id']) && isset($_SESSION['first_name'])) {
         header("Location: index.php");
         exit();
     }
 
     // Function to validate login credentials
     // Include database connection
-include 'db_connection.php'; // Update with your DB connection file
+    include 'db_connection.php'; // Update with your DB connection file
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
-    // Retrieve email and password from form
-    $email = $_POST['email'];
-    $password = $_POST['password'];
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
+        // Retrieve email and password from form
+        $email = $_POST['email'];
+        $password = $_POST['password'];
 
-    try {
-        // Prepare SQL query to get user by email
-        $stmt = $pdo->prepare("SELECT * FROM users WHERE email = :email");
-        $stmt->bindParam(':email', $email, PDO::PARAM_STR);
-        $stmt->execute();
-        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+        try {
+            // Prepare SQL query to get user by email
+            $stmt = $pdo->prepare("SELECT * FROM users WHERE email = :email");
+            $stmt->bindParam(':email', $email, PDO::PARAM_STR);
+            $stmt->execute();
+            $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        if ($user) {
-            // Verify password
-            if (password_verify($password, $user['password'])) {
-                // Successful login: Set session variables
-                $_SESSION['user_id'] = $user['user_id'];
-                $_SESSION['first_name'] = $user['first_name'];
-                $_SESSION['role'] = $user['role'];
+            if ($user) {
+                // Verify password
+                if (password_verify($password, $user['password'])) {
+                    // Successful login: Set session variables
+                    $_SESSION['user_id'] = $user['user_id'];
+                    $_SESSION['email'] = $user['email'];
 
-                // Redirect to dashboard or another page
-                header("Location: dashboard.php");
-                exit();
+                    // Redirect to dashboard or another page
+                    header("Location: index.php");
+                    exit();
+                } else {
+                    // Password doesn't match
+                    echo "Invalid password.";
+                }
             } else {
-                // Password doesn't match
-                echo "Invalid password.";
+                // Email not found
+                echo "No user found with this email address.";
             }
-        } else {
-            // Email not found
-            echo "No user found with this email address.";
+        } catch (PDOException $e) {
+            echo "Error: " . $e->getMessage();
         }
-    } catch (PDOException $e) {
-        echo "Error: " . $e->getMessage();
     }
-}
 
 
     // Function to create a new user/profile
-    if (isset($_POST['first_name']) && isset($_POST['last_name']) && isset($_POST['email']) && isset($_POST['password'])) {
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['signup'])) {
+        $first_name = $_POST['first_name'];
+        $last_name = $_POST['last_name'];
+        $email = $_POST['email'];
+        $password = $_POST['password']; // Plaintext password must be hashed prior to INSERT
+        $hashedPassword = password_hash($password, PASSWORD_DEFAULT); // Hash the password
 
-        // If signup successful redirect to profile.php
+        try {
+            $stmt = $pdo->prepare("INSERT INTO `users`(`first_name`, `last_name`, `email`, `password`) VALUES (:first_name, :last_name, :email, :password)");
+            $stmt->bindParam(':first_name', $first_name, PDO::PARAM_STR);
+            $stmt->bindParam(':last_name', $last_name, PDO::PARAM_STR);
+            $stmt->bindParam(':email', $email, PDO::PARAM_STR);
+            $stmt->bindParam(':password', $hashedPassword, PDO::PARAM_STR); // Store the hashed password
+            $stmt->execute();
+
+            // Need to set SESSION variables to reach profile.php
+
+            $stmt = $pdo->prepare("SELECT * FROM users WHERE email = :email");
+            $stmt->bindParam(':email', $email, PDO::PARAM_STR);
+            $stmt->execute();
+            $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            $_SESSION['user_id'] = $user['user_id'];
+            $_SESSION['first_name'] = $user['first_name'];
+
+            header("Location: profile.php");
+        } catch (PDOException $e) {
+            echo "Error: " . $e->getMessage();
+        }
     }
 ?>
 <!DOCTYPE html>
