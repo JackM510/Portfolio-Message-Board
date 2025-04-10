@@ -1,0 +1,16 @@
+
+#home-link {
+    color: black;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+#home-icon {
+    width: 30px;
+    margin-right: 5px;
+}
+
+.nav-profile:hover {
+    background-color: lightgrey;
+    border-radius: 1px;
+}
