@@ -3,7 +3,7 @@
     require_once('db_connection.php');
     require_once('utilities.php');
 
-    //If user not logged in; redirect to login.php to login/signup
+    // If user not logged in; redirect to login.php to login/signup
     if (isLoggedIn() === false) {
         header("Location: login.php");
     }
@@ -18,7 +18,7 @@
     $last_name = $user['last_name'] ?? 'User';
     $full_name = $first_name.' '.$last_name;
 
-    // Set profile details - get profile pic, bio, location etc.
+    // ######## Set profile details - get profile pic, bio, location etc.
     $stmt = $pdo->prepare("SELECT `bio`, `profile_picture`, `location` FROM `profiles` WHERE `user_id` = :user_id");
     $stmt->bindParam(':user_id', $_SESSION['user_id'], PDO::PARAM_INT);
     $stmt->execute();
@@ -28,6 +28,47 @@
     $bio = $profile['bio'] ?? 'Set a bio';
     $location = $profile['location'] ?? 'Set your location';
 
+    // ######### Update profile data through form
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        $full_name = $_POST["full_name"];
+        $location = $_POST["location"];
+        $bio = $_POST["bio"];
+    
+        // Update the users first and last name
+        // Need to split the first and last names......
+        $name_parts = explode(" ", trim($_POST['full_name']), 2);
+        $first_name = $name_parts[0]; // First name
+        $last_name = isset($name_parts[1]) ? $name_parts[1] : "";
+
+        $stmt = $pdo->prepare("UPDATE users SET first_name = :first, last_name = :last WHERE user_id = :uid");
+        $stmt->bindParam(':first', $first_name, PDO::PARAM_STR);
+        $stmt->bindParam(':last', $last_name, PDO::PARAM_STR);
+        $stmt->bindParam(':uid', $_SESSION['user_id'], PDO::PARAM_STR);
+        $stmt->execute();
+
+        // Update the users profile location and bio
+        $stmt = $pdo->prepare("UPDATE profiles SET location = :location, bio = :bio WHERE user_id = :uid");    
+        $stmt->bindParam(':location', $location, PDO::PARAM_STR);
+        $stmt->bindParam(':bio', $bio, PDO::PARAM_STR);
+        $stmt->bindParam(':uid', $_SESSION['user_id'], PDO::PARAM_STR);
+        $stmt->execute();
+    }
+
+    // ###### Create a new post and insert into mysql
+    if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["new-post"])) {
+        $post_content = $_POST["post_content"];
+    
+        // Insert post into database
+        $stmt = $pdo->prepare("INSERT INTO posts (user_id, post_text) VALUES (:uid, :post_text)");
+        $stmt->bindParam(':uid', $_SESSION['user_id'], PDO::PARAM_STR);
+        $stmt->bindParam(':post_text', $post_content, PDO::PARAM_STR);
+        $stmt->execute();
+    
+        echo "Post created successfully!";
+    }
+
+
+    
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -38,31 +79,73 @@
 <body>
     <!-- Navbar -->
     <?php require_once "nav.php"; ?>
-    <section class="container border mt-5">
-        <div id="profile-details" class="d-flex justify-content-center mt-5">
-            <img id="profile-picture" src="<?php echo htmlentities($profile_picture) ?>" style="width: 100px;"> 
-            
-            <div>
-                <div>   
-                    <h1 id="profile-name"><?php echo htmlentities($full_name) ?></h1>
-                    <span></span>
+    <section class="container w-50 mt-5">
+        <form id="profile-form" action="profile.php" method="POST">
+            <div id="profile-details-container" class="d-flex m-auto border mt-5">
+                <!-- Profile Picture -->
+                <div>
+                    <img id="profile-picture" src="<?php echo htmlentities($profile_picture) ?>"> 
                 </div>
-                <h4 id="profile-location"><?php echo htmlentities($location) ?></h4>
-                <p id="profile-bio"><?php echo htmlentities($bio) ?></p>
+                <!-- Profile Details -->
+                <div class="d-flex flex-column justify-content-center">
+                    <!-- Full Name -->
+                    <div class="mb-2">   
+                        <h1><input id="profile-name" type="text" name="full_name" value="<?php echo htmlentities($full_name); ?>" disabled></h1>
+                    </div>
+                    <!-- Location -->
+                    <div class="mb-2">
+                        <h4><input id="profile-location" type="text" name="location" value="<?php echo htmlentities($location); ?>" disabled></h4>
+                    </div>
+                    <!-- Bio -->
+                    <div>
+                        <p><textarea id="profile-bio" name="bio" disabled><?php echo htmlentities($bio); ?></textarea></p>
+                    </div>   
+                </div>
+                <!-- Edit icon -->
+                <div>
+                    <span id="edit-icon">
+                        <i class="bi bi-pencil"></i>
+                    </span>
+                </div>
             </div>
-        
-        </div>
-        <div id="profile-new-post" class="justify-content-center mt-5">
+        </form>
+        <div id="profile-new-post" class="mt-5">
             <!-- Section for a new post -->
-             <h2>Create a new post</h2>
-             <form action="profile.php" method="POST">
-                <textarea id="new-post" required></textarea>
-                <button class="btn btn-sm btn-primary" type="submit" name="post">Post</button>
+             <form action="profile.php" method="POST" class="d-flex flex-column justify-content-center w-75 m-auto">
+                <textarea id="new-post-textarea" class=" mb-2" name="post_content" placeholder="Create a new post" rows="3" required></textarea>
+                <button id="new-post-btn" class="btn btn-sm btn-primary" type="submit" name="new-post">Post</button>
              </form>
-             
+            <hr>
         </div>
-        <div id="profile-posts" class="d-flex justify-content-center mt-5">
-            <p>All users posts displayed here</p>
+        <div id="profile-posts" class="d-flex flex-column justify-content-center border mt-5">
+            <?php 
+                // ##### Display all posts from the user
+                $stmt = $pdo->prepare("SELECT * FROM posts WHERE user_id = :uid ORDER BY post_created DESC");
+                $stmt->bindParam(':uid', $_SESSION['user_id'], PDO::PARAM_STR);
+                $stmt->execute();
+
+                $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+                if ($posts) {
+                    foreach ($posts as $post) {
+                        echo('<div><p>'.htmlentities($post['post_text']).'</p>');
+                        echo('<p>'.htmlentities($post['post_created']).'</p></div>');
+
+                        if (!empty($post['post_picture'])) {
+                            echo "<img src='" . htmlspecialchars($post['post_picture']) . "' alt='Post Image' style='max-width:100px;'>";
+                        }
+
+                        
+
+                    }
+                } else {
+                    echo('<p>No Posts Available</p>');
+                }
+                        
+            
+            
+            
+            ?>
             <!-- List of posts by the user -->
 
             <!-- Display No posts if none made -->

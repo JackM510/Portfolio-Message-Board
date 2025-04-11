@@ -65,7 +65,6 @@
             $stmt->execute();
 
             // Need to set SESSION variables to reach profile.php
-
             $stmt = $pdo->prepare("SELECT * FROM users WHERE email = :email");
             $stmt->bindParam(':email', $email, PDO::PARAM_STR);
             $stmt->execute();
@@ -73,6 +72,17 @@
 
             $_SESSION['user_id'] = $user['user_id'];
             $_SESSION['first_name'] = $user['first_name'];
+
+            // Need to set generic profile details - NEW SECTION ADDED IN
+            $profile_picture_default = 'uploads/default.png';
+            $profile_location_default = 'Add a location';
+            $profile_bio_default = 'Add a bio';
+            $stmt = $pdo->prepare("INSERT INTO `profiles` (user_id, profile_picture, location, bio) VALUES (:uid, :profile_picture, :profile_location, :profile_bio)");
+            $stmt->bindParam(':uid', $_SESSION['user_id'], PDO::PARAM_STR);
+            $stmt->bindParam(':profile_picture', $profile_picture_default, PDO::PARAM_STR);
+            $stmt->bindParam(':profile_location', $profile_location_default, PDO::PARAM_STR);
+            $stmt->bindParam(':profile_bio', $profile_bio_default, PDO::PARAM_STR);
+            $stmt->execute();
 
             header("Location: profile.php");
         } catch (PDOException $e) {

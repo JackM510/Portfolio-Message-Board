@@ -1,3 +1,35 @@
-#profile-picture {
-    margin: 0 10px;
+/* Profile Details */
+#profile-details-container {
+    position: relative;
 }
+
+#profile-picture {
+    width: 150px;
+    height: auto;
+    margin: 0 20px 0 0;
+}
+
+#edit-icon {
+    color: black;
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+#edit-icon:hover {
+    background: lightgrey;
+}
+
+/* New Post */
+#new-post-textarea {
+    resize: none;
+}
+
+#new-post-btn {
+    width: 50px;
+    margin: 0 auto;
+}
+
+/* All users posts */

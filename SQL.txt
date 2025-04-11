@@ -18,13 +18,13 @@ CREATE TABLE users (
 ) ENGINE = InnoDB DEFAULT CHARSET=utf8;
 
 INSERT INTO `users` (`first_name`, `last_name`, `email`, `password`, `role`)
-VALUES ('Jack', 'Marshall', 'jackmashall@example.com', '$2y$10$Y6ld32Af8dtZmTWb0nwOPOKz2LJMOK/Py3yPBQovEopqiO8lmsN.a', 'admin');
+VALUES ('Jack', 'Marshall', 'jackmarshall@example.com', '$2y$10$Y6ld32Af8dtZmTWb0nwOPOKz2LJMOK/Py3yPBQovEopqiO8lmsN.a', 'admin');
 
 -- Create 'profiles' table
 CREATE TABLE profiles (
   profile_id INTEGER NOT NULL AUTO_INCREMENT,
   user_id INTEGER NOT NULL,
-  bio VARCHAR(500),
+  bio VARCHAR(255),
   profile_picture VARCHAR(255),
   location VARCHAR(100),
   PRIMARY KEY(profile_id),
@@ -32,4 +32,27 @@ CREATE TABLE profiles (
 ) ENGINE = InnoDB DEFAULT CHARSET=utf8;
 
 INSERT INTO `profiles` (`user_id`, `bio`, `profile_picture`, `location`)
-VALUES ('2', 'Creator of the Message Board application', 'uploads/jackm.png', 'VIC, Australia');
+VALUES (1, 'Creator of the Message Board application', 'uploads/jackm.png', 'VIC, Australia');
+
+-- Create 'posts' table
+CREATE TABLE posts (
+  post_id INTEGER NOT NULL AUTO_INCREMENT,
+  user_id INTEGER NOT NULL,
+  post_picture VARCHAR(255),
+  post_text VARCHAR(255) NOT NULL,
+  post_created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY(post_id),
+  FOREIGN KEY(user_id) REFERENCES users(user_id)
+) ENGINE = InnoDB DEFAULT CHARSET=utf8;
+
+-- Create 'comments' table
+CREATE TABLE comments (
+  comment_id INTEGER NOT NULL AUTO_INCREMENT,
+  post_id INTEGER NOT NULL,
+  user_id INTEGER NOT NULL,
+  comment_text VARCHAR(255) NOT NULL,
+  comment_created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY(comment_id),
+  FOREIGN KEY(post_id) REFERENCES posts(post_id),
+  FOREIGN KEY(user_id) REFERENCES users(user_id)
+) ENGINE = InnoDB DEFAULT CHARSET=utf8; 
