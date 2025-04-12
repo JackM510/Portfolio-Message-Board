@@ -12,16 +12,11 @@
 <body>
     <!-- Navbar -->
     <?php require_once "nav.php"; ?>
-    <section class="container text-center">
-        <h1>Message Board</h1>
-    </section>
 
     <!-- Example Post structure -->
-    <section class="w-50 mx-auto">
+    <section class="w-50 mx-auto mt-5">
         <div>
             <?php
-                
-                echo('<br><br><br>');
 
                 // Get all posts from the DB
                 $stmt = $pdo->prepare("SELECT * FROM posts ORDER BY post_created DESC");
