@@ -28,7 +28,7 @@ CREATE TABLE profiles (
   profile_picture VARCHAR(255),
   location VARCHAR(100),
   PRIMARY KEY(profile_id),
-  FOREIGN KEY(user_id) REFERENCES users(user_id)
+  FOREIGN KEY(user_id) REFERENCES users(user_id) ON DELETE CASCADE
 ) ENGINE = InnoDB DEFAULT CHARSET=utf8;
 
 INSERT INTO `profiles` (`user_id`, `bio`, `profile_picture`, `location`)
@@ -42,7 +42,7 @@ CREATE TABLE posts (
   post_text VARCHAR(255) NOT NULL,
   post_created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY(post_id),
-  FOREIGN KEY(user_id) REFERENCES users(user_id)
+  FOREIGN KEY(user_id) REFERENCES users(user_id) ON DELETE CASCADE
 ) ENGINE = InnoDB DEFAULT CHARSET=utf8;
 
 -- Create 'comments' table
@@ -54,5 +54,5 @@ CREATE TABLE comments (
   comment_created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY(comment_id),
   FOREIGN KEY(post_id) REFERENCES posts(post_id),
-  FOREIGN KEY(user_id) REFERENCES users(user_id)
+  FOREIGN KEY(user_id) REFERENCES users(user_id) ON DELETE CASCADE
 ) ENGINE = InnoDB DEFAULT CHARSET=utf8; 
