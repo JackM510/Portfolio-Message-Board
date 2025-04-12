@@ -30,6 +30,7 @@
                     // Successful login: Set session variables
                     $_SESSION['user_id'] = $user['user_id'];
                     $_SESSION['email'] = $user['email'];
+                    $_SESSION['role'] = $user['role'];
 
                     // Redirect to dashboard or another page
                     header("Location: index.php");
@@ -64,24 +65,15 @@
             $stmt->bindParam(':password', $hashedPassword, PDO::PARAM_STR); // Store the hashed password
             $stmt->execute();
 
-            // Need to set SESSION variables to reach profile.php
-            $stmt = $pdo->prepare("SELECT * FROM users WHERE email = :email");
-            $stmt->bindParam(':email', $email, PDO::PARAM_STR);
-            $stmt->execute();
-            $user = $stmt->fetch(PDO::FETCH_ASSOC);
+            // Get the newly inserted user ID
+            $user_id = $pdo->lastInsertId();
+            // Set SESSION variables
+            $_SESSION['user_id'] = $user_id;
+            $_SESSION['email'] = $email;
 
-            $_SESSION['user_id'] = $user['user_id'];
-            $_SESSION['first_name'] = $user['first_name'];
-
-            // Need to set generic profile details - NEW SECTION ADDED IN
-            $profile_picture_default = 'uploads/default.png';
-            $profile_location_default = 'Add a location';
-            $profile_bio_default = 'Add a bio';
-            $stmt = $pdo->prepare("INSERT INTO `profiles` (user_id, profile_picture, location, bio) VALUES (:uid, :profile_picture, :profile_location, :profile_bio)");
-            $stmt->bindParam(':uid', $_SESSION['user_id'], PDO::PARAM_STR);
-            $stmt->bindParam(':profile_picture', $profile_picture_default, PDO::PARAM_STR);
-            $stmt->bindParam(':profile_location', $profile_location_default, PDO::PARAM_STR);
-            $stmt->bindParam(':profile_bio', $profile_bio_default, PDO::PARAM_STR);
+            // Insert default profile data
+            $stmt = $pdo->prepare("INSERT INTO profiles (user_id, profile_picture, location, bio) VALUES (:user_id, 'uploads/default.png', 'Add a location', 'Add a bio')");
+            $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
             $stmt->execute();
 
             header("Location: profile.php");
@@ -94,6 +86,8 @@
 <html lang="en">
 <head>
     <?php require_once "head.php"; ?>
+    <link href="css/login.css" rel="stylesheet">
+    <script src="js/login.js"></script>
     <title>Messageboard - Login</title>
 </head>
 <body>
@@ -149,16 +143,5 @@
         </div>
         <div class="text-center mt-3" onclick="showLogin()" style="cursor:pointer;">Already have an account? Login</div>
     </div>  
-    <script>
-        function showSignUp() {
-            document.getElementById("login-form").style.display = "none";
-            document.getElementById("signup-form").style.display = "block";
-        }
-
-        function showLogin() {
-            document.getElementById("login-form").style.display = "block";
-            document.getElementById("signup-form").style.display = "none";
-        }
-    </script>
 </body>
 </html>

@@ -7,10 +7,5 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
 <!-- Custom CSS -->
 <link href="css/nav.css" rel="stylesheet">
-<link href="css/index.css" rel="stylesheet">
-<link href="css/login.css" rel="stylesheet">
-<link href="css/profile.css" rel="stylesheet">
-<!-- JS -->
-<script src="js/profile.js"></script>
 <!-- Icon -->
 <link rel="icon" href="icon/forum2.png">

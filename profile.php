@@ -8,28 +8,29 @@
         header("Location: login.php");
     }
 
-    // Set Profile details - get users name
-    $stmt = $pdo->prepare("SELECT `first_name`, `last_name` FROM `users` WHERE `email` = :email");
-    $stmt->bindParam(':email', $_SESSION['email'], PDO::PARAM_STR);
-    $stmt->execute();
-    $user = $stmt->fetch(PDO::FETCH_ASSOC);
+    // Set Profile details - get users full name and profile information
+    $sql = "SELECT u.first_name, u.last_name, p.bio, p.profile_picture, p.location
+        FROM users u
+        JOIN profiles p ON u.user_id = p.user_id
+        WHERE u.user_id = :user_id";
 
-    $first_name = $user['first_name'] ?? 'Unknown';
-    $last_name = $user['last_name'] ?? 'User';
-    $full_name = $first_name.' '.$last_name;
-
-    // ######## Set profile details - get profile pic, bio, location etc.
-    $stmt = $pdo->prepare("SELECT `bio`, `profile_picture`, `location` FROM `profiles` WHERE `user_id` = :user_id");
+    $stmt = $pdo->prepare($sql);
     $stmt->bindParam(':user_id', $_SESSION['user_id'], PDO::PARAM_INT);
     $stmt->execute();
-    $profile = $stmt->fetch(PDO::FETCH_ASSOC);
+    $data = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    $profile_picture = $profile['profile_picture'] ?? 'uploads/default.png';
-    $bio = $profile['bio'] ?? 'Set a bio';
-    $location = $profile['location'] ?? 'Set your location';
+    // Handling default values
+    $first_name = $data['first_name'] ?? 'Unknown';
+    $last_name = $data['last_name'] ?? 'User';
+    $full_name = $first_name . ' ' . $last_name;
+    $bio = $data['bio'] ?? 'Set a bio';
+    $profile_picture = $data['profile_picture'] ?? 'uploads/default.png';
+    $location = $data['location'] ?? 'Set your location';
+
+
 
     // ######### Update profile data through form
-    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    if ($_SERVER["REQUEST_METHOD"] == "POST" && !isset($_POST['new-post'])) {
         $full_name = $_POST["full_name"];
         $location = $_POST["location"];
         $bio = $_POST["bio"];
@@ -74,6 +75,8 @@
 <html lang="en">
 <head>
     <?php require_once "head.php"; ?>
+    <link href="css/profile.css" rel="stylesheet">
+    <script src="js/profile.js"></script>
     <title>Profile</title>
 </head>
 <body>

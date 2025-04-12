@@ -6,6 +6,7 @@
 <html lang="en">
 <head>
     <?php require_once "head.php"; ?>
+    <link href="css/index.css" rel="stylesheet">
     <title>Message Board</title>
 </head>
 <body>
@@ -95,7 +96,8 @@
                             echo "<p>No comments yet.</p>";
                         }
                         
-                        
+                        // Add a comment section
+                        echo('<div><form><textarea></textarea><button>Comment</button></form></div>');
 
 
                         echo('</div><br>'); // CLOSE PARENT DIV

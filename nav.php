@@ -1,5 +1,6 @@
 <?php
     $isLoggedIn = isset($_SESSION['user_id']) && isset($_SESSION['email']); // Check login status
+    $isAdmin = isset($_SESSION['role']) && $_SESSION['role'] === 'admin';
 ?>
 
 <nav class="navbar navbar-expand-lg sticky-top bg-light shadow-lg">
@@ -23,6 +24,9 @@
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="avatarDropdown">
                     <li><a class="dropdown-item" href="profile.php">View Profile</a></li>
+                    <?php if ($isAdmin): ?>
+                        <li><a class="dropdown-item" href="admin.php">Admin Panel<a></li>
+                    <?php endif; ?>
                     <li><a class="dropdown-item" href="logout.php">Logout</a></li>
                 </ul>
             </div>
