@@ -5,7 +5,7 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 <!-- Bootstrap Icons -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
-<!-- Custom CSS -->
+<!-- Custom CSS used on all pages -->
 <link href="css/nav.css" rel="stylesheet">
 <!-- Icon -->
 <link rel="icon" href="icon/forum2.png">

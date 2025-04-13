@@ -7,6 +7,7 @@
 <head>
     <?php require_once "head.php"; ?>
     <link href="css/index.css" rel="stylesheet">
+    <script src="js/index.js"></script>
     <title>Message Board</title>
 </head>
 <body>
@@ -26,38 +27,62 @@
                 if ($posts) {
                     foreach ($posts as $post) {
 
-                        // Get the user_id for the user that made the post
-                        $post_user_id = $post['user_id']; 
-                        $stmt = $pdo->prepare("SELECT first_name, last_name FROM users WHERE user_id = :uid"); // Get their first and last name from the users table
-                        $stmt->bindParam(':uid', $post_user_id, PDO::PARAM_STR);
+                        // Get the profile picture and name of the user that made a post
+                        $sql = "SELECT u.first_name, u.last_name, p.profile_picture FROM users u JOIN profiles p ON u.user_id = p.user_id WHERE u.user_id = :user_id";
+                        $stmt = $pdo->prepare($sql);
+                        $stmt->bindParam(':user_id', $post['user_id'], PDO::PARAM_INT);
                         $stmt->execute();
-                        $user = $stmt->fetch(PDO::FETCH_ASSOC);
-                        $user_first = $user['first_name'];
-                        $user_last = $user['last_name'];
+                        $data = $stmt->fetch(PDO::FETCH_ASSOC);
+
+                        $user_first = $data['first_name'];
+                        $user_last = $data['last_name'];
                         $user_name = $user_first.' '.$user_last; // Users full name
+                        $profile_picture = $data['profile_picture'];
 
-                        // Get the users profile pricture from the profile table
-                        $stmt = $pdo->prepare("SELECT profile_picture FROM profiles WHERE user_id = :uid");
-                        $stmt->bindParam(':uid', $post_user_id, PDO::PARAM_STR);
-                        $stmt->execute();
-                        $profile = $stmt->fetch(PDO::FETCH_ASSOC);
-                        $profile_picture = $profile['profile_picture'];
 
-                        echo('<div class="p-3 border">'); // POST PARENT CONTAINER
-                        // PROFILE PIC AND NAME
-                        echo('<div class="d-flex align-items-center">');
-                            echo('<img class="me-3 rounded-pill" src="'.htmlspecialchars($profile_picture). '" alt="Post Image" style="width:40px;">');
-                            echo('<h5>'.$user_name.'</h5>');
-                        echo('</div>');
-                        // POST IMAGE
+                        // Display each post in HTML
+                        // Users Profile Picture & Full Name
+                        echo('<div class="p-4 border">
+                                <div class="d-flex align-items-center">
+                                    <img class="me-3 rounded-pill" src="'.htmlspecialchars($profile_picture). '" alt="Post Image" style="width:40px;">
+                                    <h5>'.$user_name.'</h5>
+                                </div>');
+                        // Display any pictures added to the post
                         if (!empty($post['post_picture'])) {
-                            echo "<div class='mt-3'><img src='" . htmlspecialchars($post['post_picture']) . "' alt='Post Image' style='max-width:100px;'></div>";
+                            echo("<div class='mt-3'>
+                                    <img src='" . htmlspecialchars($post['post_picture']) . "' alt='Post Image' style='max-width:100px;'>
+                                </div>");
                         }
-                        // POST TEXT
-                        echo('<div class="mt-3"><p>'.htmlentities($post['post_text']).'</p>');
-                        echo('<p style="color:grey;">'.htmlentities($post['post_created']).'</p></div>');
+                        // Display the post text and DAT the post was created
+                        echo('<div class="mt-3">
+                            <p>'.htmlentities($post['post_text']).'</p>
+                            <p style="color:grey;">'.htmlentities($post['post_created']).'</p>
+                                </div>');
 
+            
+                        // Add a comment section
+                        if (isset($_SESSION['user_id']) ) {
+                            $sql = "SELECT profile_picture FROM profiles WHERE user_id =:user_id";
+                            $stmt = $pdo->prepare($sql);
+                            $stmt->bindParam(':user_id', $_SESSION['user_id'], PDO::PARAM_INT);
+                            $stmt->execute();
+                            $data = $stmt->fetch(PDO::FETCH_ASSOC);
+                            $your_profile_picture = $data['profile_picture'];
+                            echo('<hr><div class="d-flex pt-3">
+                                    <div>
+                                         <img class="me-3 rounded-pill" src="'.htmlspecialchars($your_profile_picture). '" alt="Post Image" style="width:40px;">
+                                    </div>
+                                    <form class="w-100">
+                                        <textarea id="'.htmlspecialchars($post['post_id']).'" class="w-100 add-comment-textarea" placeholder="Add a comment..." rows="3" style="resize:none;"></textarea>
+                                        <div id="add-comment-btns-'.htmlspecialchars($post['post_id']).'" class="add-comment-btns">
+                                            <button class="btn btn-sm btn-secondary me-2">Cancel</button>
+                                            <button class="btn btn-sm btn-primary me-2">Comment</button>
+                                        </div>
+                                    </form>
+                                </div>');
+                        }
 
+                    
                         // ADD ALL COMMENTS ON THE POST
                         $post_id = $post['post_id']; 
                         $stmt = $pdo->prepare("
@@ -77,22 +102,18 @@
                                 $commentor_name = htmlspecialchars($comment['first_name'] . ' ' . $comment['last_name']);
                                 $commentor_profile_picture = htmlspecialchars($comment['profile_picture']);
                         
-                                echo "<div class='comment'>";
+                                echo "<hr><div class='comment'>";
                                     echo('<div class="d-flex">');
                                         echo "<img class='me-3 rounded-pill' src='" . $commentor_profile_picture . "' alt='Profile Picture' style='max-width:40px;'>";
                                         echo "<p><strong>" . $commentor_name . ":</strong> " . htmlspecialchars($comment['comment_text']) . "</p>";
                                     echo('</div>');
-                                    echo('<div>');
-                                        echo "<p><small>Posted on: " . htmlspecialchars($comment['comment_created']) . "</small></p>";
-                                    echo('</div>');    
-                                echo "</div><hr>";
+                                    //echo('<div>');
+                                        //echo "<p><small>Posted on: " . htmlspecialchars($comment['comment_created']) . "</small></p>";
+                                    //echo('</div>');    
+                                echo "</div>";
                             }
-                        } else {
-                            echo "<p>No comments yet.</p>";
                         }
                         
-                        // Add a comment section
-                        echo('<div><form><textarea></textarea><button>Comment</button></form></div>');
 
 
                         echo('</div><br>'); // CLOSE PARENT DIV
@@ -101,30 +122,9 @@
                 } else {
                     echo('<p>No Posts Available</p>');
                 }
-                /*
 
-                Need to select all comments for the specific post
-                $stmt = $pdo->prepare("SELECT * FROM comments WHERE post_id = :pid");
-                --- for each comment get the picture, name, and comment from the user:
-                $stmt = $pdo->prepare("SELECT first_name, last_name FROM users WHERE user_id = :comment_uid");
-                $stmt = $pdo->prepare("SELECT profile_picture FROM profies WHERE user_id = :comment_id");
-
-
-
-                        */
             ?>    
 
-            <div id="content">
-            <!-- Persons Profile Pic & Name -->
-             
-            <!-- Their Post -->
-            </div>
-            <div id="comments">
-            <!-- Any existing comments -->
-            </div>
-            <div id="add_comments">
-            <!-- section to add a comment --> 
-            </div>
         </div>
     </section>
 
