@@ -7,11 +7,13 @@ document.addEventListener("DOMContentLoaded", function() {
 
         textarea.addEventListener("click", function() {
             buttonGroup.style.display = "block";
+            buttonGroup.classList.add("d-flex", "float-end");
         });
 
         document.addEventListener("click", function(event) {
             if (!textarea.contains(event.target) && !buttonGroup.contains(event.target)) {
                 buttonGroup.style.display = "none";
+                buttonGroup.classList.remove("d-flex", "float-end");
             }
         });
     });
@@ -26,6 +28,7 @@ document.addEventListener("DOMContentLoaded", function() {
             if (textarea) {
                 textarea.value = ""; // Clear the textarea without refreshing
                 buttonGroup.style.display = "none";
+                buttonGroup.classList.remove("d-flex", "float-end");
             }
         });
     });

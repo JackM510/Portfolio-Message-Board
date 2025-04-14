@@ -19,7 +19,7 @@
     <?php require_once "nav.php"; ?>
 
     <!-- Example Post structure -->
-    <section class="w-50 mx-auto mt-5">
+    <section class="container w-50 mx-auto mt-5">
         <div>
             <?php
 
@@ -54,7 +54,7 @@
                         // Display any pictures added to the post
                         if (!empty($post['post_picture'])) {
                             echo("<div class='mt-3'>
-                                    <img src='" . htmlspecialchars($post['post_picture']) . "' alt='Post Image' style='max-width:100px;'>
+                                    <img src='" . htmlspecialchars($post['post_picture']) . "' alt='Post Image'>
                                 </div>");
                         }
                         // Display the post text and DAT the post was created
@@ -79,8 +79,8 @@
                                     <form id="add-comment-form-'.htmlspecialchars($post['post_id']).'" method="POST" class="w-100">
                                         <textarea id="add-comment-textarea-'.htmlspecialchars($post['post_id']).'" class="w-100 add-comment-textarea" placeholder="Add a comment..." rows="3" style="resize:none;"></textarea>
                                         <div id="add-comment-btns-'.htmlspecialchars($post['post_id']).'" class="add-comment-btns">
-                                            <button class="btn btn-sm btn-secondary me-2 cancel-btn" type="button" data-post-id="'.htmlspecialchars($post['post_id']).'">Cancel</button>
-                                            <button class="btn btn-sm btn-primary me-2">Comment</button>
+                                            <button class="btn btn-sm btn-secondary cancel-btn" type="button" data-post-id="'.htmlspecialchars($post['post_id']).'">Cancel</button>
+                                            <button class="btn btn-sm btn-primary ms-1">Comment</button>
                                         </div>
                                     </form>
                                 </div>');
@@ -117,7 +117,7 @@
                         
 
 
-                        echo('</div><br>'); // CLOSE PARENT DIV
+                        echo('</div><br><br>'); // CLOSE PARENT DIV
 
                     }
                 } else {
