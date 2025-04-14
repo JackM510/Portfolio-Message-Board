@@ -28,11 +28,12 @@
 <body>
     <!-- Navbar -->
     <?php require_once "nav.php"; ?>
-    <section class="container text-center">
+    <div class="mt-5 text-center">
         <h1>Admin Control Panel</h1>
-    </section>
+    </div>
 
     <section class="container d-flex justify-content-center w-50 mx-auto mt-5">
+    
     <?php
     // Retrieve all users from mysql
     $sql = "SELECT user_id, first_name, last_name, email, role FROM users";
@@ -41,14 +42,14 @@
     $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     // Create a table to store the data
-    echo "<table border='1'>
-        <tr>
+    echo '<table class="table" border="1">
+        <tr class="table-secondary">
             <th>First Name</th>
             <th>Last Name</th>
             <th>Email</th>
             <th>Role</th>
             <th>Action</th>
-        </tr>";
+        </tr>';
 
     // Loop through each user and add as table data
     foreach ($users as $user) {
