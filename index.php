@@ -1,6 +1,10 @@
 <?php
     session_start();
     require_once('db_connection.php');
+
+    // Add a comment functionality
+
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -70,12 +74,12 @@
                             $your_profile_picture = $data['profile_picture'];
                             echo('<hr><div class="d-flex pt-3">
                                     <div>
-                                         <img class="me-3 rounded-pill" src="'.htmlspecialchars($your_profile_picture). '" alt="Post Image" style="width:40px;">
+                                         <img class="me-3 rounded-pill" src="'.htmlspecialchars($your_profile_picture).'" alt="Post Image" style="width:40px;">
                                     </div>
-                                    <form class="w-100">
-                                        <textarea id="'.htmlspecialchars($post['post_id']).'" class="w-100 add-comment-textarea" placeholder="Add a comment..." rows="3" style="resize:none;"></textarea>
+                                    <form id="add-comment-form-'.htmlspecialchars($post['post_id']).'" method="POST" class="w-100">
+                                        <textarea id="add-comment-textarea-'.htmlspecialchars($post['post_id']).'" class="w-100 add-comment-textarea" placeholder="Add a comment..." rows="3" style="resize:none;"></textarea>
                                         <div id="add-comment-btns-'.htmlspecialchars($post['post_id']).'" class="add-comment-btns">
-                                            <button class="btn btn-sm btn-secondary me-2">Cancel</button>
+                                            <button class="btn btn-sm btn-secondary me-2 cancel-btn" type="button" data-post-id="'.htmlspecialchars($post['post_id']).'">Cancel</button>
                                             <button class="btn btn-sm btn-primary me-2">Comment</button>
                                         </div>
                                     </form>
@@ -107,9 +111,6 @@
                                         echo "<img class='me-3 rounded-pill' src='" . $commentor_profile_picture . "' alt='Profile Picture' style='max-width:40px;'>";
                                         echo "<p><strong>" . $commentor_name . ":</strong> " . htmlspecialchars($comment['comment_text']) . "</p>";
                                     echo('</div>');
-                                    //echo('<div>');
-                                        //echo "<p><small>Posted on: " . htmlspecialchars($comment['comment_created']) . "</small></p>";
-                                    //echo('</div>');    
                                 echo "</div>";
                             }
                         }

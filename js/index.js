@@ -1,20 +1,33 @@
 document.addEventListener("DOMContentLoaded", function() {
-    const textareas = document.querySelectorAll(".add-comment-textarea");
-
-    textareas.forEach(textarea => {
-        const id = textarea.getAttribute("id");
+    
+    // Add an event listener to each textarea on each post
+     document.querySelectorAll(".add-comment-textarea").forEach(textarea => {
+        const id = textarea.getAttribute("id").replace("add-comment-textarea-", "");
         const buttonGroup = document.querySelector(`#add-comment-btns-${id}`);
 
-        // Show buttons when the textarea is focused
-        textarea.addEventListener("focus", function() {
-            buttonGroup.style.display = "block"; // Show buttons
+        textarea.addEventListener("click", function() {
+            buttonGroup.style.display = "block";
         });
 
-        // Hide buttons when focus is lost (clicked outside)
-        textarea.addEventListener("blur", function(event) {
-            setTimeout(() => {
-                buttonGroup.style.display = "none"; // Hide buttons after blur
-            }, 100); // Delay needed to allow clicks inside button group
+        document.addEventListener("click", function(event) {
+            if (!textarea.contains(event.target) && !buttonGroup.contains(event.target)) {
+                buttonGroup.style.display = "none";
+            }
         });
     });
+
+    // Add event listener to each cancel comment btn on each post
+    document.querySelectorAll(".cancel-btn").forEach(button => {
+        button.addEventListener("click", function() {
+            const postId = button.getAttribute("data-post-id"); // Get post ID from button
+            const textarea = document.querySelector(`#add-comment-textarea-${postId}`); // Find correct textarea
+            const buttonGroup = document.querySelector(`#add-comment-btns-${postId}`);
+
+            if (textarea) {
+                textarea.value = ""; // Clear the textarea without refreshing
+                buttonGroup.style.display = "none";
+            }
+        });
+    });
+
 });
