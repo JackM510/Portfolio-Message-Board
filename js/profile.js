@@ -1,4 +1,5 @@
 document.addEventListener("DOMContentLoaded", function () {  
+    // Profile details edit icon
     document.getElementById("edit-icon").addEventListener("click", function () {
         let profileName = document.getElementById("profile-name");
         let profileLocation = document.getElementById("profile-location");
@@ -17,5 +18,25 @@ document.addEventListener("DOMContentLoaded", function () {
             // Submit form when tick is clicked
             document.getElementById("profile-form").submit();
         }
+    });
+
+
+    const textarea = document.getElementById("new-post-textarea");
+    const buttonGroup = document.getElementById("new-post-btn-group");
+
+    document.getElementById("new-post-textarea").addEventListener("click", function () {
+        buttonGroup.style.display = "block";
+    });
+
+    document.addEventListener("click", function(event) {
+        if (!textarea.contains(event.target) && !buttonGroup.contains(event.target)) {
+            buttonGroup.style.display = "none";
+        }
+    });
+
+    // New post cancel button
+    document.getElementById("cancel-post-btn").addEventListener("click", function () {
+        textarea.value = "";
+        buttonGroup.style.display = "none";
     });
 });

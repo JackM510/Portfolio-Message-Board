@@ -27,9 +27,8 @@
     resize: none;
 }
 
-#new-post-btn {
-    width: 50px;
-    margin: 0 auto;
+#new-post-btn-group {
+    display: none;
 }
 
 /* All users posts */

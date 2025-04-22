@@ -115,8 +115,15 @@
         <div id="profile-new-post" class="mt-5">
             <!-- Section for a new post -->
              <form action="profile.php" method="POST" class="d-flex flex-column justify-content-center w-75 m-auto">
-                <textarea id="new-post-textarea" class=" mb-2" name="post_content" placeholder="Create a new post" rows="3" required></textarea>
-                <button id="new-post-btn" class="btn btn-sm btn-primary" type="submit" name="new-post">Post</button>
+                <img id="new-post-img" class="mb-2" src="">
+                <textarea id="new-post-textarea" class="mb-2" name="post_content" placeholder="Create a new post" rows="3" required></textarea>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <button type="button"><i class="bi bi-card-image"></i></button>
+                        <div id="new-post-btn-group">
+                            <button id="cancel-post-btn" class="btn btn-sm btn-secondary ms-1" type="button" name="new-post">Cancel</button>
+                            <button id="new-post-btn" class="btn btn-sm btn-primary ms-1" type="submit" name="new-post">Post</button>
+                        </div>
+                    </div>
              </form>
             <hr>
         </div>
