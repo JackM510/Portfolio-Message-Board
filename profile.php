@@ -58,13 +58,66 @@
     // ###### Create a new post and insert into mysql
     if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["new-post"])) {
         $post_content = $_POST["post_content"];
-    
-        // Insert post into database
+        $image_url = null; // Default img url if an img is not uploaded
+
+        // Prepare SQL post
         $stmt = $pdo->prepare("INSERT INTO posts (user_id, post_text) VALUES (:uid, :post_text)");
-        $stmt->bindParam(':uid', $_SESSION['user_id'], PDO::PARAM_STR);
+        $stmt->bindParam(':uid', $_SESSION['user_id'], PDO::PARAM_INT);
         $stmt->bindParam(':post_text', $post_content, PDO::PARAM_STR);
         $stmt->execute();
-    
+
+         // Check if an image was uploaded
+        if (!empty($_FILES["image"]["name"])) {
+
+            $user_id = $_SESSION['user_id']; // Get the user's ID
+            $userDir = "uploads/profiles/" . $user_id . "/"; // Define user-specific directory
+
+            // Check if the user's directory exists, if not, create it
+            if (!file_exists($userDir)) {
+                mkdir($userDir, 0777, true); // Create user's main folder
+            }
+
+            $post_id = $pdo->lastInsertId(); // Get new post ID
+            $postDir = $userDir . "posts/" . $post_id . "/"; // Define post-specific folder
+        
+            // Ensure the post directory is created **only if an image is being uploaded**
+            if (!file_exists($postDir)) {
+                mkdir($postDir, 0777, true); // Create post folder
+            }
+        
+            // Move the image into the post folder
+            $fileName = basename($_FILES["image"]["name"]);
+            $targetFilePath = $postDir . $fileName;
+        
+            if (move_uploaded_file($_FILES["image"]["tmp_name"], $targetFilePath)) {
+                $image_url = $targetFilePath;
+        
+                // Update the post record with the image URL
+                $stmt = $pdo->prepare("UPDATE posts SET post_picture = :post_picture WHERE post_id = :post_id");
+                $stmt->bindParam(':post_picture', $image_url, PDO::PARAM_STR);
+                $stmt->bindParam(':post_id', $post_id, PDO::PARAM_INT);
+                $stmt->execute();
+            }
+        }
+
+        /*if (!empty($_FILES["image"]["name"])) {
+            $targetDir = "uploads/posts/";
+            $fileName = basename($_FILES["image"]["name"]);
+            $targetFilePath = $targetDir . $fileName;
+
+            if (move_uploaded_file($_FILES["image"]["tmp_name"], $targetFilePath)) {
+                echo "File uploaded to: " . $targetFilePath; // Debugging message
+                $image_url = $targetFilePath; // Store the image path
+            }
+        }*/
+
+        // Prepare SQL query with optional image URL
+        /*$stmt = $pdo->prepare("INSERT INTO posts (user_id, post_text, post_picture) VALUES (:uid, :post_text, :post_picture)");
+        $stmt->bindParam(':uid', $_SESSION['user_id'], PDO::PARAM_INT);
+        $stmt->bindParam(':post_text', $post_content, PDO::PARAM_STR);
+        $stmt->bindParam(':post_picture', $image_url, PDO::PARAM_STR | PDO::PARAM_NULL); // Can be NULL
+        $stmt->execute();*/
+
         echo "Post created successfully!";
     }
 
@@ -114,11 +167,15 @@
         </form>
         <div id="profile-new-post" class="mt-5">
             <!-- Section for a new post -->
-             <form action="profile.php" method="POST" class="d-flex flex-column justify-content-center w-75 m-auto">
+             <form class="d-flex flex-column justify-content-center w-75 m-auto" action="profile.php" method="POST" enctype="multipart/form-data">
                 <img id="new-post-img" class="mb-2" src="">
                 <textarea id="new-post-textarea" class="mb-2" name="post_content" placeholder="Create a new post" rows="3" required></textarea>
                     <div class="d-flex justify-content-between align-items-center">
-                        <button type="button"><i class="bi bi-card-image"></i></button>
+                    <input type="file" name="image" id="image-upload" accept="image/*" hidden>
+                    <button type="button" onclick="document.getElementById('image-upload').click()">
+                    <i class="bi bi-card-image"></i>
+                    </button>
+
                         <div id="new-post-btn-group">
                             <button id="cancel-post-btn" class="btn btn-sm btn-secondary ms-1" type="button" name="new-post">Cancel</button>
                             <button id="new-post-btn" class="btn btn-sm btn-primary ms-1" type="submit" name="new-post">Post</button>
@@ -162,5 +219,19 @@
 
         </div>
     </section>
+
+    <script>
+        document.getElementById("image-upload").addEventListener("change", function(event) {
+            const file = event.target.files[0]; // Get the selected file
+
+            if (file) {
+                const reader = new FileReader(); // Create a FileReader object
+                reader.onload = function(e) {
+                    document.getElementById("new-post-img").src = e.target.result; // Set the image source to the selected file
+                };
+                reader.readAsDataURL(file); // Convert the file into a Data URL
+            }
+        });
+</script>
 </body>
 </html>
