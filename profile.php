@@ -53,6 +53,34 @@
         $stmt->bindParam(':bio', $bio, PDO::PARAM_STR);
         $stmt->bindParam(':uid', $_SESSION['user_id'], PDO::PARAM_STR);
         $stmt->execute();
+
+        if (isset($_FILES["profile_picture"])) {
+            $user_id = $_SESSION['user_id'];
+            $userDir = "uploads/profiles/" . $user_id . "/";
+            $profilePicDir = $userDir . "profile_picture/";
+
+            // Ensure user folder exists
+            if (!file_exists($userDir)) {
+                mkdir($userDir, 0777, true);
+            }
+
+            if (!file_exists($profilePicDir)) {
+                mkdir($profilePicDir, 0777, true);
+            }
+
+            if (!empty($_FILES["profile_picture"]["name"])) {
+                $fileName = basename($_FILES["profile_picture"]["name"]);
+                $targetFilePath = $profilePicDir . $fileName; // Store profile pic inside profile folder
+            
+                if (move_uploaded_file($_FILES["profile_picture"]["tmp_name"], $targetFilePath)) {
+                    // Update database with new profile picture URL
+                    $stmt = $pdo->prepare("UPDATE profiles SET profile_picture = :profile_picture WHERE user_id = :user_id");
+                    $stmt->bindParam(':profile_picture', $targetFilePath, PDO::PARAM_STR);
+                    $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+                    $stmt->execute();
+                }
+            }
+        }
     }
 
     // ###### Create a new post and insert into mysql
@@ -100,24 +128,6 @@
             }
         }
 
-        /*if (!empty($_FILES["image"]["name"])) {
-            $targetDir = "uploads/posts/";
-            $fileName = basename($_FILES["image"]["name"]);
-            $targetFilePath = $targetDir . $fileName;
-
-            if (move_uploaded_file($_FILES["image"]["tmp_name"], $targetFilePath)) {
-                echo "File uploaded to: " . $targetFilePath; // Debugging message
-                $image_url = $targetFilePath; // Store the image path
-            }
-        }*/
-
-        // Prepare SQL query with optional image URL
-        /*$stmt = $pdo->prepare("INSERT INTO posts (user_id, post_text, post_picture) VALUES (:uid, :post_text, :post_picture)");
-        $stmt->bindParam(':uid', $_SESSION['user_id'], PDO::PARAM_INT);
-        $stmt->bindParam(':post_text', $post_content, PDO::PARAM_STR);
-        $stmt->bindParam(':post_picture', $image_url, PDO::PARAM_STR | PDO::PARAM_NULL); // Can be NULL
-        $stmt->execute();*/
-
         echo "Post created successfully!";
     }
 
@@ -136,11 +146,14 @@
     <!-- Navbar -->
     <?php require_once "nav.php"; ?>
     <section class="container w-50 mt-5">
-        <form id="profile-form" action="profile.php" method="POST">
+        <form id="profile-form" action="profile.php" method="POST" enctype="multipart/form-data">
             <div id="profile-details-container" class="d-flex m-auto border mt-5">
                 <!-- Profile Picture -->
                 <div>
-                    <img id="profile-picture" src="<?php echo htmlentities($profile_picture) ?>"> 
+                    <input type="file" id="profile-image-upload" name="profile_picture" accept="image/*" disabled hidden>
+                    <label for="profile-image-upload">
+                        <img id="profile-picture" src="<?php echo htmlentities($profile_picture); ?>" alt="Profile Picture">
+                    </label>
                 </div>
                 <!-- Profile Details -->
                 <div class="d-flex flex-column justify-content-center">
@@ -232,6 +245,20 @@
                 reader.readAsDataURL(file); // Convert the file into a Data URL
             }
         });
+
+
+        document.getElementById("profile-image-upload").addEventListener("change", function(event) {
+        const file = event.target.files[0];
+
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById("profile-picture").src = e.target.result; // Update image preview
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+
 </script>
 </body>
 </html>

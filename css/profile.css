@@ -7,6 +7,25 @@
     width: 150px;
     height: auto;
     margin: 0 20px 0 0;
+    cursor: pointer;
+}
+
+#profile-bio {
+    resize: none;
+}
+
+#profile-name:disabled,
+#profile-location:disabled,
+#profile-bio:disabled {
+    color: black;
+    background: none;
+    border: none;
+}
+
+#profile-name,
+#profile-location,
+#profile-bio {
+    border: none;
 }
 
 #edit-icon {

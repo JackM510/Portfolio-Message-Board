@@ -1,12 +1,14 @@
 document.addEventListener("DOMContentLoaded", function () {  
     // Profile details edit icon
     document.getElementById("edit-icon").addEventListener("click", function () {
+        let profilePicture = document.getElementById("profile-image-upload");
         let profileName = document.getElementById("profile-name");
         let profileLocation = document.getElementById("profile-location");
         let profileBio = document.getElementById("profile-bio");
     
         if (!this.classList.contains("editing")) {
             // Enable editing
+            profilePicture.removeAttribute("disabled");
             profileName.removeAttribute("disabled");
             profileLocation.removeAttribute("disabled");
             profileBio.removeAttribute("disabled");
@@ -21,6 +23,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
 
+    // New post functionality
     const textarea = document.getElementById("new-post-textarea");
     const buttonGroup = document.getElementById("new-post-btn-group");
 
