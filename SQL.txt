@@ -32,7 +32,7 @@ CREATE TABLE profiles (
 ) ENGINE = InnoDB DEFAULT CHARSET=utf8;
 
 INSERT INTO `profiles` (`user_id`, `bio`, `profile_picture`, `location`)
-VALUES (1, 'Creator of the Message Board application', 'uploads/1/profile_picture/ph-3.png', 'VIC, Australia');
+VALUES (1, 'Creator of the Message Board application', 'uploads/profiles/1/profile_picture/ph-3.png', 'VIC, Australia');
 
 -- Create 'posts' table
 CREATE TABLE posts (
