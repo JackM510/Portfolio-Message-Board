@@ -24,7 +24,7 @@
     $last_name = $data['last_name'] ?? 'User';
     $full_name = $first_name . ' ' . $last_name;
     $bio = $data['bio'] ?? 'Set a bio';
-    $profile_picture = $data['profile_picture'] ?? 'uploads/default.png';
+    $profile_picture = $data['profile_picture'] ?? 'uploads/default/profile_picture.png';
     $location = $data['location'] ?? 'Set your location';
 
 
