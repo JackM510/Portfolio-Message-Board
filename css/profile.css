@@ -1,7 +1,39 @@
 /* Profile Details */
 #profile-details-container {
     position: relative;
+    max-width: 100%; /* Prevents overflow */
+    overflow: hidden; /* Ensures content stays within boundaries */
+    display: flex;
+    flex-wrap: wrap; /* Prevents elements from exceeding container */
 }
+
+#profile-details {
+    width: auto;
+    max-width: 100%; /* Prevents expansion */
+    overflow: hidden; /* Ensures content stays within boundaries */
+    display: flex; /* Ensures they don't take full width */
+    flex-direction: column;
+}
+/*
+#profile-details input,
+#profile-details textarea {
+    display: flex;
+    width: auto; /* Allows natural width 
+    max-width: 100%; /* Stops unnecessary expansion 
+}*/
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 #profile-picture {
     width: 150px;
@@ -15,12 +47,14 @@
     color: black;
     background: none;
     border: none;
+    resize: none;
 }
 
 #profile-name,
 #profile-location,
 #profile-bio {
     border: none;
+    resize: none;
 }
 
 #profile-picture {
@@ -33,7 +67,7 @@
     position: absolute;
     top: 5px;
     right: 5px;
-    font-size: 18px;
+    font-size: 16px;
     cursor: pointer;
 }
 

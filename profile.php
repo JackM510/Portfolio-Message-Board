@@ -20,12 +20,12 @@
     $data = $stmt->fetch(PDO::FETCH_ASSOC);
 
     // Handling default values
+    $profile_picture = $data['profile_picture'] ?? 'uploads/default/profile_picture.png';
     $first_name = $data['first_name'] ?? 'Unknown';
     $last_name = $data['last_name'] ?? 'User';
     $full_name = $first_name . ' ' . $last_name;
-    $bio = $data['bio'] ?? 'Set a bio';
-    $profile_picture = $data['profile_picture'] ?? 'uploads/default/profile_picture.png';
     $location = $data['location'] ?? 'Set your location';
+    $bio = $data['bio'] ?? 'Set a bio';
 
 
 
@@ -144,6 +144,7 @@
     <!-- Navbar -->
     <?php require_once "nav.php"; ?>
     <section class="container w-50 mt-5">
+        <!-- Profile details section -->
         <form id="profile-form" action="profile.php" method="POST" enctype="multipart/form-data">
             <div id="profile-details-container" class="d-flex m-auto border mt-5">
                 <!-- Profile Picture -->
@@ -153,18 +154,14 @@
                         <img id="profile-picture" src="<?php echo htmlentities($profile_picture); ?>" alt="Profile Picture">
                     </label>
                 </div>
-                <!-- Profile Details -->
-                <div class="d-flex flex-column justify-content-center">
+                <!-- Profile information -->
+                <div id="profile-details">
                     <!-- Full Name -->
-                    <div class="mb-2">   
-                        <h1><input id="profile-name" type="text" name="full_name" value="<?php echo htmlentities($full_name); ?>" disabled></h1>
-                    </div>
+                    <h3><input id="profile-name" class="mb-2 w-100" type="text" name="full_name" value="<?php echo !empty($full_name) ? htmlentities($full_name) : 'Enter your name'; ?>" disabled></h3>
                     <!-- Location -->
-                    <div class="mb-2">
-                        <h4><input id="profile-location" type="text" name="location" value="<?php echo htmlentities($location); ?>" disabled></h4>
-                    </div>
+                    <h5><input id="profile-location" class="mb-2 w-100" type="text" name="location" value="<?php echo htmlentities($location); ?>" disabled></h5>
                     <!-- Bio -->
-                    <textarea id="profile-bio" name="bio" disabled><?php echo htmlentities($bio); ?></textarea>  
+                    <textarea id="profile-bio" class="w-100" name="bio" disabled><?php echo !empty($bio) ? htmlentities($bio) : "Add a bio"; ?></textarea>  
                 </div>
                 <!-- Edit icon -->
                 <div>
@@ -174,6 +171,7 @@
                 </div>
             </div>
         </form>
+        <!-- New post section -->
         <div id="profile-new-post" class="mt-5">
             <!-- Section for a new post -->
              <form id="new-post-form" class="d-flex flex-column justify-content-center w-75 m-auto" action="profile.php" method="POST" enctype="multipart/form-data">
