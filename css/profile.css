@@ -7,11 +7,6 @@
     width: 150px;
     height: auto;
     margin: 0 20px 0 0;
-    cursor: pointer;
-}
-
-#profile-bio {
-    resize: none;
 }
 
 #profile-name:disabled,
@@ -27,6 +22,11 @@
 #profile-bio {
     border: none;
 }
+
+#profile-picture {
+    cursor: pointer;
+}
+
 
 #edit-icon {
     color: black;

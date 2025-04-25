@@ -127,8 +127,6 @@
                 $stmt->execute();
             }
         }
-
-        echo "Post created successfully!";
     }
 
 
@@ -166,9 +164,7 @@
                         <h4><input id="profile-location" type="text" name="location" value="<?php echo htmlentities($location); ?>" disabled></h4>
                     </div>
                     <!-- Bio -->
-                    <div>
-                        <p><textarea id="profile-bio" name="bio" disabled><?php echo htmlentities($bio); ?></textarea></p>
-                    </div>   
+                    <textarea id="profile-bio" name="bio" disabled><?php echo htmlentities($bio); ?></textarea>  
                 </div>
                 <!-- Edit icon -->
                 <div>
@@ -180,20 +176,22 @@
         </form>
         <div id="profile-new-post" class="mt-5">
             <!-- Section for a new post -->
-             <form class="d-flex flex-column justify-content-center w-75 m-auto" action="profile.php" method="POST" enctype="multipart/form-data">
+             <form id="new-post-form" class="d-flex flex-column justify-content-center w-75 m-auto" action="profile.php" method="POST" enctype="multipart/form-data">
                 <img id="new-post-img" class="mb-2" src="">
-                <textarea id="new-post-textarea" class="mb-2" name="post_content" placeholder="Create a new post" rows="3" required></textarea>
-                    <div class="d-flex justify-content-between align-items-center">
-                    <input type="file" name="image" id="image-upload" accept="image/*" hidden>
-                    <button type="button" onclick="document.getElementById('image-upload').click()">
-                    <i class="bi bi-card-image"></i>
-                    </button>
-
-                        <div id="new-post-btn-group">
-                            <button id="cancel-post-btn" class="btn btn-sm btn-secondary ms-1" type="button" name="new-post">Cancel</button>
-                            <button id="new-post-btn" class="btn btn-sm btn-primary ms-1" type="submit" name="new-post">Post</button>
-                        </div>
+                <div class="d-flex flex-column">
+                    <div class="mb-2">
+                        <input type="file" name="image" id="image-upload" accept="image/*" hidden>
+                        <button type="button" onclick="document.getElementById('image-upload').click()" style="border:none;">
+                        <i class="bi bi-card-image"></i>
+                        </button>
                     </div>
+                    
+                    <textarea id="new-post-textarea" class="mb-2" name="post_content" placeholder="Create a new post" rows="3" required></textarea>
+                    <div id="new-post-btn-group" class="ms-auto">
+                        <button id="cancel-post-btn" class="btn btn-sm btn-secondary ms-1" type="button" name="new-post">Cancel</button>
+                        <button id="new-post-btn" class="btn btn-sm btn-primary ms-1" type="submit" name="new-post">Post</button>
+                    </div>
+                </div>
              </form>
             <hr>
         </div>
