@@ -157,9 +157,9 @@
                 <!-- Profile information -->
                 <div id="profile-details">
                     <!-- Full Name -->
-                    <h3><input id="profile-name" class="mb-2 w-100" type="text" name="full_name" value="<?php echo !empty($full_name) ? htmlentities($full_name) : 'Enter your name'; ?>" disabled></h3>
+                    <h3><input id="profile-name" class="mb-2 w-100" type="text" name="full_name" value="<?php echo !empty($full_name) ? htmlentities($full_name) : 'Enter your name'; ?>" disabled required></h3>
                     <!-- Location -->
-                    <h5><input id="profile-location" class="mb-2 w-100" type="text" name="location" value="<?php echo htmlentities($location); ?>" disabled></h5>
+                    <h5><input id="profile-location" class="mb-2 w-100" type="text" name="location" value="<?php echo htmlentities($location); ?>" disabled required></h5>
                     <!-- Bio -->
                     <textarea id="profile-bio" class="w-100" name="bio" disabled><?php echo !empty($bio) ? htmlentities($bio) : "Add a bio"; ?></textarea>  
                 </div>

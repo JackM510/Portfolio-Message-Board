@@ -54,7 +54,7 @@
                         // Display any pictures added to the post
                         if (!empty($post['post_picture'])) {
                             echo("<div class='mt-3'>
-                                    <img src='" . htmlspecialchars($post['post_picture']) . "' alt='Post Image'>
+                                    <img id='post-profile-picture' src='" . htmlspecialchars($post['post_picture']) . "' alt='Post Image'>
                                 </div>");
                         }
                         // Display the post text and DAT the post was created

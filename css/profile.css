@@ -41,6 +41,10 @@
     margin: 0 20px 0 0;
 }
 
+#profile-picture:hover {
+    opacity: 0.1;
+}
+
 #profile-name:disabled,
 #profile-location:disabled,
 #profile-bio:disabled {

@@ -1,3 +1,10 @@
+#post-profile-picture {
+    object-fit: contain;
+    height: auto;
+    max-width: 100%
+}
+
+
 .add-comment-btns {
     display: none;
 }
