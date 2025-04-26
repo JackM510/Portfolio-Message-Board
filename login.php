@@ -72,7 +72,7 @@
             $_SESSION['email'] = $email;
 
             // Insert default profile data
-            $stmt = $pdo->prepare("INSERT INTO profiles (user_id, profile_picture, location, bio) VALUES (:user_id, 'uploads/default.png', 'Add a location', 'Add a bio')");
+            $stmt = $pdo->prepare("INSERT INTO profiles (user_id, profile_picture) VALUES (:user_id, 'uploads/default/profile_picture.png')");
             $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
             $stmt->execute();
 
@@ -136,12 +136,12 @@
                         <input class="form-control form-control-lg" type="password" name="password" placeholder="Password" required>
                     </div>
                     <div class="col-12 d-flex justify-content-center">
-                        <button class="btn btn-lg btn-primary" type="submit" name="signup">Sign Up</button>
+                        <button id="next-btn" class="btn btn-lg btn-primary" type="submit" name="signup">Sign Up</button>
                     </div>
                 </div>   
             </form>
         </div>
         <div class="text-center mt-3" onclick="showLogin()" style="cursor:pointer;">Already have an account? Login</div>
-    </div>  
+    </div>
 </body>
 </html>

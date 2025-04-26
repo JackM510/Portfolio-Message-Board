@@ -4,36 +4,18 @@
     max-width: 100%; /* Prevents overflow */
     overflow: hidden; /* Ensures content stays within boundaries */
     display: flex;
-    flex-wrap: wrap; /* Prevents elements from exceeding container */
 }
 
 #profile-details {
-    width: auto;
-    max-width: 100%; /* Prevents expansion */
-    overflow: hidden; /* Ensures content stays within boundaries */
-    display: flex; /* Ensures they don't take full width */
-    flex-direction: column;
+    flex-grow: 1;
+    padding-right: 16px;
 }
-/*
+
 #profile-details input,
 #profile-details textarea {
-    display: flex;
-    width: auto; /* Allows natural width 
-    max-width: 100%; /* Stops unnecessary expansion 
-}*/
-
-
-
-
-
-
-
-
-
-
-
-
-
+    width: 100%; /* Takes up full width within the flex container */
+    box-sizing: border-box; /* Ensures padding and borders don’t cause overflow */
+}
 
 #profile-picture {
     width: 150px;
@@ -41,8 +23,9 @@
     margin: 0 20px 0 0;
 }
 
-#profile-picture:hover {
-    opacity: 0.1;
+#profile-image-upload:not([disabled]) + label #profile-picture:hover {
+    cursor: pointer; /* Enables hover only when input is active */
+    opacity: 0.9; /* Optional: restore full visibility */
 }
 
 #profile-name:disabled,
@@ -60,11 +43,6 @@
     border: none;
     resize: none;
 }
-
-#profile-picture {
-    cursor: pointer;
-}
-
 
 #edit-icon {
     color: black;

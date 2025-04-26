@@ -18,7 +18,7 @@ document.addEventListener("DOMContentLoaded", function () {
             this.classList.add("editing");
         } else {
             // Submit form when tick is clicked
-            document.getElementById("profile-form").submit();
+            document.getElementById("profile-details-submit").click();
         }
     });
 

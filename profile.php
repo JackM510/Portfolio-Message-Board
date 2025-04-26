@@ -20,17 +20,17 @@
     $data = $stmt->fetch(PDO::FETCH_ASSOC);
 
     // Handling default values
-    $profile_picture = $data['profile_picture'] ?? 'uploads/default/profile_picture.png';
-    $first_name = $data['first_name'] ?? 'Unknown';
-    $last_name = $data['last_name'] ?? 'User';
+    $profile_picture = $data['profile_picture'];
+    $first_name = $data['first_name'];
+    $last_name = $data['last_name'];
     $full_name = $first_name . ' ' . $last_name;
-    $location = $data['location'] ?? 'Set your location';
-    $bio = $data['bio'] ?? 'Set a bio';
+    $location = $data['location'];
+    $bio = $data['bio'];
 
 
 
     // ######### Update profile data through form
-    if ($_SERVER["REQUEST_METHOD"] == "POST" && !isset($_POST['new-post'])) {
+    if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['profile-details'])) {
         $full_name = $_POST["full_name"];
         $location = $_POST["location"];
         $bio = $_POST["bio"];
@@ -54,7 +54,7 @@
         $stmt->bindParam(':uid', $_SESSION['user_id'], PDO::PARAM_STR);
         $stmt->execute();
 
-        if (isset($_FILES["profile_picture"])) {
+        if (isset($_FILES["profile_picture"]) && !empty($_FILES["profile_picture"]["name"])) {
             $user_id = $_SESSION['user_id'];
             $userDir = "uploads/profiles/" . $user_id . "/";
             $profilePicDir = $userDir . "profile_picture/";
@@ -68,6 +68,18 @@
                 mkdir($profilePicDir, 0777, true);
             }
 
+            // Retrieve existing profile picture path from db
+            $stmt = $pdo->prepare("SELECT profile_picture FROM profiles WHERE user_id = :user_id");
+            $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+            $stmt->execute();
+            $existingPicture = $stmt->fetchColumn();
+
+            // Delete the existing profile picture if it exists
+            if (!empty($existingPicture) && file_exists($existingPicture)) {
+                unlink($existingPicture); // Deletes the previous file
+            }
+
+            // Upload the new profile picture
             if (!empty($_FILES["profile_picture"]["name"])) {
                 $fileName = basename($_FILES["profile_picture"]["name"]);
                 $targetFilePath = $profilePicDir . $fileName; // Store profile pic inside profile folder
@@ -81,6 +93,7 @@
                 }
             }
         }
+        header("Location: profile.php"); // temp line to update profile pic
     }
 
     // ###### Create a new post and insert into mysql
@@ -129,8 +142,6 @@
         }
     }
 
-
-    
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -146,10 +157,10 @@
     <section class="container w-50 mt-5">
         <!-- Profile details section -->
         <form id="profile-form" action="profile.php" method="POST" enctype="multipart/form-data">
-            <div id="profile-details-container" class="d-flex m-auto border mt-5">
+            <div id="profile-details-container" class="d-flex m-auto mt-5">
                 <!-- Profile Picture -->
                 <div>
-                    <input type="file" id="profile-image-upload" name="profile_picture" accept="image/*" disabled hidden>
+                    <input id="profile-image-upload" type="file" name="profile_picture" accept="image/*" disabled hidden>
                     <label for="profile-image-upload">
                         <img id="profile-picture" src="<?php echo htmlentities($profile_picture); ?>" alt="Profile Picture">
                     </label>
@@ -157,20 +168,21 @@
                 <!-- Profile information -->
                 <div id="profile-details">
                     <!-- Full Name -->
-                    <h3><input id="profile-name" class="mb-2 w-100" type="text" name="full_name" value="<?php echo !empty($full_name) ? htmlentities($full_name) : 'Enter your name'; ?>" disabled required></h3>
+                    <h3><input id="profile-name" class="mb-2" type="text" name="full_name" value="<?php echo !empty($full_name) ? htmlentities($full_name) : 'Enter your name'; ?>" required disabled></h3>
                     <!-- Location -->
-                    <h5><input id="profile-location" class="mb-2 w-100" type="text" name="location" value="<?php echo htmlentities($location); ?>" disabled required></h5>
+                    <h5><input id="profile-location" class="mb-2" type="text" name="location" value="<?php echo !empty($location) ? htmlentities($location) : 'Add a location'; ?>" disabled></h5>
                     <!-- Bio -->
-                    <textarea id="profile-bio" class="w-100" name="bio" disabled><?php echo !empty($bio) ? htmlentities($bio) : "Add a bio"; ?></textarea>  
+                    <textarea id="profile-bio" name="bio" disabled><?php echo !empty($bio) ? htmlentities($bio) : "Add a bio"; ?></textarea>  
                 </div>
                 <!-- Edit icon -->
                 <div>
                     <span id="edit-icon">
                         <i class="bi bi-pencil"></i>
                     </span>
+                    <button id="profile-details-submit" type="submit" name="profile-details" style="display: none;"></button>
                 </div>
             </div>
-        </form>
+        </form><hr class="mt-5">
         <!-- New post section -->
         <div id="profile-new-post" class="mt-5">
             <!-- Section for a new post -->
@@ -191,7 +203,7 @@
                     </div>
                 </div>
              </form>
-            <hr>
+            <hr class="mt-5">
         </div>
         <div id="profile-posts" class="d-flex flex-column justify-content-center border mt-5">
             <?php 
