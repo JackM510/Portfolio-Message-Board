@@ -48,8 +48,8 @@
                         // Users Profile Picture & Full Name
                         echo('<div class="p-4 border">
                                 <div class="d-flex align-items-center">
-                                    <img class="me-3 rounded-pill" src="'.htmlspecialchars($profile_picture). '" alt="Post Image" style="width:40px;">
-                                    <h5>'.$user_name.'</h5>');
+                                    <a href="profile.php"><img class="me-3 rounded-pill" src="'.htmlspecialchars($profile_picture). '" alt="Post Image" style="width:40px;">
+                                    <h5>'.$user_name.'</a></h5>');
 
                                     if (isset($_SESSION['user_id']) && $_SESSION['user_id'] == $post['user_id']) {
                                         echo('<div class="dropdown ms-auto">
