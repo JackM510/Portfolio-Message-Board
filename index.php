@@ -49,8 +49,20 @@
                         echo('<div class="p-4 border">
                                 <div class="d-flex align-items-center">
                                     <img class="me-3 rounded-pill" src="'.htmlspecialchars($profile_picture). '" alt="Post Image" style="width:40px;">
-                                    <h5>'.$user_name.'</h5>
-                                </div>');
+                                    <h5>'.$user_name.'</h5>');
+
+                                    if (isset($_SESSION['user_id']) && $_SESSION['user_id'] == $post['user_id']) {
+                                        echo('<div class="dropdown ms-auto">
+                                            <span id="post-options-'.htmlspecialchars($post['post_id']).'" data-bs-toggle="dropdown" aria-expanded="false" role="button" style="cursor: pointer;">
+                                                <i class="bi bi-three-dots-vertical" style="color:black; font-size:20px;"></i>
+                                            </span>
+                                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="post-options-'.htmlspecialchars($post['post_id']).'">
+                                                <li><a class="dropdown-item" href="#">Edit</a></li>
+                                                <li><a class="dropdown-item text-danger" href="#">Delete</a></li>
+                                            </ul>
+                                            </div>'); 
+                                    }
+                                echo('</div>');
                         // Display any pictures added to the post
                         if (!empty($post['post_picture'])) {
                             echo("<div class='mt-3'>
