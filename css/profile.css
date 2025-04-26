@@ -8,7 +8,7 @@
 
 #profile-details {
     flex-grow: 1;
-    padding-right: 16px;
+    padding-right: 30px;
 }
 
 #profile-details input,
@@ -25,8 +25,17 @@
 
 #profile-image-upload:not([disabled]) + label #profile-picture:hover {
     cursor: pointer; /* Enables hover only when input is active */
+    border: 1px solid black;
     opacity: 0.9; /* Optional: restore full visibility */
 }
+
+#profile-name:not([disabled]):hover,
+#profile-location:not([disabled]):hover,
+#profile-bio:not([disabled]):hover {
+    cursor: pointer; /* Enables hover only when input is active */
+    border: 1px solid black;
+}
+
 
 #profile-name:disabled,
 #profile-location:disabled,
@@ -53,9 +62,22 @@
     cursor: pointer;
 }
 
-#edit-icon:hover {
+#edit-icon:hover,
+#cancel-icon:hover {
     background: lightgrey;
 }
+
+#cancel-icon {
+    display: none;
+    color: red;
+    position: absolute;
+    top: 40px;
+    right: 5px;
+    font-size: 14px;
+    padding: 1px 2px;
+    cursor: pointer;
+}
+
 
 /* New Post */
 #new-post-textarea {

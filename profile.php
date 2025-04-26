@@ -179,6 +179,9 @@
                     <span id="edit-icon">
                         <i class="bi bi-pencil"></i>
                     </span>
+                    <span id="cancel-icon">
+                        <i class="bi bi-x-lg"></i>
+                    </span>
                     <button id="profile-details-submit" type="submit" name="profile-details" style="display: none;"></button>
                 </div>
             </div>
