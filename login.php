@@ -51,34 +51,46 @@
 
     // Function to create a new user/profile
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['signup'])) {
-        $first_name = $_POST['first_name'];
-        $last_name = $_POST['last_name'];
+
+        // Need to validate the email before an insert statement
         $email = $_POST['email'];
-        $password = $_POST['password']; // Plaintext password must be hashed prior to INSERT
-        $hashedPassword = password_hash($password, PASSWORD_DEFAULT); // Hash the password
+        $stmt = $pdo->prepare("SELECT email FROM users WHERE email = :email");
+        $stmt->bindParam(':email', $email, PDO::PARAM_STR);
+        $stmt->execute();
 
-        try {
-            $stmt = $pdo->prepare("INSERT INTO `users`(`first_name`, `last_name`, `email`, `password`) VALUES (:first_name, :last_name, :email, :password)");
-            $stmt->bindParam(':first_name', $first_name, PDO::PARAM_STR);
-            $stmt->bindParam(':last_name', $last_name, PDO::PARAM_STR);
-            $stmt->bindParam(':email', $email, PDO::PARAM_STR);
-            $stmt->bindParam(':password', $hashedPassword, PDO::PARAM_STR); // Store the hashed password
-            $stmt->execute();
+        if ($stmt->rowCount() > 0) {
+            $_SESSION['email-error'] = "Email address already registered";
+        } 
+        // INSERT the new user
+        else {
+            $first_name = $_POST['first_name'];
+            $last_name = $_POST['last_name'];
+            $password = $_POST['password']; // Plaintext password must be hashed prior to INSERT
+            $hashedPassword = password_hash($password, PASSWORD_DEFAULT); // Hash the password
 
-            // Get the newly inserted user ID
-            $user_id = $pdo->lastInsertId();
-            // Set SESSION variables
-            $_SESSION['user_id'] = $user_id;
-            $_SESSION['email'] = $email;
+            try {
+                $stmt = $pdo->prepare("INSERT INTO `users`(`first_name`, `last_name`, `email`, `password`) VALUES (:first_name, :last_name, :email, :password)");
+                $stmt->bindParam(':first_name', $first_name, PDO::PARAM_STR);
+                $stmt->bindParam(':last_name', $last_name, PDO::PARAM_STR);
+                $stmt->bindParam(':email', $email, PDO::PARAM_STR);
+                $stmt->bindParam(':password', $hashedPassword, PDO::PARAM_STR); // Store the hashed password
+                $stmt->execute();
 
-            // Insert default profile data
-            $stmt = $pdo->prepare("INSERT INTO profiles (user_id, profile_picture) VALUES (:user_id, 'uploads/default/profile_picture.png')");
-            $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
-            $stmt->execute();
+                // Get the newly inserted user ID
+                $user_id = $pdo->lastInsertId();
+                // Set SESSION variables
+                $_SESSION['user_id'] = $user_id;
+                $_SESSION['email'] = $email;
 
-            header("Location: profile.php");
-        } catch (PDOException $e) {
-            echo "Error: " . $e->getMessage();
+                // Insert default profile data
+                $stmt = $pdo->prepare("INSERT INTO profiles (user_id, profile_picture) VALUES (:user_id, 'uploads/default/profile_picture.png')");
+                $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+                $stmt->execute();
+
+                header("Location: profile.php");
+            } catch (PDOException $e) {
+                echo "Error: " . $e->getMessage();
+            }
         }
     }
 ?>
@@ -102,6 +114,7 @@
             <form action="login.php" method="POST" class="w-50">
                 <div class="row">
                     <div class="col-12 mb-3">
+                    <?php if (isset($_SESSION['email-error'])) { echo "<p class='error-flash'>".$_SESSION['email-error']."</p>"; unset($_SESSION['email-error']); } ?>
                         <input class="form-control form-control-lg" type="email" name="email" placeholder="Email" required>
                     </div>
                     <div class="col-12 mb-3">
