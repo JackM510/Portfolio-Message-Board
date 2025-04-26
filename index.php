@@ -48,7 +48,7 @@
                         // Users Profile Picture & Full Name
                         echo('<div class="p-4 border">
                                 <div class="d-flex align-items-center">
-                                    <a href="profile.php"><img class="me-3 rounded-pill" src="'.htmlspecialchars($profile_picture). '" alt="Post Image" style="width:40px;">
+                                    <a class="post-profile-link" href="profile.php?user_id='.htmlspecialchars($post['user_id']).'"><img class="me-3 rounded-pill" src="'.htmlspecialchars($profile_picture). '" alt="Post Image" style="width:40px;">
                                     <h5>'.$user_name.'</a></h5>');
 
                                     if (isset($_SESSION['user_id']) && $_SESSION['user_id'] == $post['user_id']) {
@@ -102,7 +102,7 @@
                         // ADD ALL COMMENTS ON THE POST
                         $post_id = $post['post_id']; 
                         $stmt = $pdo->prepare("
-                            SELECT c.comment_text, c.comment_created, u.first_name, u.last_name, p.profile_picture 
+                            SELECT c.comment_text, c.comment_created, u.user_id, u.first_name, u.last_name, p.profile_picture 
                             FROM comments c 
                             INNER JOIN users u ON c.user_id = u.user_id 
                             INNER JOIN profiles p ON c.user_id = p.user_id 
@@ -120,8 +120,8 @@
                         
                                 echo "<hr><div class='comment'>";
                                     echo('<div class="d-flex">');
-                                        echo "<img class='me-3 rounded-pill' src='" . $commentor_profile_picture . "' alt='Profile Picture' style='max-width:40px;'>";
-                                        echo "<p><strong>" . $commentor_name . ":</strong> " . htmlspecialchars($comment['comment_text']) . "</p>";
+                                        echo "<a class='post-profile-link' href='profile.php?user_id=" . $comment['user_id'] . "'><img class='me-3 rounded-pill' src='" . $commentor_profile_picture . "' alt='Profile Picture' style='max-width:40px;'>";
+                                        echo "<p><strong>" . $commentor_name . ": </strong></a>" . htmlspecialchars($comment['comment_text']) . "</p>";
                                     echo('</div>');
                                 echo "</div>";
                             }

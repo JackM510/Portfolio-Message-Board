@@ -8,6 +8,8 @@
         header("Location: login.php");
     }
 
+    $user_id = isset($_GET['user_id']) ? $_GET['user_id'] : $_SESSION['user_id'];
+
     // Set Profile details - get users full name and profile information
     $sql = "SELECT u.first_name, u.last_name, p.bio, p.profile_picture, p.location
         FROM users u
@@ -15,7 +17,7 @@
         WHERE u.user_id = :user_id";
 
     $stmt = $pdo->prepare($sql);
-    $stmt->bindParam(':user_id', $_SESSION['user_id'], PDO::PARAM_INT);
+    $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
     $stmt->execute();
     $data = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -154,94 +156,108 @@
 <body>
     <!-- Navbar -->
     <?php require_once "nav.php"; ?>
-    <section class="container w-50 mt-5">
+    <section class="mt-5">
         <!-- Profile details section -->
-        <form id="profile-form" action="profile.php" method="POST" enctype="multipart/form-data">
-            <div id="profile-details-container" class="d-flex m-auto mt-5">
-                <!-- Profile Picture -->
-                <div>
-                    <input id="profile-image-upload" type="file" name="profile_picture" accept="image/*" disabled hidden>
-                    <label for="profile-image-upload">
-                        <img id="profile-picture" src="<?php echo htmlentities($profile_picture); ?>" alt="Profile Picture">
-                    </label>
-                </div>
-                <!-- Profile information -->
-                <div id="profile-details">
-                    <!-- Full Name -->
-                    <h3><input id="profile-name" class="mb-2" type="text" name="full_name" value="<?php echo !empty($full_name) ? htmlentities($full_name) : 'Enter your name'; ?>" required disabled></h3>
-                    <!-- Location -->
-                    <h5><input id="profile-location" class="mb-2" type="text" name="location" value="<?php echo !empty($location) ? htmlentities($location) : 'Add a location'; ?>" disabled></h5>
-                    <!-- Bio -->
-                    <textarea id="profile-bio" name="bio" disabled><?php echo !empty($bio) ? htmlentities($bio) : "Add a bio"; ?></textarea>  
-                </div>
-                <!-- Edit icon -->
-                <div>
-                    <span id="edit-icon">
-                        <i class="bi bi-pencil"></i>
-                    </span>
-                    <span id="cancel-icon">
-                        <i class="bi bi-x-lg"></i>
-                    </span>
-                    <button id="profile-details-submit" type="submit" name="profile-details" style="display: none;"></button>
-                </div>
-            </div>
-        </form><hr class="mt-5">
-        <!-- New post section -->
-        <div id="profile-new-post" class="mt-5">
-            <!-- Section for a new post -->
-             <form id="new-post-form" class="d-flex flex-column justify-content-center w-75 m-auto" action="profile.php" method="POST" enctype="multipart/form-data">
-                <img id="new-post-img" class="mb-2" src="">
-                <div class="d-flex flex-column">
-                    <div class="mb-2">
-                        <input type="file" name="image" id="image-upload" accept="image/*" hidden>
-                        <button type="button" onclick="document.getElementById('image-upload').click()" style="border:none;">
-                        <i class="bi bi-card-image"></i>
-                        </button>
+        <div class="container-fluid">
+            <form id="profile-form" class="w-75 mx-auto" action="profile.php" method="POST" enctype="multipart/form-data">
+                <div id="profile-details-container" class="d-flex m-auto mt-5">
+                    <!-- Profile Picture -->
+                    <div>
+                        <input id="profile-image-upload" type="file" name="profile_picture" accept="image/*" disabled hidden>
+                        <label for="profile-image-upload">
+                            <img id="profile-picture" src="<?php echo htmlentities($profile_picture); ?>" alt="Profile Picture">
+                        </label>
                     </div>
-                    
-                    <textarea id="new-post-textarea" class="mb-2" name="post_content" placeholder="Create a new post" rows="3" required></textarea>
-                    <div id="new-post-btn-group" class="ms-auto">
-                        <button id="cancel-post-btn" class="btn btn-sm btn-secondary ms-1" type="button" name="new-post">Cancel</button>
-                        <button id="new-post-btn" class="btn btn-sm btn-primary ms-1" type="submit" name="new-post">Post</button>
+                    <!-- Profile information -->
+                    <div id="profile-details">
+                        <!-- Full Name -->
+                        <h3><input id="profile-name" class="mb-2" type="text" name="full_name" value="<?php echo !empty($full_name) ? htmlentities($full_name) : 'Enter your name'; ?>" required disabled></h3>
+                        <!-- Location -->
+                        <h5><input id="profile-location" class="mb-2" type="text" name="location" value="<?php 
+                            if ($user_id == $_SESSION['user_id']) {
+                                echo !empty($location) ? htmlentities($location) : 'Add a location';
+                            } else {
+                                echo !empty($location) ? htmlentities($location) : 'Location not set';
+                            }
+                        ?>" disabled></h5>
+                        <!-- Bio -->
+                        <textarea id="profile-bio" name="bio" disabled><?php
+                            if ($user_id == $_SESSION['user_id']) {
+                                echo !empty($bio) ? htmlentities($bio) : "Add a bio";
+                            } else {
+                                echo !empty($bio) ? htmlentities($bio) : "Bio not set";
+                            }
+                        ?></textarea>  
                     </div>
+                    <!-- Edit icon -->
+                    <?php if ($user_id == $_SESSION['user_id']): ?> 
+                        <div>
+                            <span id="edit-icon">
+                                <i class="bi bi-pencil"></i>
+                            </span>
+                            <span id="cancel-icon">
+                                <i class="bi bi-x-lg"></i>
+                            </span>
+                            <button id="profile-details-submit" type="submit" name="profile-details" style="display: none;"></button>
+                        </div>
+                    <?php endif; ?>
                 </div>
-             </form>
-            <hr class="mt-5">
+            </form><hr class="mt-5">
         </div>
-        <div id="profile-posts" class="d-flex flex-column justify-content-center border mt-5">
-            <?php 
-                // ##### Display all posts from the user
-                $stmt = $pdo->prepare("SELECT * FROM posts WHERE user_id = :uid ORDER BY post_created DESC");
-                $stmt->bindParam(':uid', $_SESSION['user_id'], PDO::PARAM_STR);
-                $stmt->execute();
 
-                $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        <!-- Section for a new post -->
+        <div class="w-50 mx-auto">
+            <?php if ($user_id == $_SESSION['user_id']): ?>
+                <div id="profile-new-post" class="mt-5">
+                    <form id="new-post-form" class="d-flex flex-column justify-content-center w-75 m-auto" action="profile.php" method="POST" enctype="multipart/form-data">
+                        <img id="new-post-img" class="mb-2" src="">
+                        <div class="d-flex flex-column">
+                            <div class="mb-2">
+                                <input type="file" name="image" id="image-upload" accept="image/*" hidden>
+                                <button type="button" onclick="document.getElementById('image-upload').click()" style="border:none;">
+                                <i class="bi bi-card-image"></i>
+                                </button>
+                            </div>
+                            
+                            <textarea id="new-post-textarea" class="mb-2" name="post_content" placeholder="Create a new post" rows="3" required></textarea>
+                            <div id="new-post-btn-group" class="ms-auto">
+                                <button id="cancel-post-btn" class="btn btn-sm btn-secondary ms-1" type="button" name="new-post">Cancel</button>
+                                <button id="new-post-btn" class="btn btn-sm btn-primary ms-1" type="submit" name="new-post">Post</button>
+                            </div>
+                        </div>
+                    </form>
+                    <hr class="mt-5">
+                </div>
+            <?php endif; ?>    
+            <div id="profile-posts" class="d-flex flex-column justify-content-center border mt-5">
+                <?php 
+                    // ##### Display all posts from the user
+                    $stmt = $pdo->prepare("SELECT * FROM posts WHERE user_id = :uid ORDER BY post_created DESC");
+                    $stmt->bindParam(':uid', $user_id, PDO::PARAM_STR);
+                    $stmt->execute();
 
-                if ($posts) {
-                    foreach ($posts as $post) {
-                        echo('<div><p>'.htmlentities($post['post_text']).'</p>');
-                        echo('<p>'.htmlentities($post['post_created']).'</p></div>');
+                    $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-                        if (!empty($post['post_picture'])) {
-                            echo "<img src='" . htmlspecialchars($post['post_picture']) . "' alt='Post Image' style='max-width:100px;'>";
+                    if ($posts) {
+                        foreach ($posts as $post) {
+                            echo('<div><p>'.htmlentities($post['post_text']).'</p>');
+                            echo('<p>'.htmlentities($post['post_created']).'</p></div>');
+
+                            if (!empty($post['post_picture'])) {
+                                echo "<img src='" . htmlspecialchars($post['post_picture']) . "' alt='Post Image' style='max-width:100px;'>";
+                            }
+
+                            
+
                         }
-
-                        
-
+                    } else {
+                        echo('<p>No Posts Available</p>');
                     }
-                } else {
-                    echo('<p>No Posts Available</p>');
-                }
-                        
-            
-            
-            
-            ?>
-            <!-- List of posts by the user -->
-
-            <!-- Display No posts if none made -->
-
+                ?>
+            </div>
         </div>
+        <!-- New post section -->
+        
     </section>
 
     <script>

@@ -8,3 +8,9 @@
 .add-comment-btns {
     display: none;
 }
+
+.post-profile-link {
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer; /* Ensures it still looks clickable */ 
+}
