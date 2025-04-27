@@ -3,7 +3,25 @@
     require_once('db_connection.php');
 
     // Add a comment functionality
+    if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_SESSION['user_id'])) {
+        $post_id = $_POST['post_id'];
+        $user_id = $_SESSION['user_id'];
+        $comment_text = trim($_POST['comment_text']);
 
+        if (!empty($comment_text)) {
+            // Insert comment into the database
+            $sql = "INSERT INTO comments (post_id, user_id, comment_text) VALUES (:post_id, :user_id, :comment_text)";
+            $stmt = $pdo->prepare($sql);
+            $stmt->bindParam(':post_id', $post_id, PDO::PARAM_INT);
+            $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+            $stmt->bindParam(':comment_text', $comment_text, PDO::PARAM_STR);
+    
+            if ($stmt->execute()) {
+                header("Location: index.php");
+                exit();
+            }
+        }
+    }
 
 ?>
 <!DOCTYPE html>
@@ -88,8 +106,9 @@
                                     <div>
                                          <img class="me-3 rounded-pill" src="'.htmlspecialchars($your_profile_picture).'" alt="Post Image" style="width:40px;">
                                     </div>
-                                    <form id="add-comment-form-'.htmlspecialchars($post['post_id']).'" method="POST" class="w-100">
-                                        <textarea id="add-comment-textarea-'.htmlspecialchars($post['post_id']).'" class="w-100 add-comment-textarea" placeholder="Add a comment..." rows="3" style="resize:none;"></textarea>
+                                    <form id="add-comment-form-'.htmlspecialchars($post['post_id']).'" data-post-id="'.htmlspecialchars($post['post_id']).'" method="POST" class="w-100">
+                                        <textarea id="add-comment-textarea-'.htmlspecialchars($post['post_id']).'" class="w-100 add-comment-textarea" name="comment_text" placeholder="Add a comment..." rows="3" style="resize:none;"></textarea>
+                                        <input type="hidden" name="post_id" value="'.htmlspecialchars($post['post_id']).'">
                                         <div id="add-comment-btns-'.htmlspecialchars($post['post_id']).'" class="add-comment-btns">
                                             <button class="btn btn-sm btn-secondary cancel-btn" type="button" data-post-id="'.htmlspecialchars($post['post_id']).'">Cancel</button>
                                             <button class="btn btn-sm btn-primary ms-1">Comment</button>
@@ -126,11 +145,7 @@
                                 echo "</div>";
                             }
                         }
-                        
-
-
                         echo('</div><br><br>'); // CLOSE PARENT DIV
-
                     }
                 } else {
                     echo('<p>No Posts Available</p>');
