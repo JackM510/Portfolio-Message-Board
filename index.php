@@ -2,8 +2,28 @@
     session_start();
     require_once('db_connection.php');
 
+    // Edit a post
+
+
+
+    // Delete a post
+    if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_SESSION['user_id']) && isset($_POST['post_id']) && isset($_POST['delete_post'])) {
+        $post_id = $_POST['post_id'];
+
+        $stmt = $pdo->prepare("DELETE FROM posts WHERE post_id = :post_id");
+        $stmt->bindParam(':post_id', $post_id, PDO::PARAM_INT);
+
+        if ($stmt->execute()) {
+            header("Location: index.php");
+            exit();
+        } else {
+            echo "Error deleting post: " . implode(" ", $stmt->errorInfo());
+        }
+    }
+
+
     // Add a comment functionality
-    if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_SESSION['user_id'])) {
+    if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_SESSION['user_id']) && isset($_POST['comment_text'])) {
         $post_id = $_POST['post_id'];
         $user_id = $_SESSION['user_id'];
         $comment_text = trim($_POST['comment_text']);
@@ -76,7 +96,13 @@
                                             </span>
                                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="post-options-'.htmlspecialchars($post['post_id']).'">
                                                 <li><a class="dropdown-item" href="#">Edit</a></li>
-                                                <li><a class="dropdown-item text-danger" href="#">Delete</a></li>
+                                                <li>
+                                                    <form method="POST" action="index.php">
+                                                        <input type="hidden" name="delete_post" value="true">
+                                                        <input type="hidden" name="post_id" value="'.htmlspecialchars($post['post_id']).'">
+                                                        <button type="submit" class="dropdown-item text-danger" style="border: none; background: none; cursor: pointer;">Delete</button>
+                                                    </form>
+                                                </li>
                                             </ul>
                                             </div>'); 
                                     }
@@ -155,7 +181,5 @@
 
         </div>
     </section>
-
-
 </body>
 </html>

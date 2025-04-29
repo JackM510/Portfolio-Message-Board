@@ -32,13 +32,4 @@ document.addEventListener("DOMContentLoaded", function() {
             }
         });
     });
-
-    
-
-
-
-
-
-
-
 });
