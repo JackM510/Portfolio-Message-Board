@@ -1,13 +1,11 @@
 <?php
     session_start();
-    require_once('db_connection.php');
+    require_once('includes/db_connection.php');
 
     // Edit a post
 
-
-
     // Delete a post
-    if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_SESSION['user_id']) && isset($_POST['post_id']) && isset($_POST['delete_post'])) {
+    /*if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_SESSION['user_id']) && isset($_POST['post_id']) && isset($_POST['delete_post'])) {
         $post_id = $_POST['post_id'];
 
         $stmt = $pdo->prepare("DELETE FROM posts WHERE post_id = :post_id");
@@ -19,30 +17,7 @@
         } else {
             echo "Error deleting post: " . implode(" ", $stmt->errorInfo());
         }
-    }
-
-
-    // Add a comment functionality
-    if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_SESSION['user_id']) && isset($_POST['comment_text'])) {
-        $post_id = $_POST['post_id'];
-        $user_id = $_SESSION['user_id'];
-        $comment_text = trim($_POST['comment_text']);
-
-        if (!empty($comment_text)) {
-            // Insert comment into the database
-            $sql = "INSERT INTO comments (post_id, user_id, comment_text) VALUES (:post_id, :user_id, :comment_text)";
-            $stmt = $pdo->prepare($sql);
-            $stmt->bindParam(':post_id', $post_id, PDO::PARAM_INT);
-            $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
-            $stmt->bindParam(':comment_text', $comment_text, PDO::PARAM_STR);
-    
-            if ($stmt->execute()) {
-                header("Location: index.php");
-                exit();
-            }
-        }
-    }
-
+    }*/
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -56,7 +31,7 @@
     <!-- Navbar -->
     <?php require_once "nav.php"; ?>
 
-    <!-- Example Post structure -->
+    <!-- Post section -->
     <section class="container w-50 mx-auto mt-5">
         <div>
             <?php
@@ -97,7 +72,7 @@
                                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="post-options-'.htmlspecialchars($post['post_id']).'">
                                                 <li><a class="dropdown-item" href="#">Edit</a></li>
                                                 <li>
-                                                    <form method="POST" action="index.php">
+                                                    <form id="post-options-form-'.htmlspecialchars($post['post_id']).'" method="POST">
                                                         <input type="hidden" name="delete_post" value="true">
                                                         <input type="hidden" name="post_id" value="'.htmlspecialchars($post['post_id']).'">
                                                         <button type="submit" class="dropdown-item text-danger" style="border: none; background: none; cursor: pointer;">Delete</button>
@@ -144,7 +119,7 @@
                         }
 
                     
-                        // ADD ALL COMMENTS ON THE POST
+                        // Add any comments on the post
                         $post_id = $post['post_id']; 
                         $stmt = $pdo->prepare("
                             SELECT c.comment_text, c.comment_created, u.user_id, u.first_name, u.last_name, p.profile_picture 
@@ -178,7 +153,6 @@
                 }
 
             ?>    
-
         </div>
     </section>
 </body>

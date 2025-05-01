@@ -1,6 +1,6 @@
 <?php
     session_start();
-    require('db_connection.php');
+    require_once('includes/db_connection.php');
 
     // If a user is already logged in
     if (isset($_SESSION['user_id']) && isset($_SESSION['first_name'])) {
@@ -8,10 +8,7 @@
         exit();
     }
 
-    // Function to validate login credentials
-    // Include database connection
-    include 'db_connection.php'; // Update with your DB connection file
-
+    // Function to validate login credential
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
         // Retrieve email and password from form
         $email = $_POST['email'];

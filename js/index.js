@@ -32,4 +32,62 @@ document.addEventListener("DOMContentLoaded", function() {
             }
         });
     });
+
+    // Add comment AJAX for add_comment.php
+    document.querySelectorAll("[id^=add-comment-form]").forEach(form => {
+        form.addEventListener("submit", function(event) {
+            event.preventDefault(); // Stop default form submission
+    
+            const formData = new FormData(this);
+    
+            // Debugging - Log the values
+            for (let pair of formData.entries()) {
+                console.log(pair[0] + ": " + pair[1]);
+            }
+    
+            fetch("actions/add_comment.php", {
+                method: "POST",
+                body: formData
+            })
+            .then(response => response.text())
+            .then(data => {
+                console.log("Server Response:", data); // Log server response
+                if (data.trim() === "success") {
+                    location.reload();
+                } else {
+                    alert("Error adding comment: " + data);
+                }
+            })
+            .catch(error => console.error("Fetch Error:", error));
+        });
+    });
+
+    // Delete post AJAX for delete_post.php
+    document.querySelectorAll("[id^=post-options-form]").forEach(form => {
+        form.addEventListener("submit", function(event) {
+            event.preventDefault(); // Stop default form submission
+
+            const formData = new FormData(this);
+    
+            // Debugging - Log the values
+            for (let pair of formData.entries()) {
+                console.log(pair[0] + ": " + pair[1]);
+            }
+    
+            fetch("actions/delete_post.php", {
+                method: "POST",
+                body: formData
+            })
+            .then(response => response.text())
+            .then(data => {
+                console.log("Server Response:", data); // Log server response
+                if (data.trim() === "success") {
+                    location.reload();
+                } else {
+                    alert("Error deleting post: " + data);
+                }
+            })
+            .catch(error => console.error("Fetch Error:", error));
+        });
+    });
 });

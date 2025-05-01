@@ -1,6 +1,6 @@
 <?php
     session_start();
-    require_once('db_connection.php');
+    require_once('includes/db_connection.php');
     require_once('utilities.php');
 
     // If user not logged in; redirect to login.php to login/signup
@@ -232,27 +232,12 @@
             <div id="profile-posts" class="d-flex flex-column justify-content-center border mt-5">
                 <?php 
                     // ##### Display all posts from the user
-                    $stmt = $pdo->prepare("SELECT * FROM posts WHERE user_id = :uid ORDER BY post_created DESC");
-                    $stmt->bindParam(':uid', $user_id, PDO::PARAM_STR);
-                    $stmt->execute();
+                    //$stmt = $pdo->prepare("SELECT * FROM posts WHERE user_id = :uid ORDER BY post_created DESC");
+                    //echo('<p>No Posts Available</p>');
 
-                    $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-                    if ($posts) {
-                        foreach ($posts as $post) {
-                            echo('<div><p>'.htmlentities($post['post_text']).'</p>');
-                            echo('<p>'.htmlentities($post['post_created']).'</p></div>');
 
-                            if (!empty($post['post_picture'])) {
-                                echo "<img src='" . htmlspecialchars($post['post_picture']) . "' alt='Post Image' style='max-width:100px;'>";
-                            }
-
-                            
-
-                        }
-                    } else {
-                        echo('<p>No Posts Available</p>');
-                    }
+                    
                 ?>
             </div>
         </div>
