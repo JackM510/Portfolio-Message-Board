@@ -93,7 +93,7 @@ function getPosts($pdo, $user_id = null) {
             // Add any comments on the post
             $post_id = $post['post_id']; 
             $stmt = $pdo->prepare("
-                SELECT c.comment_text, c.comment_created, u.user_id, u.first_name, u.last_name, p.profile_picture 
+                SELECT c.comment_id, c.comment_text, c.comment_created, u.user_id, u.first_name, u.last_name, p.profile_picture 
                 FROM comments c 
                 INNER JOIN users u ON c.user_id = u.user_id 
                 INNER JOIN profiles p ON c.user_id = p.user_id 
@@ -110,10 +110,33 @@ function getPosts($pdo, $user_id = null) {
                     $commentor_profile_picture = htmlspecialchars($comment['profile_picture']);
             
                     echo "<hr><div class='comment'>";
+
+
                         echo('<div class="d-flex">');
                             echo "<a class='post-profile-link' href='profile.php?user_id=" . $comment['user_id'] . "'><img class='me-3 rounded-pill' src='" . $commentor_profile_picture . "' alt='Profile Picture' style='max-width:40px;'>";
                             echo "<p><strong>" . $commentor_name . ": </strong></a>" . htmlspecialchars($comment['comment_text']) . "</p>";
+
+
+                            if (isset($_SESSION['user_id']) && $_SESSION['user_id'] == $comment['user_id']) {
+                                echo('<div class="dropdown ms-auto">
+                                    <span id="comment-options-'.htmlspecialchars($comment['comment_id']).'" data-bs-toggle="dropdown" aria-expanded="false" role="button" style="cursor: pointer;">
+                                        <i class="bi bi-three-dots-vertical" style="color:black; font-size:20px;"></i>
+                                    </span>
+                                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="post-options-'.htmlspecialchars($comment['comment_id']).'">
+                                        <li><a class="dropdown-item" href="#">Edit</a></li>
+                                        <li>
+                                            <form id="comment-options-form-'.htmlspecialchars($comment['comment_id']).'" method="POST">
+                                                <input type="hidden" name="delete_comment" value="true">
+                                                <input type="hidden" name="comment_id" value="'.htmlspecialchars($comment['comment_id']).'">
+                                                <button type="submit" class="dropdown-item text-danger" style="border: none; background: none; cursor: pointer;">Delete</button>
+                                            </form>
+                                        </li>
+                                    </ul>
+                                    </div>'); 
+                            }
+
                         echo('</div>');
+
                     echo "</div>";
                 }
             }
