@@ -151,8 +151,14 @@
     <?php require_once "head.php"; ?>
     <link href="css/profile.css" rel="stylesheet">
     <script src="js/profile.js"></script>
-    <link href="css/posts.css" rel="stylesheet">
-    <script src="js/posts.js"></script>
+    <!-- CSS & JS to create posts if user logged in -->
+    <link href="css/create_post.css" rel="stylesheet">
+    <script src="js/create_post.js"></script>
+    <!-- CSS & JS to fetch posts from mysql for a specified user -->
+    <link href="css/fetch_posts.css" rel="stylesheet">
+    <script src="js/fetch_posts.js"></script>
+
+
     <title>Profile</title>
 </head>
 <body>
@@ -234,29 +240,14 @@
             <div id="profile-posts" class="d-flex flex-column justify-content-center mt-5">
                 <?php 
                     // Display all posts from the user
-                    include 'includes/posts.php';
+                    include 'includes/fetch_posts.php';
                     getPosts($pdo, $user_id); //Fetch ALL posts in mysql   
                 ?>
             </div>
-        </div>
-        <!-- New post section -->
-        
+        </div> 
     </section>
 
     <script>
-        document.getElementById("image-upload").addEventListener("change", function(event) {
-            const file = event.target.files[0]; // Get the selected file
-
-            if (file) {
-                const reader = new FileReader(); // Create a FileReader object
-                reader.onload = function(e) {
-                    document.getElementById("new-post-img").src = e.target.result; // Set the image source to the selected file
-                };
-                reader.readAsDataURL(file); // Convert the file into a Data URL
-            }
-        });
-
-
         document.getElementById("profile-image-upload").addEventListener("change", function(event) {
         const file = event.target.files[0];
 
