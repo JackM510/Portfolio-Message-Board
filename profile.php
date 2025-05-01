@@ -151,6 +151,8 @@
     <?php require_once "head.php"; ?>
     <link href="css/profile.css" rel="stylesheet">
     <script src="js/profile.js"></script>
+    <link href="css/posts.css" rel="stylesheet">
+    <script src="js/posts.js"></script>
     <title>Profile</title>
 </head>
 <body>
@@ -229,15 +231,11 @@
                     <hr class="mt-5">
                 </div>
             <?php endif; ?>    
-            <div id="profile-posts" class="d-flex flex-column justify-content-center border mt-5">
+            <div id="profile-posts" class="d-flex flex-column justify-content-center mt-5">
                 <?php 
-                    // ##### Display all posts from the user
-                    //$stmt = $pdo->prepare("SELECT * FROM posts WHERE user_id = :uid ORDER BY post_created DESC");
-                    //echo('<p>No Posts Available</p>');
-
-
-
-                    
+                    // Display all posts from the user
+                    include 'includes/posts.php';
+                    getPosts($pdo, $user_id); //Fetch ALL posts in mysql   
                 ?>
             </div>
         </div>
