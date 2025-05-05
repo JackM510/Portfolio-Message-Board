@@ -111,11 +111,9 @@ function getPosts($pdo, $user_id = null) {
             
                     echo "<hr><div class='comment'>";
 
-
                         echo('<div class="d-flex">');
                             echo "<a class='post-profile-link' href='profile.php?user_id=" . $comment['user_id'] . "'><img class='me-3 rounded-pill' src='" . $commentor_profile_picture . "' alt='Profile Picture' style='max-width:40px;'>";
                             echo "<p><strong>" . $commentor_name . ": </strong></a>" . htmlspecialchars($comment['comment_text']) . "</p>";
-
 
                             if (isset($_SESSION['user_id']) && $_SESSION['user_id'] == $comment['user_id']) {
                                 echo('<div class="dropdown ms-auto">
@@ -136,7 +134,6 @@ function getPosts($pdo, $user_id = null) {
                             }
 
                         echo('</div>');
-
                     echo "</div>";
                 }
             }

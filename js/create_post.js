@@ -47,4 +47,33 @@ document.addEventListener("DOMContentLoaded", function () {
             reader.readAsDataURL(file); // Convert the file into a Data URL
         }
     });
+
+    // Add a post AJAX for add_post.php
+    document.getElementById("new-post-form").addEventListener("submit", function(event) {
+            event.preventDefault(); // Stop default form submission
+
+            const formData = new FormData(this);
+    
+            // Debugging - Log the values
+            for (let pair of formData.entries()) {
+                console.log(pair[0] + ": " + pair[1]);
+            }
+
+            fetch("actions/add_post.php", {
+                method: "POST",
+                body: formData
+            })
+            .then(response => response.text())
+            .then(data => {
+                console.log("Server Response:", data); // Log server response
+                if (data.trim() === "success") {
+                    location.reload();
+                } else {
+                    alert("Error adding post: " + data);
+                }
+            })
+            .catch(error => console.error("Fetch Error:", error));
+            
+    });
+    
 });

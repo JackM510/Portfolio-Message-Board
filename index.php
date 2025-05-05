@@ -18,9 +18,9 @@
     <!-- Navbar -->
     <?php require_once "nav.php"; ?>
 
-
+    <!-- New post & ALL posts section -->
     <section class="container w-50 mx-auto mt-5">
-        <div>
+        <div id="index-new-post">
             <?php 
                 if (isset($_SESSION['user_id'])) {
                     $user_id = $_SESSION['user_id'];
@@ -28,7 +28,7 @@
                 }
             ?>    
         </div>
-        <div>
+        <div id="index-all-posts">
             <?php
                 include 'includes/fetch_posts.php';
                 getPosts($pdo); //Fetch ALL posts in mysql
