@@ -8,6 +8,8 @@
         exit();
     }
 
+    $email = isset($_COOKIE['user_login']) ? $_COOKIE["user_login"] : "";
+
     // Function to validate login credential
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
         // Retrieve email and password from form
@@ -28,6 +30,13 @@
                     $_SESSION['user_id'] = $user['user_id'];
                     $_SESSION['email'] = $user['email'];
                     $_SESSION['role'] = $user['role'];
+
+                    // Successful login & remember me selected
+                    if (!empty($_POST['remember_me'])) {
+                        setcookie("user_login", $email, time() + (30 * 24 * 60 * 60), "/"); // Expires in 30 days
+                    } else {
+                        setcookie("user_login", "", time() - 3600, "/"); // Clear cookie if unchecked
+                    }
 
                     // Redirect to dashboard or another page
                     header("Location: index.php");
@@ -112,10 +121,15 @@
                 <div class="row">
                     <div class="col-12 mb-3">
                     <?php if (isset($_SESSION['email-error'])) { echo "<p class='error-flash'>".$_SESSION['email-error']."</p>"; unset($_SESSION['email-error']); } ?>
-                        <input class="form-control form-control-lg" type="email" name="email" placeholder="Email" required>
+                        <input class="form-control form-control-lg" type="email" name="email" placeholder="Email" value="<?= htmlspecialchars($email) ?>" required>
                     </div>
                     <div class="col-12 mb-3">
                         <input class="form-control form-control-lg" type="password" name="password" placeholder="Password" required>
+                    </div>
+                    <div>
+                    <label>
+                        <input type="checkbox" name="remember_me" <?= !empty($email) ? "checked" : "" ?>> Remember Me
+                    </label>
                     </div>
                     <div class="col-12 d-flex justify-content-center">
                         <button class="btn btn-lg btn-primary" type="submit" name="login">Login</button>
