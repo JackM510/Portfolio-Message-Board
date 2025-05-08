@@ -126,7 +126,7 @@
                     <div>
                         <input id="profile-image-upload" type="file" name="profile_picture" accept="image/*" disabled hidden>
                         <label for="profile-image-upload">
-                            <img id="profile-picture" src="<?php echo htmlentities($profile_picture); ?>" alt="Profile Picture">
+                            <img id="profile-picture" class="rounded-pill" src="<?php echo htmlentities($profile_picture); ?>" alt="Profile Picture">
                         </label>
                     </div>
                     <!-- Profile information -->

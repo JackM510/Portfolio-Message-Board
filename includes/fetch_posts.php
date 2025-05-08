@@ -33,7 +33,7 @@ function getPosts($pdo, $user_id = null) {
             echo('<div class="p-4 border">
                     <div class="d-flex align-items-center">
                         <a class="post-profile-link" href="profile.php?user_id='.htmlspecialchars($post['user_id']).'">
-                            <img class="me-3 rounded-pill" src="'.htmlspecialchars($profile_picture). '" alt="Post Image" style="width:40px;">
+                            <img class="me-3 rounded-pill post-profile-picture" src="'.htmlspecialchars($profile_picture). '" alt="Post Image">
                             <h5>'.$user_name.'</a></h5>');
 
                         if (isset($_SESSION['user_id']) && $_SESSION['user_id'] == $post['user_id']) {
@@ -57,7 +57,7 @@ function getPosts($pdo, $user_id = null) {
             // Display any pictures added to the post
             if (!empty($post['post_picture'])) {
                 echo("<div class='mt-3'>
-                        <img id='post-profile-picture' src='" . htmlspecialchars($post['post_picture']) . "' alt='Post Image'>
+                        <img id='post-picture' class='post-picture' src='" . htmlspecialchars($post['post_picture']) . "' alt='Post Image'>
                     </div>");
             }
             // Display the post text and DAT the post was created
@@ -77,7 +77,7 @@ function getPosts($pdo, $user_id = null) {
                 $your_profile_picture = $data['profile_picture'];
                 echo('<hr><div class="d-flex pt-3">
                         <div>
-                            <img class="me-3 rounded-pill" src="'.htmlspecialchars($your_profile_picture).'" alt="Post Image" style="width:40px;">
+                            <img class="me-3 rounded-pill comment-profile-picture" src="'.htmlspecialchars($your_profile_picture).'" alt="Post Image">
                         </div>
                         <form id="add-comment-form-'.htmlspecialchars($post['post_id']).'" data-post-id="'.htmlspecialchars($post['post_id']).'" method="POST" class="w-100">
                             <textarea id="add-comment-textarea-'.htmlspecialchars($post['post_id']).'" class="w-100 add-comment-textarea" name="comment_text" placeholder="Add a comment..." rows="3" style="resize:none;"></textarea>
@@ -115,7 +115,7 @@ function getPosts($pdo, $user_id = null) {
                             <div class="d-flex">
                                 <div>
                                     <a class="post-profile-link" href="profile.php?user_id=' . $comment['user_id'] . '">
-                                    <img class="me-3 rounded-pill" src="' . $commentor_profile_picture . '" alt="Profile Picture" style="max-width:40px;">
+                                    <img class="me-3 rounded-pill comment-profile-picture" src="' . $commentor_profile_picture . '" alt="Profile Picture">
                                 </div>
                                 <div class="w-100">
                                     <p><strong>' . $commentor_name . '</strong></a></p>

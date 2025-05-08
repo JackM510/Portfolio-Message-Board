@@ -1,7 +1,14 @@
-#post-profile-picture {
-    object-fit: contain;
-    height: auto;
-    max-width: 100%
+.post-profile-picture,
+.comment-profile-picture {
+    object-fit: cover;
+    height: 40px;
+    width: 40px;
+}
+
+.post-picture {
+    object-fit: stretch;
+    max-height: 100%;
+    max-width: 100%;
 }
 
 .add-comment-btns,
@@ -13,4 +20,12 @@
     text-decoration: none;
     color: inherit;
     cursor: pointer;
+}
+/* Existing Comment & Edit comment styles */
+.comment-textarea:disabled {
+    border: none;
+}
+
+.comment-textarea:not([disabled]) {
+    border: 1px solid black;
 }
