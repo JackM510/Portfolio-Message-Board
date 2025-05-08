@@ -89,7 +89,7 @@
                 $_SESSION['email'] = $email;
 
                 // Insert default profile data
-                $stmt = $pdo->prepare("INSERT INTO profiles (user_id, profile_picture) VALUES (:user_id, 'uploads/default/profile_picture.png')");
+                $stmt = $pdo->prepare("INSERT INTO profiles (user_id, profile_picture) VALUES (:user_id, 'uploads/default/profile_picture.avif')");
                 $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
                 $stmt->execute();
 

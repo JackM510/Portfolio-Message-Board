@@ -109,6 +109,7 @@ function getPosts($pdo, $user_id = null) {
                 foreach ($comments as $comment) {
                     $commentor_name = htmlspecialchars($comment['first_name'] . ' ' . $comment['last_name']);
                     $commentor_profile_picture = htmlspecialchars($comment['profile_picture']);
+                    $comment_timestamp = htmlspecialchars($comment['comment_created']);
             
                     echo ('<hr><div class="comment">
                             <div class="d-flex">
@@ -126,6 +127,7 @@ function getPosts($pdo, $user_id = null) {
                                             <button class="btn btn-sm btn-primary ms-1" type="submit">Comment</button>
                                         </div>
                                     </form>
+                                    <p>' . $comment_timestamp . '</p>
                                 </div>');
                             
                             if (isset($_SESSION['user_id']) && $_SESSION['user_id'] == $comment['user_id']) {
