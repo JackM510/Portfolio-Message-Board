@@ -97,53 +97,6 @@
         }
         header("Location: profile.php"); // temp line to update profile pic
     }
-
-    // ###### Create a new post and insert into mysql
-    /*if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["new-post"])) {
-        $post_content = $_POST["post_content"];
-        $image_url = null; // Default img url if an img is not uploaded
-
-        // Prepare SQL post
-        $stmt = $pdo->prepare("INSERT INTO posts (user_id, post_text) VALUES (:uid, :post_text)");
-        $stmt->bindParam(':uid', $_SESSION['user_id'], PDO::PARAM_INT);
-        $stmt->bindParam(':post_text', $post_content, PDO::PARAM_STR);
-        $stmt->execute();
-
-         // Check if an image was uploaded
-        if (!empty($_FILES["image"]["name"])) {
-
-            $user_id = $_SESSION['user_id']; // Get the user's ID
-            $userDir = "uploads/profiles/" . $user_id . "/"; // Define user-specific directory
-
-            // Check if the user's directory exists, if not, create it
-            if (!file_exists($userDir)) {
-                mkdir($userDir, 0777, true); // Create user's main folder
-            }
-
-            $post_id = $pdo->lastInsertId(); // Get new post ID
-            $postDir = $userDir . "posts/" . $post_id . "/"; // Define post-specific folder
-        
-            // Ensure the post directory is created **only if an image is being uploaded**
-            if (!file_exists($postDir)) {
-                mkdir($postDir, 0777, true); // Create post folder
-            }
-        
-            // Move the image into the post folder
-            $fileName = basename($_FILES["image"]["name"]);
-            $targetFilePath = $postDir . $fileName;
-        
-            if (move_uploaded_file($_FILES["image"]["tmp_name"], $targetFilePath)) {
-                $image_url = $targetFilePath;
-        
-                // Update the post record with the image URL
-                $stmt = $pdo->prepare("UPDATE posts SET post_picture = :post_picture WHERE post_id = :post_id");
-                $stmt->bindParam(':post_picture', $image_url, PDO::PARAM_STR);
-                $stmt->bindParam(':post_id', $post_id, PDO::PARAM_INT);
-                $stmt->execute();
-            }
-        }
-    }*/
-
 ?>
 <!DOCTYPE html>
 <html lang="en">

@@ -33,6 +33,44 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     });
 
+    // Event listener for edit btn in comment dropdown
+    document.querySelectorAll(".edit-btn").forEach(button => {
+        button.addEventListener("click", function() {
+            const postId = button.getAttribute("data-post-id");
+            const textarea = document.querySelector(`#comment-textarea-${postId}`);
+            const buttonGroup = document.querySelector(`#edit-comment-btns-${postId}`);
+
+            // Store the original value before editing - used when edit-cancel-btn selected
+            textarea.dataset.originalValue = textarea.value;
+
+            // Make textarea active
+            textarea.removeAttribute("disabled");
+
+            // Show the button group
+            buttonGroup.style.display = "block";
+            buttonGroup.classList.add("d-flex", "float-end");
+            
+        });
+    });
+
+    // Event listener for cancel btn when editing a comment
+    document.querySelectorAll(".edit-cancel-btn").forEach(button => {
+        button.addEventListener("click", function() {
+            const postId = button.getAttribute("data-post-id"); // Get post ID from button
+            const textarea = document.querySelector(`#comment-textarea-${postId}`); // Find correct textarea
+            const buttonGroup = document.querySelector(`#edit-comment-btns-${postId}`);
+
+            if (textarea) {
+                // Restore the original comment text
+                textarea.value = textarea.dataset.originalValue;
+
+                buttonGroup.style.display = "none";
+                buttonGroup.classList.remove("d-flex", "float-end");
+                textarea.setAttribute("disabled", "true");
+            }
+        });
+    });
+
     // Add comment AJAX for add_comment.php
     document.querySelectorAll("[id^=add-comment-form]").forEach(form => {
         form.addEventListener("submit", function(event) {
@@ -46,6 +84,30 @@ document.addEventListener("DOMContentLoaded", function() {
             }
     
             fetch("actions/add_comment.php", {
+                method: "POST",
+                body: formData
+            })
+            .then(response => response.text())
+            .then(data => {
+                console.log("Server Response:", data); // Log server response
+                if (data.trim() === "success") {
+                    location.reload();
+                } else {
+                    alert("Error adding comment: " + data);
+                }
+            })
+            .catch(error => console.error("Fetch Error:", error));
+        });
+    });
+
+    // Edit comment AJAX for edit_comment.php
+    document.querySelectorAll("[id^=edit-comment-form]").forEach(form => {
+        form.addEventListener("submit", function(event) {
+            event.preventDefault(); // Stop default form submission
+    
+            const formData = new FormData(this);
+    
+            fetch("actions/edit_comment.php", {
                 method: "POST",
                 body: formData
             })

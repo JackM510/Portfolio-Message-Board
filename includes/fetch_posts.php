@@ -32,8 +32,9 @@ function getPosts($pdo, $user_id = null) {
             // Users Profile Picture & Full Name
             echo('<div class="p-4 border">
                     <div class="d-flex align-items-center">
-                        <a class="post-profile-link" href="profile.php?user_id='.htmlspecialchars($post['user_id']).'"><img class="me-3 rounded-pill" src="'.htmlspecialchars($profile_picture). '" alt="Post Image" style="width:40px;">
-                        <h5>'.$user_name.'</a></h5>');
+                        <a class="post-profile-link" href="profile.php?user_id='.htmlspecialchars($post['user_id']).'">
+                            <img class="me-3 rounded-pill" src="'.htmlspecialchars($profile_picture). '" alt="Post Image" style="width:40px;">
+                            <h5>'.$user_name.'</a></h5>');
 
                         if (isset($_SESSION['user_id']) && $_SESSION['user_id'] == $post['user_id']) {
                             echo('<div class="dropdown ms-auto">
@@ -109,19 +110,31 @@ function getPosts($pdo, $user_id = null) {
                     $commentor_name = htmlspecialchars($comment['first_name'] . ' ' . $comment['last_name']);
                     $commentor_profile_picture = htmlspecialchars($comment['profile_picture']);
             
-                    echo "<hr><div class='comment'>";
-
-                        echo('<div class="d-flex">');
-                            echo "<a class='post-profile-link' href='profile.php?user_id=" . $comment['user_id'] . "'><img class='me-3 rounded-pill' src='" . $commentor_profile_picture . "' alt='Profile Picture' style='max-width:40px;'>";
-                            echo "<p><strong>" . $commentor_name . ": </strong></a>" . htmlspecialchars($comment['comment_text']) . "</p>";
-
+                    echo ('<hr><div class="comment">
+                            <div class="d-flex">
+                                <div>
+                                    <a class="post-profile-link" href="profile.php?user_id=' . $comment['user_id'] . '">
+                                    <img class="me-3 rounded-pill" src="' . $commentor_profile_picture . '" alt="Profile Picture" style="max-width:40px;">
+                                </div>
+                                <div class="w-100">
+                                    <p><strong>' . $commentor_name . '</strong></a></p>
+                                    <form id="edit-comment-form-' . htmlspecialchars($comment["comment_id"]) . '" class="w-100" method="POST">
+                                        <textarea id="comment-textarea-' . htmlspecialchars($comment["comment_id"]) . '" class="w-100 comment-textarea" name="edit_comment" data-post-id="'.htmlspecialchars($comment['comment_id']).'" style="resize:none;" required disabled>' . htmlspecialchars($comment['comment_text']) . '</textarea>
+                                        <input type="hidden" name="comment_id" value="' . htmlspecialchars($comment['comment_id']) . '">
+                                        <div id="edit-comment-btns-'.htmlspecialchars($comment['comment_id']).'" class="edit-comment-btns ms-auto">
+                                            <button class="btn btn-sm btn-secondary edit-cancel-btn" type="button" data-post-id="'.htmlspecialchars($comment['comment_id']).'">Cancel</button>
+                                            <button class="btn btn-sm btn-primary ms-1" type="submit">Comment</button>
+                                        </div>
+                                    </form>
+                                </div>');
+                            
                             if (isset($_SESSION['user_id']) && $_SESSION['user_id'] == $comment['user_id']) {
                                 echo('<div class="dropdown ms-auto">
                                     <span id="comment-options-'.htmlspecialchars($comment['comment_id']).'" data-bs-toggle="dropdown" aria-expanded="false" role="button" style="cursor: pointer;">
                                         <i class="bi bi-three-dots-vertical" style="color:black; font-size:20px;"></i>
                                     </span>
                                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="post-options-'.htmlspecialchars($comment['comment_id']).'">
-                                        <li><a class="dropdown-item" href="#">Edit</a></li>
+                                        <li><button type="button" class="dropdown-item edit-btn" data-post-id="'.htmlspecialchars($comment['comment_id']).'" style="border: none; background: none; cursor: pointer;">Edit</button></li>
                                         <li>
                                             <form id="comment-options-form-'.htmlspecialchars($comment['comment_id']).'" method="POST">
                                                 <input type="hidden" name="delete_comment" value="true">
@@ -133,7 +146,10 @@ function getPosts($pdo, $user_id = null) {
                                     </div>'); 
                             }
 
+
+
                         echo('</div>');
+
                     echo "</div>";
                 }
             }
