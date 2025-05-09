@@ -26,6 +26,7 @@ function getPosts($pdo, $user_id = null) {
             $user_last = $data['last_name'];
             $user_name = $user_first.' '.$user_last; // Users full name
             $profile_picture = $data['profile_picture'];
+            $post_timestamp = date('Y-m-d H:i', strtotime($post['post_created']));
 
 
             // Display each post in HTML
@@ -63,7 +64,7 @@ function getPosts($pdo, $user_id = null) {
             // Display the post text and DAT the post was created
             echo('<div class="mt-3">
                 <p>'.htmlentities($post['post_text']).'</p>
-                <p style="color:grey;">'.htmlentities($post['post_created']).'</p>
+                <p style="color:grey;">'.htmlentities($post_timestamp).'</p>
                     </div>');
 
 
@@ -94,7 +95,7 @@ function getPosts($pdo, $user_id = null) {
             // Add any comments on the post
             $post_id = $post['post_id']; 
             $stmt = $pdo->prepare("
-                SELECT c.comment_id, c.comment_text, c.comment_created, u.user_id, u.first_name, u.last_name, p.profile_picture 
+                SELECT c.comment_id, c.comment_text, c.comment_created, comment_edited, u.user_id, u.first_name, u.last_name, p.profile_picture 
                 FROM comments c 
                 INNER JOIN users u ON c.user_id = u.user_id 
                 INNER JOIN profiles p ON c.user_id = p.user_id 
@@ -109,7 +110,9 @@ function getPosts($pdo, $user_id = null) {
                 foreach ($comments as $comment) {
                     $commentor_name = htmlspecialchars($comment['first_name'] . ' ' . $comment['last_name']);
                     $commentor_profile_picture = htmlspecialchars($comment['profile_picture']);
-                    $comment_timestamp = htmlspecialchars($comment['comment_created']);
+                    $comment_timestamp = $comment['comment_edited'] 
+                        ?  date('Y-m-d H:i', strtotime($comment['comment_created'])) . " (edited)" 
+                        :  date('Y-m-d H:i', strtotime($comment['comment_created']));
             
                     echo ('<hr><div class="comment">
                             <div class="d-flex">
@@ -127,11 +130,11 @@ function getPosts($pdo, $user_id = null) {
                                             <button class="btn btn-sm btn-primary ms-1" type="submit">Comment</button>
                                         </div>
                                     </form>
-                                    <p>' . $comment_timestamp . '</p>
+                                    <p style="color:grey;">' . $comment_timestamp . '</p>
                                 </div>');
                             
                             if (isset($_SESSION['user_id']) && $_SESSION['user_id'] == $comment['user_id']) {
-                                echo('<div class="dropdown ms-auto">
+                                echo('<div id="comment-dropdown-'.htmlspecialchars($comment['comment_id']).'" class="dropdown ms-auto">
                                     <span id="comment-options-'.htmlspecialchars($comment['comment_id']).'" data-bs-toggle="dropdown" aria-expanded="false" role="button" style="cursor: pointer;">
                                         <i class="bi bi-three-dots-vertical" style="color:black; font-size:20px;"></i>
                                     </span>

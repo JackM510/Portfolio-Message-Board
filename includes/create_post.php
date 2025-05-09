@@ -11,7 +11,7 @@ if ($user_id == $_SESSION['user_id']): ?>
                     </button>
                 </div>
                 
-                <textarea id="new-post-textarea" class="mb-2" name="post_content" placeholder="Create a new post" rows="3" required></textarea>
+                <textarea id="new-post-textarea" class="mb-2 new-post-textarea" name="post_content" placeholder="Create a new post" rows="3" required></textarea>
                 <div id="new-post-btn-group" class="ms-auto">
                     <button id="cancel-post-btn" class="btn btn-sm btn-secondary ms-1" type="button" name="cancel-post">Cancel</button>
                     <button id="new-post-btn" class="btn btn-sm btn-primary ms-1" type="submit" name="new-post">Post</button>

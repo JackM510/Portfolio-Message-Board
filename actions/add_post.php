@@ -52,12 +52,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["post_content"])) {
                 $success = true;
             } 
         }
-
-        if ($success) {
-            echo "success";
-        } else {
-            echo "error adding post.";
-        }
+    }
+    
+    if ($success) {
+        echo "success";
+    } else {
+        echo "error adding post.";
     }
 }
 ?>

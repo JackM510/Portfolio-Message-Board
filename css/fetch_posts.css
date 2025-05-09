@@ -6,9 +6,13 @@
 }
 
 .post-picture {
-    object-fit: stretch;
-    max-height: 100%;
-    max-width: 100%;
+    object-fit: cover;
+    height: 100%;
+    width: 100%;
+}
+
+.add-comment-textarea {
+    border-color: #DEE2E6;
 }
 
 .add-comment-btns,
@@ -22,10 +26,7 @@
     cursor: pointer;
 }
 /* Existing Comment & Edit comment styles */
-.comment-textarea:disabled {
+.comment-textarea:disabled,
+.comment-textarea {
     border: none;
-}
-
-.comment-textarea:not([disabled]) {
-    border: 1px solid black;
 }

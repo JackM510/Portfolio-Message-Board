@@ -6,8 +6,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_SESSION['user_id']) && isset
     $comment_id = $_POST['comment_id'];
     $edited_comment = $_POST['edit_comment']; // Retrieve edited text
 
-    $stmt = $pdo->prepare("UPDATE comments SET comment_text = :comment_text WHERE comment_id = :comment_id");
+    $edited_timestamp = date('Y-m-d H:i:s');
+
+
+    $stmt = $pdo->prepare("UPDATE comments SET comment_text = :comment_text, comment_edited = :comment_edited WHERE comment_id = :comment_id");
     $stmt->bindParam(':comment_text', $edited_comment, PDO::PARAM_STR);
+    $stmt->bindParam(':comment_edited', $edited_timestamp, PDO::PARAM_STR);
     $stmt->bindParam(':comment_id', $comment_id, PDO::PARAM_INT);
 
     if ($stmt->execute()) {

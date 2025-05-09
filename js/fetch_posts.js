@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", function() {
     
-    // Add an event listener to each textarea on each post
+    // Add an event listener to each add comment textarea on each post
      document.querySelectorAll(".add-comment-textarea").forEach(textarea => {
         const id = textarea.getAttribute("id").replace("add-comment-textarea-", "");
         const buttonGroup = document.querySelector(`#add-comment-btns-${id}`);
@@ -33,15 +33,18 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     });
 
+
     // Event listener for edit btn in comment dropdown
     document.querySelectorAll(".edit-btn").forEach(button => {
-        button.addEventListener("click", function() {
-            const postId = button.getAttribute("data-post-id");
-            const textarea = document.querySelector(`#comment-textarea-${postId}`);
-            const buttonGroup = document.querySelector(`#edit-comment-btns-${postId}`);
+        const postId = button.getAttribute("data-post-id");
+        const textarea = document.querySelector(`#comment-textarea-${postId}`);
+        const commentDropdown = document.querySelector(`#comment-dropdown-${postId}`);
+        const buttonGroup = document.querySelector(`#edit-comment-btns-${postId}`);
 
-            // Store the original value before editing - used when edit-cancel-btn selected
-            textarea.dataset.originalValue = textarea.value;
+        // Store the original value before editing - used when edit-cancel-btn selected
+        textarea.dataset.originalValue = textarea.value;
+
+        button.addEventListener("click", function() {
 
             // Make textarea active
             textarea.removeAttribute("disabled");
@@ -49,8 +52,17 @@ document.addEventListener("DOMContentLoaded", function() {
             // Show the button group
             buttonGroup.style.display = "block";
             buttonGroup.classList.add("d-flex", "float-end");
-            
+            textarea.focus();
         });
+
+        document.addEventListener("click", function(event) {
+            if (!textarea.contains(event.target) && !commentDropdown.contains(event.target) && !buttonGroup.contains(event.target)) {
+                textarea.setAttribute("disabled", "true");
+                textarea.value = textarea.dataset.originalValue;
+                buttonGroup.style.display = "none";
+                buttonGroup.classList.remove("d-flex", "float-end");
+            }
+        });  
     });
 
     // Event listener for cancel btn when editing a comment
@@ -70,6 +82,19 @@ document.addEventListener("DOMContentLoaded", function() {
             }
         });
     });
+
+
+
+    
+
+
+
+
+
+
+
+
+
 
     // Add comment AJAX for add_comment.php
     document.querySelectorAll("[id^=add-comment-form]").forEach(form => {

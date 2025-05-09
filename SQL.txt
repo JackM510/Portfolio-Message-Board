@@ -52,7 +52,8 @@ CREATE TABLE comments (
   user_id INTEGER NOT NULL,
   comment_text VARCHAR(255) NOT NULL,
   comment_created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  comment_edited TIMESTAMP NULL,
   PRIMARY KEY(comment_id),
   FOREIGN KEY(post_id) REFERENCES posts(post_id) ON DELETE CASCADE,
   FOREIGN KEY(user_id) REFERENCES users(user_id) ON DELETE CASCADE
-) ENGINE = InnoDB DEFAULT CHARSET=utf8; 
+) ENGINE = InnoDB DEFAULT CHARSET=utf8;
