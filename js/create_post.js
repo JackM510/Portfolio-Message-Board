@@ -21,8 +21,8 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
+    // Hide new post components when clicked outside of new post layout
     document.addEventListener("click", function (event) {
-
         if (!textarea.contains(event.target) && !buttonGroup.contains(event.target)) {
             postImg.src = "";
             imgUpload.value = "";

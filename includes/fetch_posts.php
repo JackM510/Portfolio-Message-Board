@@ -26,8 +26,12 @@ function getPosts($pdo, $user_id = null) {
             $user_last = $data['last_name'];
             $user_name = $user_first.' '.$user_last; // Users full name
             $profile_picture = $data['profile_picture'];
+
             $post_timestamp = date('Y-m-d H:i', strtotime($post['post_created']));
 
+            $post_timestamp = $post['post_edited'] 
+                        ?  date('Y-m-d H:i', strtotime($post['post_created'])) . " (edited)" 
+                        :  date('Y-m-d H:i', strtotime($post['post_created']));
 
             // Display each post in HTML
             // Users Profile Picture & Full Name
@@ -43,7 +47,7 @@ function getPosts($pdo, $user_id = null) {
                                     <i class="bi bi-three-dots-vertical" style="color:black; font-size:20px;"></i>
                                 </span>
                                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="post-options-'.htmlspecialchars($post['post_id']).'">
-                                    <li><a class="dropdown-item" href="#">Edit</a></li>
+                                    <li><button class="dropdown-item edit-post-btn" type="button" data-post-id="'.htmlspecialchars($post['post_id']).'" style="border: none; background: none; cursor: pointer;">Edit</button></li>
                                     <li>
                                         <form id="post-options-form-'.htmlspecialchars($post['post_id']).'" method="POST">
                                             <input type="hidden" name="delete_post" value="true">
@@ -54,18 +58,29 @@ function getPosts($pdo, $user_id = null) {
                                 </ul>
                                 </div>'); 
                         }
-                    echo('</div>');
-            // Display any pictures added to the post
-            if (!empty($post['post_picture'])) {
-                echo("<div class='mt-3'>
-                        <img id='post-picture' class='post-picture' src='" . htmlspecialchars($post['post_picture']) . "' alt='Post Image'>
-                    </div>");
-            }
-            // Display the post text and DAT the post was created
-            echo('<div class="mt-3">
-                <p>'.htmlentities($post['post_text']).'</p>
-                <p style="color:grey;">'.htmlentities($post_timestamp).'</p>
-                    </div>');
+                    echo('</div>
+                    <form id="edit-post-form-' . htmlspecialchars($post['post_id']) .'" method="POST">');
+                        // Display any pictures added to the post
+                        echo('<div class="mt-3">
+                                <img id="post-picture-' . htmlentities($post['post_id']) . '" class="post-picture" src="' . (!empty($post['post_picture']) ? htmlspecialchars($post['post_picture']) : "") . '" alt="Post Image"' . (empty($post['post_picture']) ? 'style="display:none;"' : '') .'>
+                            </div>
+                            <div class="mt-4">
+                                <input type="file" name="post-image-upload" id="post-image-upload-' . htmlentities($post['post_id']).'" class="post-image-upload" accept="image/*" hidden>
+                                <button type="button" id="post-image-upload-btn-' . htmlentities($post['post_id']) . '" onclick="document.getElementById(\'post-image-upload-' . htmlentities($post['post_id']) . '\').click()" style="border:none; display:none;">
+                                    <i class="bi bi-card-image"></i>
+                                </button>
+                            </div>');
+                        // Display the post text and DAT the post was created
+                        echo('<div class="mt-3">
+                                <textarea id="post-textarea-' . htmlentities($post['post_id']).'" class="post-textarea" name="post_textarea" disabled>'.htmlentities($post['post_text']).'</textarea>      
+                                <div id="edit-post-btn-group-' . htmlentities($post['post_id']).'" class="ms-auto edit-post-btn-group">
+                                    <input type="hidden" name="post_id" value="'.htmlspecialchars($post['post_id']).'">
+                                    <button class="btn btn-sm btn-secondary ms-1 edit-post-cancel-btn" type="button" data-post-id="'.htmlspecialchars($post['post_id']).'" name="edit-cancel-post">Cancel</button>
+                                    <button id="edit-post-submit-btn" class="btn btn-sm btn-primary ms-1" type="submit">Post</button>
+                                </div>
+                                <p style="color:grey;">'.htmlentities($post_timestamp).'</p>
+                            </div>
+                    </form>');
 
 
             // Add a comment section
@@ -151,10 +166,7 @@ function getPosts($pdo, $user_id = null) {
                                     </div>'); 
                             }
 
-
-
                         echo('</div>');
-
                     echo "</div>";
                 }
             }

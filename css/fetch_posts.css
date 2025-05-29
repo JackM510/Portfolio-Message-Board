@@ -11,6 +11,24 @@
     width: 100%;
 }
 
+.post-textarea {
+    width: 100%;
+    resize: none;
+    color: #212529;
+}
+
+.post-textarea:disabled {
+    background: none;
+    border: none;
+}
+
+/* Edit Post styles */
+.edit-post-btn-group {
+    display: none;
+}
+
+
+/* Add Comment styles */
 .add-comment-textarea {
     border-color: #DEE2E6;
 }
@@ -25,6 +43,7 @@
     color: inherit;
     cursor: pointer;
 }
+
 /* Existing Comment & Edit comment styles */
 .comment-textarea:disabled,
 .comment-textarea {

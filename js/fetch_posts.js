@@ -1,4 +1,71 @@
 document.addEventListener("DOMContentLoaded", function() {
+
+    // Add an event listener to each posts dropdown edit button
+    document.querySelectorAll(".edit-post-btn").forEach(button => {
+        const postId = button.getAttribute("data-post-id"); // Get post ID from button
+        const img = document.querySelector(`#post-picture-${postId}`);
+        const imgUploadBtn = document.querySelector(`#post-image-upload-btn-${postId}`);
+        const textarea = document.querySelector(`#post-textarea-${postId}`);
+        const btnGroup = document.querySelector(`#edit-post-btn-group-${postId}`);
+        
+        // Store the original value before editing - used when edit-cancel-btn selected
+        img.dataset.originalSrc = img.src;
+        textarea.dataset.originalValue = textarea.value;
+
+        button.addEventListener("click", function() {
+            imgUploadBtn.style.display ="block"; // Show img upload btn
+            textarea.removeAttribute("disabled"); // Make textarea active
+            btnGroup.style.display = "block";
+            btnGroup.classList.add("d-flex", "float-end");
+        });
+    });
+
+    // Event listener for 'cancel' button when editing a post
+    document.querySelectorAll(".edit-post-cancel-btn").forEach(button => {
+        button.addEventListener("click", function() {
+            const postId = button.getAttribute("data-post-id"); // Get post ID from button
+            const img = document.querySelector(`#post-picture-${postId}`);
+            const imgUploadBtn = document.querySelector(`#post-image-upload-btn-${postId}`);
+            const textarea = document.querySelector(`#post-textarea-${postId}`); // Find correct textarea
+            const buttonGroup = document.querySelector(`#edit-post-btn-group-${postId}`);
+
+            if (textarea) {
+                textarea.value = textarea.dataset.originalValue; // Restore the original comment text
+                img.src = img.dataset.originalSrc;  // Restore img original src (if any)
+                imgUploadBtn.style.display ="none";
+                buttonGroup.style.display = "none";
+                buttonGroup.classList.remove("d-flex", "float-end");
+                textarea.setAttribute("disabled", "true");
+            }
+        });
+    });
+
+    // Event listener if image uploaded when editing a post
+    document.querySelectorAll(".post-image-upload").forEach(input => {
+        input.addEventListener("change", function(event) {
+            const postId = input.id.replace("post-image-upload-", ""); // Extract post ID
+            const imgTag = document.querySelector(`#post-picture-${postId}`);
+
+            // Store the original image src before changing it
+            if (!imgTag.dataset.originalSrc) {
+                imgTag.dataset.originalSrc = imgTag.src;
+            }
+
+            const file = event.target.files[0];
+    
+            if (file) {
+                const reader = new FileReader();
+    
+                reader.onload = function(e) {
+                    imgTag.src = e.target.result; // Update image preview
+                    imgTag.style.display = "block"; // Make sure image is visible
+                };
+    
+                reader.readAsDataURL(file);
+            }
+        });
+    });
+    
     
     // Add an event listener to each add comment textarea on each post
      document.querySelectorAll(".add-comment-textarea").forEach(textarea => {
@@ -84,16 +151,29 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 
 
-
+    // Edit post AJAX for edit_post.php
+    document.querySelectorAll("[id^=edit-post-form]").forEach(form => {
+        form.addEventListener("submit", function(event) {
+            event.preventDefault(); // Stop default form submission
     
-
-
-
-
-
-
-
-
+            const formData = new FormData(this);
+    
+            fetch("actions/edit_post.php", {
+                method: "POST",
+                body: formData
+            })
+            .then(response => response.text())
+            .then(data => {
+                console.log("Server Response:", data); // Log server response
+                if (data.trim() === "success") {
+                    location.reload();
+                } else {
+                    alert("Error editing post: " + data);
+                }
+            })
+            .catch(error => console.error("Fetch Error:", error));
+        });
+    });
 
 
     // Add comment AJAX for add_comment.php

@@ -41,6 +41,7 @@ CREATE TABLE posts (
   post_picture VARCHAR(255),
   post_text VARCHAR(255) NOT NULL,
   post_created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  post_edited TIMESTAMP NULL,
   PRIMARY KEY(post_id),
   FOREIGN KEY(user_id) REFERENCES users(user_id) ON DELETE CASCADE
 ) ENGINE = InnoDB DEFAULT CHARSET=utf8;
