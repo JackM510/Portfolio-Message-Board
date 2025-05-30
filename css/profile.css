@@ -1,4 +1,8 @@
 /* Profile Details */
+#profile-form {
+    width: 100%;
+}
+
 #profile-details-container {
     position: relative;
     max-width: 100%; /* Prevents overflow */
@@ -87,7 +91,9 @@
 
 /* Tablets (small screens) */
 @media (min-width: 600px) {
-    
+    #profile-form {
+        width: 75%;
+    }
 }
 
 /* Larger tablets & small laptops */

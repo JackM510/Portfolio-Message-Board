@@ -1,4 +1,4 @@
-<form id="profile-form" class="w-75 mx-auto" action="profile.php" method="POST" enctype="multipart/form-data">
+<form id="profile-form" class="mx-auto" action="profile.php" method="POST" enctype="multipart/form-data">
     <div id="profile-details-container" class="d-flex m-auto mt-5">
         <!-- Profile Picture -->
         <div>
