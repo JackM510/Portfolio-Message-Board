@@ -35,7 +35,6 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
-
     // New post cancel button
     document.getElementById("cancel-post-btn").addEventListener("click", function () {
         postImg.src = "";

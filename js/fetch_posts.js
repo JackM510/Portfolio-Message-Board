@@ -3,6 +3,8 @@ document.addEventListener("DOMContentLoaded", function() {
     // Add an event listener to each posts dropdown edit button
     document.querySelectorAll(".edit-post-btn").forEach(button => {
         const postId = button.getAttribute("data-post-id"); // Get post ID from button
+        const postForm = document.querySelector(`#edit-post-form-${postId}`);
+        const postDropdown = document.querySelector(`#post-dropdown-${postId}`);
         const img = document.querySelector(`#post-picture-${postId}`);
         const imgUploadBtn = document.querySelector(`#post-image-upload-btn-${postId}`);
         const textarea = document.querySelector(`#post-textarea-${postId}`);
@@ -18,6 +20,21 @@ document.addEventListener("DOMContentLoaded", function() {
             btnGroup.style.display = "block";
             btnGroup.classList.add("d-flex", "float-end");
         });
+
+        // Hide new post components when clicked outside of new post layout
+        document.addEventListener("click", function (event) {
+            if (!postDropdown.contains(event.target) && !postForm.contains(event.target)) {
+                //postImg.src = "";
+                //imgUpload.value = "";
+                textarea.setAttribute("disabled", "true");
+                textarea.value = textarea.dataset.originalValue;
+                imgUploadBtn.style.display = "none";
+                btnGroup.style.display = "none";
+                btnGroup.classList.remove("d-flex", "float-end");
+                //document.getElementById("new-post-form").reset();
+            }
+        });
+
     });
 
     // Event listener for 'cancel' button when editing a post

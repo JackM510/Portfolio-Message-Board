@@ -42,7 +42,7 @@ function getPosts($pdo, $user_id = null) {
                             <h5>'.$user_name.'</a></h5>');
 
                         if (isset($_SESSION['user_id']) && $_SESSION['user_id'] == $post['user_id']) {
-                            echo('<div class="dropdown ms-auto">
+                            echo('<div id="post-dropdown-'.htmlspecialchars($post['post_id']).'" class="dropdown ms-auto">
                                 <span id="post-options-'.htmlspecialchars($post['post_id']).'" data-bs-toggle="dropdown" aria-expanded="false" role="button" style="cursor: pointer;">
                                     <i class="bi bi-three-dots-vertical" style="color:black; font-size:20px;"></i>
                                 </span>
