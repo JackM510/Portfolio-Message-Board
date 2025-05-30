@@ -19,8 +19,8 @@
 
 #profile-picture {
     object-fit: cover;
-    width: 150px;
-    height: 150px;
+    width: 75px;
+    height: 75px;
     margin: 0 20px 0 0;
 }
 
@@ -77,4 +77,44 @@
     font-size: 14px;
     padding: 1px 2px;
     cursor: pointer;
+}
+
+/* Profile posts (new posts and existing posts styles) */
+#profile-posts-container {
+    width: 100%;
+}
+
+
+/* Tablets (small screens) */
+@media (min-width: 600px) {
+    
+}
+
+/* Larger tablets & small laptops */
+@media (min-width: 768px) {
+    #profile-picture {
+        width: 150px;
+        height: 150px;
+    }
+
+    #profile-posts-container {
+        width: 75%;
+    }
+}
+
+/* Standard laptops & desktops */
+@media (min-width: 1024px) {
+    #profile-posts-container {
+        width: 50%;
+    }
+}
+
+/* Large screens */
+@media (min-width: 1280px) {
+    
+}
+
+/* Extra large screens (4K monitors) */
+@media (min-width: 1600px) {
+    
 }

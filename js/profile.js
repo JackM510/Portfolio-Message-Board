@@ -58,6 +58,19 @@ document.addEventListener("DOMContentLoaded", function () {
 
     });
 
+    // Event listener for profile picture file input
+    document.getElementById("profile-image-upload").addEventListener("change", function(event) {
+        const file = event.target.files[0];
+
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById("profile-picture").src = e.target.result; // Update image preview
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+
     // Edit profile AJAX for edit_profile.php
     document.getElementById("profile-form").addEventListener("submit", function(event) {
             event.preventDefault(); // Stop default form submission
