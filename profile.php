@@ -32,7 +32,7 @@
 
 
     // ######### Update profile data through form
-    if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['profile-details'])) {
+    /*if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['profile-details'])) {
         $full_name = $_POST["full_name"];
         $location = $_POST["location"];
         $bio = $_POST["bio"];
@@ -96,7 +96,7 @@
             }
         }
         header("Location: profile.php"); // temp line to update profile pic
-    }
+    }*/
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -159,7 +159,7 @@
                             <span id="cancel-icon">
                                 <i class="bi bi-x-lg"></i>
                             </span>
-                            <button id="profile-details-submit" type="submit" name="profile-details" style="display: none;"></button>
+                            <button id="profile-details-submit" type="submit" name="update_profile" style="display: none;"></button>
                         </div>
                     <?php endif; ?>
                 </div>

@@ -57,4 +57,27 @@ document.addEventListener("DOMContentLoaded", function () {
         });
 
     });
+
+    // Edit profile AJAX for edit_profile.php
+    document.getElementById("profile-form").addEventListener("submit", function(event) {
+            event.preventDefault(); // Stop default form submission
+
+            const formData = new FormData(this);
+
+            fetch("actions/edit_profile.php", {
+                method: "POST",
+                body: formData
+            })
+            .then(response => response.text())
+            .then(data => {
+                console.log("Server Response:", data); // Log server response
+                if (data.trim() === "success") {
+                    location.reload();
+                } else {
+                    alert("Error editing profile: " + data);
+                }
+            })
+            .catch(error => console.error("Fetch Error:", error));
+    });
+
 });
