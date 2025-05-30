@@ -1,8 +1,8 @@
 .post-profile-picture,
 .comment-profile-picture {
     object-fit: cover;
-    height: 40px;
-    width: 40px;
+    height: 30px;
+    width: 30px;
 }
 
 .post-picture {
@@ -48,4 +48,33 @@
 .comment-textarea:disabled,
 .comment-textarea {
     border: none;
+}
+
+/* Tablets (small screens) */
+@media (min-width: 600px) {
+    
+}
+
+/* Larger tablets & small laptops */
+@media (min-width: 768px) {
+    .post-profile-picture,
+    .comment-profile-picture {
+        height: 40px;
+        width: 40px;
+    }
+}
+
+/* Standard laptops & desktops */
+@media (min-width: 1024px) {
+    
+}
+
+/* Large screens */
+@media (min-width: 1280px) {
+    
+}
+
+/* Extra large screens (4K monitors) */
+@media (min-width: 1600px) {
+    
 }
