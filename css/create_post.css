@@ -1,3 +1,11 @@
+#new-post-form {
+    width: 100%;
+}
+
+#image-upload-btn {
+    display: none;
+}
+
 #new-post-textarea {
     resize: none;
     border-color: #DEE2E6;
@@ -5,4 +13,31 @@
 
 #new-post-btn-group {
     display: none;
+}
+
+/* Tablets (small screens) */
+@media (min-width: 600px) {
+    #new-post-form {
+        width: 75%;
+    }
+}
+
+/* Larger tablets & small laptops */
+@media (min-width: 768px) {
+
+}
+
+/* Standard laptops & desktops */
+@media (min-width: 1024px) {
+
+}
+
+/* Large screens */
+@media (min-width: 1280px) {
+
+}
+
+/* Extra large screens (4K monitors) */
+@media (min-width: 1600px) {
+
 }

@@ -4,11 +4,13 @@ document.addEventListener("DOMContentLoaded", function () {
     const textarea = document.getElementById("new-post-textarea");
     const postImg = document.getElementById("new-post-img");
     const imgUpload = document.getElementById("image-upload");
+    const imgUploadBtn = document.getElementById("image-upload-btn");
     const buttonGroup = document.getElementById("new-post-btn-group");
 
     // New post buttons visible
     if (textarea) {
         textarea.addEventListener("click", function () {
+            imgUploadBtn.style.display ="block";
             buttonGroup.style.display = "flex";
         });
     }
@@ -27,8 +29,9 @@ document.addEventListener("DOMContentLoaded", function () {
             postImg.src = "";
             imgUpload.value = "";
             textarea.value = "";
+            imgUploadBtn.style.display = "none";
             buttonGroup.style.display = "none";
-            //document.getElementById("new-post-form").reset();
+            document.getElementById("new-post-form").reset();
         }
     });
 
@@ -38,6 +41,7 @@ document.addEventListener("DOMContentLoaded", function () {
         postImg.src = "";
         imgUpload.value = "";
         textarea.value = "";
+        imgUploadBtn.style.display = "none";
         buttonGroup.style.display = "none";
         document.getElementById("new-post-form").reset();
     });
