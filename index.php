@@ -6,6 +6,8 @@
 <html lang="en">
 <head>
     <?php require_once "head.php"; ?>
+    <!-- Index styles -->
+    <link href="css/index.css" rel="stylesheet">
     <!-- CSS & JS to create posts if user logged in -->
     <link href="css/create_post.css" rel="stylesheet">
     <script src="js/create_post.js"></script>
@@ -19,7 +21,7 @@
     <?php require_once "nav.php"; ?>
 
     <!-- New post & ALL posts section -->
-    <section class="container w-50 mx-auto mt-5">
+    <section id="index-container" class="container mx-auto mt-5">
         <div id="index-new-post">
             <?php 
                 if (isset($_SESSION['user_id'])) {
@@ -28,7 +30,7 @@
                 }
             ?>    
         </div>
-        <div id="index-all-posts">
+        <div id="index-all-posts" class="mt-5">
             <?php
                 include 'includes/fetch_posts.php';
                 getPosts($pdo); //Fetch ALL posts in mysql

@@ -1,0 +1,27 @@
+#index-container {
+    width: 100%;
+}
+
+/* Larger tablets & small laptops */
+@media (min-width: 768px) {
+    #index-container {
+        width: 75%;
+    }
+}
+
+/* Standard laptops & desktops */
+@media (min-width: 1024px) {
+    #index-container {
+        width: 50%;
+    }
+}
+
+/* Large screens */
+/*@media (min-width: 1280px) {
+
+} */
+
+/* Extra large screens (4K monitors) */
+/*@media (min-width: 1600px) {
+   
+}*/
