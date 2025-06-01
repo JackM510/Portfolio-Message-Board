@@ -10,9 +10,9 @@
         <!-- Profile information -->
         <div id="profile-details-container">
             <!-- Full Name -->
-            <h3><input id="profile-name" class="mb-2" type="text" name="full_name" value="<?php echo !empty($full_name) ? htmlentities($full_name) : 'Enter your name'; ?>" required disabled></h3>
+            <h3><input id="profile-name" class="mb-2 dynamic-input" type="text" name="full_name" value="<?php echo !empty($full_name) ? htmlentities($full_name) : 'Enter your name'; ?>" required disabled></h3>
             <!-- Location -->
-            <h5><input id="profile-location" class="mb-2" type="text" name="location" value="<?php 
+            <h5><input id="profile-location" class="mb-2 dynamic-input" type="text" name="location" value="<?php 
                 if ($user_id == $_SESSION['user_id']) {
                     echo !empty($location) ? htmlentities($location) : 'Add a location';
                 } else {

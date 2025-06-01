@@ -1,4 +1,19 @@
-document.addEventListener("DOMContentLoaded", function () {  
+document.addEventListener("DOMContentLoaded", function () {
+
+    // Profile details input/textarea line height
+    document.querySelectorAll(".dynamic-input").forEach(input => {
+        // Resize on load based on existing content
+        input.style.height = "auto"; 
+        input.style.height = `${input.scrollHeight}px`;
+    
+        // Resize when user types
+        input.addEventListener("input", function() {
+            this.style.height = "auto"; // Reset height
+            this.style.height = `${this.scrollHeight}px`; // Expand dynamically
+        });
+    });
+
+
     // Profile details edit icon
     document.getElementById("edit-icon").addEventListener("click", function () {
 

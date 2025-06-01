@@ -48,6 +48,11 @@
     box-sizing: border-box; /* Ensures padding and borders don’t cause overflow */
 }
 
+.dynamic-input{
+    height: auto;
+    overflow-y: hidden;
+}
+
 #profile-image-upload:not([disabled]) + label #profile-picture:hover {
     cursor: pointer; /* Enables hover only when input is active */
     border: 1px solid black;
