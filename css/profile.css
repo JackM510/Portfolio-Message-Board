@@ -3,29 +3,49 @@
     width: 100%;
 }
 
-#profile-details-container {
+#profile-container {
     position: relative;
     max-width: 100%; /* Prevents overflow */
     overflow: hidden; /* Ensures content stays within boundaries */
     display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin: auto;
 }
 
-#profile-details {
-    flex-grow: 1;
-    padding-right: 30px;
+#profile-picture-container {
+    display: flex;
+    justify-content: center; /* Centers horizontally */
+    align-items: center; /* Centers vertically */
+    width: 75%; /* Ensures it takes up full space */
+    height: 75%; /* Adjust as needed */
+    margin: 0 auto;
+    margin-bottom: 1rem;
 }
 
-#profile-details input,
-#profile-details textarea {
-    width: 100%; /* Takes up full width within the flex container */
-    box-sizing: border-box; /* Ensures padding and borders don’t cause overflow */
+#profile-picture-label {
+    display: flex;
+    justify-content: center; /* Centers horizontally */
+    align-items: center; /* Centers vertically */
 }
 
 #profile-picture {
     object-fit: cover;
-    width: 75px;
-    height: 75px;
-    margin: 0 20px 0 0;
+    max-width: 100%;
+    max-height: 100%;
+}
+
+#profile-details-container {
+    flex-grow: 1;
+    width: 75%; /* Ensures it takes up full space */
+    height: 75%; /* Adjust as needed */
+    margin: 0 auto;
+}
+
+#profile-details-container input,
+#profile-details-container textarea {
+    width: 100%; /* Takes up full width within the flex container */
+    box-sizing: border-box; /* Ensures padding and borders don’t cause overflow */
 }
 
 #profile-image-upload:not([disabled]) + label #profile-picture:hover {
@@ -94,15 +114,31 @@
     #profile-form {
         width: 75%;
     }
-}
 
-/* Larger tablets & small laptops */
-@media (min-width: 768px) {
+    #profile-container {
+        flex-direction: row;
+    }
+
+    #profile-picture-container, 
+    #profile-picture-label {
+        display: block;
+        width: auto;
+        height: auto;
+
+    }
+
+    #profile-picture-container {
+        padding-right: 30px;
+    }
+
     #profile-picture {
         width: 150px;
         height: 150px;
     }
+}
 
+/* Larger tablets & small laptops */
+@media (min-width: 768px) {
     #profile-posts-container {
         width: 75%;
     }

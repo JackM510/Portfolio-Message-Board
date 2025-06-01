@@ -1,3 +1,7 @@
+.post-container {
+    border: #DEE2E6 solid 2px;
+}
+
 .post-profile-picture,
 .comment-profile-picture {
     object-fit: cover;
@@ -42,6 +46,9 @@
     text-decoration: none;
     color: inherit;
     cursor: pointer;
+    word-wrap: break-word; /* Breaks long words */
+    white-space: normal; /* Allows wrapping instead of one-line behavior */
+    overflow-wrap: anywhere; /* Ensures breaking even for long strings */
 }
 
 /* Existing Comment & Edit comment styles */

@@ -1,14 +1,14 @@
 <form id="profile-form" class="mx-auto" action="profile.php" method="POST" enctype="multipart/form-data">
-    <div id="profile-details-container" class="d-flex m-auto mt-5">
+    <div id="profile-container" class="d-flex m-auto mt-5">
         <!-- Profile Picture -->
-        <div>
+        <div id="profile-picture-container">
             <input id="profile-image-upload" type="file" name="profile_picture" accept="image/*" disabled hidden>
-            <label for="profile-image-upload">
-                <img id="profile-picture" class="rounded-pill" src="<?php echo htmlentities($profile_picture); ?>" alt="Profile Picture">
+            <label id="profile-picture-label" for="profile-image-upload">
+                <img id="profile-picture"  src="<?php echo htmlentities($profile_picture); ?>" alt="Profile Picture">
             </label>
         </div>
         <!-- Profile information -->
-        <div id="profile-details">
+        <div id="profile-details-container">
             <!-- Full Name -->
             <h3><input id="profile-name" class="mb-2" type="text" name="full_name" value="<?php echo !empty($full_name) ? htmlentities($full_name) : 'Enter your name'; ?>" required disabled></h3>
             <!-- Location -->

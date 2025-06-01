@@ -24,7 +24,7 @@ document.addEventListener("DOMContentLoaded", function() {
         // Hide new post components when clicked outside of new post layout
         document.addEventListener("click", function (event) {
             if (!postDropdown.contains(event.target) && !postForm.contains(event.target)) {
-                //postImg.src = "";
+                //img.src = img.dataset.originalSrc;
                 //imgUpload.value = "";
                 textarea.setAttribute("disabled", "true");
                 textarea.value = textarea.dataset.originalValue;

@@ -23,6 +23,7 @@
     <!-- New post & ALL posts section -->
     <section id="index-container" class="container mx-auto mt-5">
         <div id="index-new-post">
+            <h2>Hi ____, Share with your friends!</h2>
             <?php 
                 if (isset($_SESSION['user_id'])) {
                     $user_id = $_SESSION['user_id'];

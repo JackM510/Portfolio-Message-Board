@@ -35,7 +35,7 @@ function getPosts($pdo, $user_id = null) {
 
             // Display each post in HTML
             // Users Profile Picture & Full Name
-            echo('<div class="p-4 border">
+            echo('<div class="post-container p-4">
                     <div class="d-flex align-items-center">
                         <a class="post-profile-link" href="profile.php?user_id='.htmlspecialchars($post['user_id']).'">
                             <img class="me-3 rounded-pill post-profile-picture" src="'.htmlspecialchars($profile_picture). '" alt="Post Image">
