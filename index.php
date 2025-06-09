@@ -27,7 +27,7 @@
                 // Logic for heading above create post
                 $heading_text = isset($_SESSION['first_name']) 
                     ? 'Hi ' . htmlspecialchars($_SESSION['first_name']) . ', share on Message Board!'
-                    : '<a href="login.php">Sign-in</a> or <a href="login.php">Sign-up</a> to post and comment!';
+                    : '<a href="login.php" class="nav-link" style="display: inline-block">Sign-in to post and comment!</a><hr class="mt-5">';
                     
                 echo '<div class="text-center">
                         <h1 class="display-5">'. $heading_text .'</h1>

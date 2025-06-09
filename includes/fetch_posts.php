@@ -149,7 +149,7 @@ function getPosts($pdo, $user_id = null) {
                                 </div>');
                             
                             if (isset($_SESSION['user_id']) && $_SESSION['user_id'] == $comment['user_id']) {
-                                echo('<div id="comment-dropdown-'.htmlspecialchars($comment['comment_id']).'" class="dropdown ms-auto">
+                                echo('<div id="comment-dropdown-'.htmlspecialchars($comment['comment_id']).'" class="dropdown ms-auto" style="height:20px;">
                                     <span id="comment-options-'.htmlspecialchars($comment['comment_id']).'" data-bs-toggle="dropdown" aria-expanded="false" role="button" style="cursor: pointer;">
                                         <i class="bi bi-three-dots-vertical" style="color:grey; font-size:20px;"></i>
                                     </span>
