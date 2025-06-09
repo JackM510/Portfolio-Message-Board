@@ -1,13 +1,23 @@
+#home-container {
+        background-color: #0D6EFD;
+}
 
 #home-link {
-    color: black;
+    color: white;
     font-size: 18px;
     font-weight: bold;
+    display: flex; /* Enables flexbox */
+    align-items: center; /* Aligns items vertically */
+    padding: 4px 8px;
 }
 
 #home-icon {
-    width: 30px;
+    width: 24px;
     margin-right: 5px;
+}
+
+#avatar-icon {
+    width: 40px;
 }
 
 .nav-profile:hover {
