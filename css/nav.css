@@ -24,3 +24,7 @@
     background-color: lightgrey;
     border-radius: 1px;
 }
+
+.nav-dropdown-item:active {
+    color: #fff !important;
+}

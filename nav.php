@@ -23,11 +23,11 @@
                     <img id="avatar-icon" src="icon/profile.png" alt="Profile icon">
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="avatarDropdown">
-                    <li><a class="dropdown-item" href="profile.php">View Profile</a></li>
+                    <li><a class="dropdown-item nav-dropdown-item" href="profile.php">View Profile</a></li>
                     <?php if ($isAdmin): ?>
-                        <li><a class="dropdown-item" href="admin.php">Admin Panel<a></li>
+                        <li><a class="dropdown-item nav-dropdown-item" href="admin.php">Admin Panel<a></li>
                     <?php endif; ?>
-                    <li><a class="dropdown-item" href="logout.php">Logout</a></li>
+                    <li><a class="dropdown-item nav-dropdown-item text-danger" href="logout.php">Logout</a></li>
                 </ul>
             </div>
         <?php else: ?>
