@@ -23,8 +23,17 @@
     <!-- New post & ALL posts section -->
     <section id="index-container" class="container mx-auto mt-5">
         <div id="index-new-post">
-            <h2>Hi ____, Share with your friends!</h2>
             <?php 
+                // Logic for heading above create post
+                $heading_text = isset($_SESSION['first_name']) 
+                    ? 'Hi ' . htmlspecialchars($_SESSION['first_name']) . ', share on Message Board!'
+                    : '<a href="login.php">Sign-in</a> or <a href="login.php">Sign-up</a> to post and comment!';
+                    
+                echo '<div class="text-center">
+                        <h1 class="display-5">'. $heading_text .'</h1>
+                    </div>';
+
+                // Include the create post section
                 if (isset($_SESSION['user_id'])) {
                     $user_id = $_SESSION['user_id'];
                     include 'includes/create_post.php';

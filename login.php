@@ -29,6 +29,7 @@
                     // Successful login: Set session variables
                     $_SESSION['user_id'] = $user['user_id'];
                     $_SESSION['email'] = $user['email'];
+                    $_SESSION['first_name'] = $user['first_name'];
                     $_SESSION['role'] = $user['role'];
 
                     // Successful login & remember me selected

@@ -11,6 +11,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_SESSION['user_id'])) {
         // Need to split the first and last names......
         $name_parts = explode(" ", trim($_POST['full_name']), 2);
         $first_name = $name_parts[0]; // First name
+        $_SESSION['first_name'] = $first_name;
         $last_name = isset($name_parts[1]) ? $name_parts[1] : "";
 
         $stmt = $pdo->prepare("UPDATE users SET first_name = :first, last_name = :last WHERE user_id = :uid");
