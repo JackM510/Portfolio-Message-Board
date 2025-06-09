@@ -47,12 +47,12 @@ function getPosts($pdo, $user_id = null) {
                                     <i class="bi bi-three-dots-vertical" style="color:grey; font-size:20px;"></i>
                                 </span>
                                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="post-options-'.htmlspecialchars($post['post_id']).'">
-                                    <li><button class="dropdown-item edit-post-btn" type="button" data-post-id="'.htmlspecialchars($post['post_id']).'" style="border: none; background: none; cursor: pointer;">Edit</button></li>
+                                    <li><button class="dropdown-item edit-post-btn edit-post-dropdown-item" type="button" data-post-id="'.htmlspecialchars($post['post_id']).'" style="border: none; background: none; cursor: pointer;">Edit</button></li>
                                     <li>
                                         <form id="post-options-form-'.htmlspecialchars($post['post_id']).'" method="POST">
                                             <input type="hidden" name="delete_post" value="true">
                                             <input type="hidden" name="post_id" value="'.htmlspecialchars($post['post_id']).'">
-                                            <button type="submit" class="dropdown-item text-danger" style="border: none; background: none; cursor: pointer;">Delete</button>
+                                            <button type="submit" class="dropdown-item edit-post-dropdown-item text-danger" style="border: none; cursor: pointer;">Delete</button>
                                         </form>
                                     </li>
                                 </ul>
@@ -66,8 +66,8 @@ function getPosts($pdo, $user_id = null) {
                             </div>
                             <div class="mt-4">
                                 <input type="file" name="post-image-upload" id="post-image-upload-' . htmlentities($post['post_id']).'" class="post-image-upload" accept="image/*" hidden>
-                                <button type="button" id="post-image-upload-btn-' . htmlentities($post['post_id']) . '" onclick="document.getElementById(\'post-image-upload-' . htmlentities($post['post_id']) . '\').click()" style="border:none; display:none;">
-                                    <i class="bi bi-card-image"></i>
+                                <button type="button" class="btn btn-sml btn-light" id="post-image-upload-btn-' . htmlentities($post['post_id']) . '" onclick="document.getElementById(\'post-image-upload-' . htmlentities($post['post_id']) . '\').click()" style="border:none; display:none;">
+                                    <i class="bi bi-card-image" style="font-size: 16px;"></i>
                                 </button>
                             </div>');
                         // Display the post text and DAT the post was created
@@ -154,12 +154,12 @@ function getPosts($pdo, $user_id = null) {
                                         <i class="bi bi-three-dots-vertical" style="color:grey; font-size:20px;"></i>
                                     </span>
                                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="post-options-'.htmlspecialchars($comment['comment_id']).'">
-                                        <li><button type="button" class="dropdown-item edit-btn" data-post-id="'.htmlspecialchars($comment['comment_id']).'" style="border: none; background: none; cursor: pointer;">Edit</button></li>
+                                        <li><button type="button" class="dropdown-item edit-btn edit-comment-dropdown-item" data-post-id="'.htmlspecialchars($comment['comment_id']).'" style="border: none; background: none; cursor: pointer;">Edit</button></li>
                                         <li>
                                             <form id="comment-options-form-'.htmlspecialchars($comment['comment_id']).'" method="POST">
                                                 <input type="hidden" name="delete_comment" value="true">
                                                 <input type="hidden" name="comment_id" value="'.htmlspecialchars($comment['comment_id']).'">
-                                                <button type="submit" class="dropdown-item text-danger" style="border: none; background: none; cursor: pointer;">Delete</button>
+                                                <button type="submit" class="dropdown-item edit-comment-dropdown-item text-danger" style="cursor: pointer;">Delete</button>
                                             </form>
                                         </li>
                                     </ul>

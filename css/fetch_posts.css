@@ -17,7 +17,7 @@
 
 .post-textarea {
     width: 100%;
-    resize: none;
+    resize: none !important;
     color: #212529;
 }
 
@@ -27,6 +27,15 @@
 }
 
 /* Edit Post styles */
+.edit-post-dropdown-item:hover {
+    background-color: #f8f9fa !important;
+}
+
+.edit-post-dropdown-item:active {
+    background-color: #0d6efd !important;
+    color: #fff !important;
+}
+
 .edit-post-btn-group {
     display: none;
 }
@@ -54,6 +63,15 @@
 .comment-textarea:disabled,
 .comment-textarea {
     border: none;
+}
+
+.edit-comment-dropdown-item:hover {
+    background-color: #f8f9fa !important;
+}
+
+.edit-comment-dropdown-item:active {
+    background-color: #0d6efd !important;
+    color: #fff !important;
 }
 
 /* Tablets (small screens) */
