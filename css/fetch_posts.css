@@ -48,7 +48,6 @@
     cursor: pointer;
     word-wrap: break-word; /* Breaks long words */
     white-space: normal; /* Allows wrapping instead of one-line behavior */
-    overflow-wrap: anywhere; /* Ensures breaking even for long strings */
 }
 
 /* Existing Comment & Edit comment styles */

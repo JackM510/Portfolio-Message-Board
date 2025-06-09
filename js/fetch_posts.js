@@ -1,5 +1,21 @@
 document.addEventListener("DOMContentLoaded", function() {
 
+    // TA responsive height testing
+    document.querySelectorAll("textarea").forEach(textarea => {
+        textarea.style.height = "auto"; // Reset for fresh calculation
+        textarea.style.height = textarea.scrollHeight + "px"; // Adjust to content
+      });
+
+      document.addEventListener("input", function (event) {
+        if (event.target.tagName.toLowerCase() === "textarea") {
+          event.target.style.height = "auto"; 
+          event.target.style.height = event.target.scrollHeight + "px"; 
+        }
+      });
+
+
+
+
     // Add an event listener to each posts dropdown edit button
     document.querySelectorAll(".edit-post-btn").forEach(button => {
         const postId = button.getAttribute("data-post-id"); // Get post ID from button

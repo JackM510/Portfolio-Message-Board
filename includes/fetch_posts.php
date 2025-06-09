@@ -40,11 +40,11 @@ function getPosts($pdo, $user_id = null) {
                         <a class="post-profile-link" href="profile.php?user_id='.htmlspecialchars($post['user_id']).'">
                             <img class="me-3 rounded-pill post-profile-picture" src="'.htmlspecialchars($profile_picture). '" alt="Post Image">
                             <h5>'.$user_name.'</a></h5>');
-
+                        // Display a dropdown on each post if the user is logged in and the post is their own
                         if (isset($_SESSION['user_id']) && $_SESSION['user_id'] == $post['user_id']) {
                             echo('<div id="post-dropdown-'.htmlspecialchars($post['post_id']).'" class="dropdown ms-auto">
                                 <span id="post-options-'.htmlspecialchars($post['post_id']).'" data-bs-toggle="dropdown" aria-expanded="false" role="button" style="cursor: pointer;">
-                                    <i class="bi bi-three-dots-vertical" style="color:black; font-size:20px;"></i>
+                                    <i class="bi bi-three-dots-vertical" style="color:grey; font-size:20px;"></i>
                                 </span>
                                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="post-options-'.htmlspecialchars($post['post_id']).'">
                                     <li><button class="dropdown-item edit-post-btn" type="button" data-post-id="'.htmlspecialchars($post['post_id']).'" style="border: none; background: none; cursor: pointer;">Edit</button></li>
@@ -72,7 +72,7 @@ function getPosts($pdo, $user_id = null) {
                             </div>');
                         // Display the post text and DAT the post was created
                         echo('<div class="mt-3">
-                                <textarea id="post-textarea-' . htmlentities($post['post_id']).'" class="post-textarea" name="post_textarea" disabled>'.htmlentities($post['post_text']).'</textarea>      
+                                <textarea id="post-textarea-' . htmlentities($post['post_id']).'" class="post-textarea rounded" name="post_textarea" disabled>'.htmlentities($post['post_text']).'</textarea>      
                                 <div id="edit-post-btn-group-' . htmlentities($post['post_id']).'" class="ms-auto edit-post-btn-group">
                                     <input type="hidden" name="post_id" value="'.htmlspecialchars($post['post_id']).'">
                                     <button class="btn btn-sm btn-secondary ms-1 edit-post-cancel-btn" type="button" data-post-id="'.htmlspecialchars($post['post_id']).'" name="edit-cancel-post">Cancel</button>
@@ -96,7 +96,7 @@ function getPosts($pdo, $user_id = null) {
                             <img class="me-3 rounded-pill comment-profile-picture" src="'.htmlspecialchars($your_profile_picture).'" alt="Post Image">
                         </div>
                         <form id="add-comment-form-'.htmlspecialchars($post['post_id']).'" data-post-id="'.htmlspecialchars($post['post_id']).'" method="POST" class="w-100">
-                            <textarea id="add-comment-textarea-'.htmlspecialchars($post['post_id']).'" class="w-100 add-comment-textarea" name="comment_text" placeholder="Add a comment..." rows="3" style="resize:none;"></textarea>
+                            <textarea id="add-comment-textarea-'.htmlspecialchars($post['post_id']).'" class="w-100 add-comment-textarea rounded" name="comment_text" placeholder="Add a comment..." style="height: auto; resize:none;"></textarea>
                             <input type="hidden" name="post_id" value="'.htmlspecialchars($post['post_id']).'">
                             <div id="add-comment-btns-'.htmlspecialchars($post['post_id']).'" class="add-comment-btns">
                                 <button class="btn btn-sm btn-secondary cancel-btn" type="button" data-post-id="'.htmlspecialchars($post['post_id']).'">Cancel</button>
@@ -138,7 +138,7 @@ function getPosts($pdo, $user_id = null) {
                                 <div class="w-100">
                                     <p><strong>' . $commentor_name . '</strong></a></p>
                                     <form id="edit-comment-form-' . htmlspecialchars($comment["comment_id"]) . '" class="w-100" method="POST">
-                                        <textarea id="comment-textarea-' . htmlspecialchars($comment["comment_id"]) . '" class="w-100 comment-textarea" name="edit_comment" data-post-id="'.htmlspecialchars($comment['comment_id']).'" style="resize:none;" required disabled>' . htmlspecialchars($comment['comment_text']) . '</textarea>
+                                        <textarea id="comment-textarea-' . htmlspecialchars($comment["comment_id"]) . '" class="w-100 comment-textarea rounded" name="edit_comment" data-post-id="'.htmlspecialchars($comment['comment_id']).'" style="height: auto; min-height: unset; resize:none;" required disabled>' . htmlspecialchars($comment['comment_text']) . '</textarea>
                                         <input type="hidden" name="comment_id" value="' . htmlspecialchars($comment['comment_id']) . '">
                                         <div id="edit-comment-btns-'.htmlspecialchars($comment['comment_id']).'" class="edit-comment-btns ms-auto">
                                             <button class="btn btn-sm btn-secondary edit-cancel-btn" type="button" data-post-id="'.htmlspecialchars($comment['comment_id']).'">Cancel</button>
@@ -151,7 +151,7 @@ function getPosts($pdo, $user_id = null) {
                             if (isset($_SESSION['user_id']) && $_SESSION['user_id'] == $comment['user_id']) {
                                 echo('<div id="comment-dropdown-'.htmlspecialchars($comment['comment_id']).'" class="dropdown ms-auto">
                                     <span id="comment-options-'.htmlspecialchars($comment['comment_id']).'" data-bs-toggle="dropdown" aria-expanded="false" role="button" style="cursor: pointer;">
-                                        <i class="bi bi-three-dots-vertical" style="color:black; font-size:20px;"></i>
+                                        <i class="bi bi-three-dots-vertical" style="color:grey; font-size:20px;"></i>
                                     </span>
                                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="post-options-'.htmlspecialchars($comment['comment_id']).'">
                                         <li><button type="button" class="dropdown-item edit-btn" data-post-id="'.htmlspecialchars($comment['comment_id']).'" style="border: none; background: none; cursor: pointer;">Edit</button></li>
