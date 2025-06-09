@@ -112,6 +112,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
         document.addEventListener("click", function(event) {
             if (!textarea.contains(event.target) && !buttonGroup.contains(event.target)) {
+                textarea.value = ""; // Clear the textarea without refreshing
                 buttonGroup.style.display = "none";
                 buttonGroup.classList.remove("d-flex", "float-end");
             }
