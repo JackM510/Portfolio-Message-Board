@@ -1,6 +1,7 @@
 document.addEventListener("DOMContentLoaded", function () {  
     
     // New post functionality
+    const container = document.getElementById("new-post-form");
     const textarea = document.getElementById("new-post-textarea");
     const postImg = document.getElementById("new-post-img");
     const imgUpload = document.getElementById("image-upload");
@@ -25,7 +26,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Hide new post components when clicked outside of new post layout
     document.addEventListener("click", function (event) {
-        if (!textarea.contains(event.target) && !buttonGroup.contains(event.target)) {
+        if (!container.contains(event.target)) {
             postImg.src = "";
             imgUpload.value = "";
             textarea.value = "";
