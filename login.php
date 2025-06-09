@@ -115,7 +115,7 @@
     <!-- Login form -->
     <div class="container mt-5" id="login-form">
         <div class="d-flex justify-content-center mt-5 mb-3">
-            <h2>Login</h2>
+            <h1 class="display-5">Login</h1>
         </div>
         <div class="d-flex justify-content-center">
             <form action="login.php" method="POST" class="w-50">
@@ -143,7 +143,7 @@
     <!-- Signup form -->
     <div class="container mt-5" id="signup-form" style="display:none;">
         <div class="d-flex justify-content-center mt-3 mb-3">
-            <h2>Sign Up</h2>
+            <h1 class="display-5">Sign Up</h1>
         </div>
         <div class="d-flex justify-content-center">
             <form action="login.php" method="POST" class="w-50">
