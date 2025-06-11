@@ -121,7 +121,7 @@
         <!-- Profile details section -->
         <div class="container-fluid">
             <?php
-                // Display profile_details.php if user logged in
+                // Display profile_details.php
                 include 'includes/profile_details.php';
             ?>
         </div>
