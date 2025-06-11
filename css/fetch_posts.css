@@ -19,11 +19,13 @@
     width: 100%;
     resize: none !important;
     color: #212529;
+    padding: 5px;
 }
 
 .post-textarea:disabled {
     background: none;
     border: none;
+    padding: 0px;
 }
 
 /* Edit Post styles */
@@ -44,6 +46,7 @@
 /* Add Comment styles */
 .add-comment-textarea {
     border-color: #DEE2E6;
+    padding: 5px;
 }
 
 .add-comment-btns,
@@ -60,6 +63,10 @@
 }
 
 /* Existing Comment & Edit comment styles */
+.comment-textarea {
+    padding: 5px;
+}
+
 .comment-textarea:disabled,
 .comment-textarea {
     border: none;
