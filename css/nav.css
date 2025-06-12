@@ -1,14 +1,15 @@
 #home-container {
-        background-color: #0D6EFD;
+    background-color: #0D6EFD;
+    border-radius: 2px;
 }
 
 #home-link {
     color: white;
     font-size: 18px;
     font-weight: bold;
-    display: flex; /* Enables flexbox */
-    align-items: center; /* Aligns items vertically */
-    padding: 4px 8px;
+    display: flex;
+    align-items: center;
+    padding: 6px 6px;
 }
 
 #home-icon {
@@ -20,11 +21,10 @@
     width: 40px;
 }
 
-.nav-profile:hover {
-    background-color: lightgrey;
-    border-radius: 1px;
-}
-
 .nav-dropdown-item:active {
     color: #fff !important;
+}
+
+.dropdown-toggle::after {
+    margin-left: 0px !important;
 }
