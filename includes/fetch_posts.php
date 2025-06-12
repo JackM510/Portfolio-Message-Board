@@ -135,6 +135,9 @@ function getPosts($pdo, $user_id = null) {
                                     <a class="post-profile-link" href="profile.php?user_id=' . $comment['user_id'] . '">
                                     <img class="me-3 rounded-pill comment-profile-picture" src="' . $commentor_profile_picture . '" alt="Profile Picture">
                                 </div>
+
+                                <div class="w-100 position-relative">
+
                                 <div class="w-100">
                                     <p><strong>' . $commentor_name . '</strong></a></p>
                                     <form id="edit-comment-form-' . htmlspecialchars($comment["comment_id"]) . '" class="w-100" method="POST">
@@ -149,7 +152,7 @@ function getPosts($pdo, $user_id = null) {
                                 </div>');
                             
                             if (isset($_SESSION['user_id']) && $_SESSION['user_id'] == $comment['user_id']) {
-                                echo('<div id="comment-dropdown-'.htmlspecialchars($comment['comment_id']).'" class="dropdown ms-auto" style="height:20px;">
+                                echo('<div id="comment-dropdown-'.htmlspecialchars($comment['comment_id']).'" class="dropdown ms-auto position-absolute" style="top: 0; right: 0; height:20px;">
                                     <span id="comment-options-'.htmlspecialchars($comment['comment_id']).'" data-bs-toggle="dropdown" aria-expanded="false" role="button" style="cursor: pointer;">
                                         <i class="bi bi-three-dots-vertical" style="color:grey; font-size:20px;"></i>
                                     </span>
@@ -165,6 +168,9 @@ function getPosts($pdo, $user_id = null) {
                                     </ul>
                                     </div>'); 
                             }
+
+                            echo('</div>');
+
 
                         echo('</div>');
                     echo "</div>";

@@ -29,10 +29,12 @@ document.addEventListener("DOMContentLoaded", function() {
         // Store the original value before editing - used when edit-cancel-btn selected
         img.dataset.originalSrc = img.src;
         textarea.dataset.originalValue = textarea.value;
+       
 
         button.addEventListener("click", function() {
             imgUploadBtn.style.display ="block"; // Show img upload btn
             textarea.removeAttribute("disabled"); // Make textarea active
+            textarea.focus();
             btnGroup.style.display = "block";
             btnGroup.classList.add("d-flex", "float-end");
         });
