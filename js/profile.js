@@ -1,86 +1,80 @@
 document.addEventListener("DOMContentLoaded", function () {
 
-    // Profile details input/textarea line height
-    document.querySelectorAll(".dynamic-input").forEach(input => {
-        // Resize on load based on existing content
-        input.style.height = "auto"; 
-        input.style.height = `${input.scrollHeight}px`;
-    
-        // Resize when user types
-        input.addEventListener("input", function() {
-            this.style.height = "auto"; // Reset height
-            this.style.height = `${this.scrollHeight}px`; // Expand dynamically
-        });
-    });
+    // Profile container elements
+    const form = document.getElementById("update-profile");
+    const details = document.getElementById("profile-details");
 
+    // Profile form elements
+    let profilePictureInput = document.getElementById("profile-picture-input");
+    let firstNameInput = document.getElementById("first-name-input");
+    let lastNameInput = document.getElementById("last-name-input");
+    let ageInput = document.getElementById("age-input");
+    let locationInput = document.getElementById("location-input");
+    let bioTextarea = document.getElementById("bio-textarea");
 
     // Profile details edit icon
     document.getElementById("edit-icon").addEventListener("click", function () {
 
-        let profilePictureImg = document.getElementById("profile-picture");
-        let originalImgSrc = profilePictureImg.src;
+        /*let profilePictureImg = document.getElementById("profile-picture");
+        let originalImgSrc = profilePictureImg.src; */
 
-        let profilePicture = document.getElementById("profile-image-upload");
-        let profileName = document.getElementById("profile-name");
-        let profileLocation = document.getElementById("profile-location");
-        let profileBio = document.getElementById("profile-bio");
+        //Remove disabled attribute from form elements
+        firstNameInput.removeAttribute("disabled");
+        lastNameInput.removeAttribute("disabled");
+        ageInput.removeAttribute("disabled");
+        locationInput.removeAttribute("disabled");
+        bioTextarea.removeAttribute("disabled");
 
-        let editIcon = document.getElementById('edit-icon');
-        let cancelIcon = document.getElementById('cancel-icon');
-    
-        if (!this.classList.contains("editing")) {
-            // Enable editing
-            profilePicture.removeAttribute("disabled");
-            profileName.removeAttribute("disabled");
-            profileLocation.removeAttribute("disabled");
-            profileBio.removeAttribute("disabled");
-    
-            // Change edit icon to save (tick)
-            this.innerHTML = '<i class="bi bi-check-lg"></i>';
-            this.classList.add("editing");
-            this.style = "color:green";
+        // Show the 'update profile' form and hide the profile details div
+        form.style.display = 'block'; // Display 'Update Profile' form
+        form.classList.add("d-flex", "flex-column", "justify-content-center");
+        details.style.display = 'none'; // Hide profile details
+        details.classList.remove("d-flex");
 
-            // close icon
-            cancelIcon.style.display = "block";
-
-        } else {
-            // Submit form when tick is clicked
-            document.getElementById("profile-details-submit").click();
-        }
-
-        cancelIcon.addEventListener("click", function () {
-             // ✅ Reset form inputs to their original values
-            document.getElementById("profile-form").reset();
-
-            // ✅ Disable inputs again (returning to default state)
-            profilePicture.setAttribute("disabled", "true");
-            profileName.setAttribute("disabled", "true");
-            profileLocation.setAttribute("disabled", "true");
-            profileBio.setAttribute("disabled", "true");
-
-            // ✅ Switch back to the pencil edit icon
-            editIcon.innerHTML = '<i class="bi bi-pencil"></i>';
-            editIcon.classList.remove("editing");
-            editIcon.style = "color:black";
-
-            // ✅ Hide the cancel icon again
-            cancelIcon.style.display = "none";
-
-            // ✅ Clear the file input (so users don't accidentally submit the wrong image)
-            profilePicture.value = "";
-            profilePictureImg.src = originalImgSrc;
-        });
+       
 
     });
 
+   
+
+    // Cancel button when editing profile details
+    document.getElementById("profile-cancel-btn").addEventListener("click", function () {
+
+        // Add disabled attribute to form elements
+        firstNameInput.setAttribute("disabled", "true");
+        lastNameInput.setAttribute("disabled", "true");
+        ageInput.setAttribute("disabled", "true");
+        locationInput.setAttribute("disabled", "true");
+        bioTextarea.setAttribute("disabled", "true");
+
+        details.style.display = 'block'; // Display profile details
+        details.classList.add("d-flex");
+        form.style.display = 'none'; // Hide 'Update Profile' form
+        form.classList.remove("d-flex", "flex-column", "justify-content-center");
+    });
+
+
+
+    // Update button when editing profile details
+
+
+
+
+    // Event listener for profile picture image btn
+    document.getElementById('profile-picture-btn').addEventListener('click', function () {
+        // Make the input active and call click()
+        profilePictureInput.removeAttribute("disabled");
+        profilePictureInput.click();
+      });
+      
     // Event listener for profile picture file input
-    document.getElementById("profile-image-upload").addEventListener("change", function(event) {
+    document.getElementById("profile-picture-input").addEventListener("change", function(event) {
         const file = event.target.files[0];
 
         if (file) {
             const reader = new FileReader();
             reader.onload = function(e) {
-                document.getElementById("profile-picture").src = e.target.result; // Update image preview
+                document.getElementById("profile-picture-img").src = e.target.result; // Update image preview
             };
             reader.readAsDataURL(file);
         }
@@ -101,6 +95,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 console.log("Server Response:", data); // Log server response
                 if (data.trim() === "success") {
                     location.reload();
+
                 } else {
                     alert("Error editing profile: " + data);
                 }

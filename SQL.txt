@@ -24,6 +24,7 @@ VALUES ('Jack', 'Marshall', 'jackmarshall@example.com', '$2y$10$Y6ld32Af8dtZmTWb
 CREATE TABLE profiles (
   profile_id INTEGER NOT NULL AUTO_INCREMENT,
   user_id INTEGER NOT NULL,
+  age INTEGER NOT NULL,
   bio VARCHAR(255),
   profile_picture VARCHAR(255),
   location VARCHAR(100),
@@ -31,8 +32,8 @@ CREATE TABLE profiles (
   FOREIGN KEY(user_id) REFERENCES users(user_id) ON DELETE CASCADE
 ) ENGINE = InnoDB DEFAULT CHARSET=utf8;
 
-INSERT INTO `profiles` (`user_id`, `bio`, `profile_picture`, `location`)
-VALUES (1, 'Creator of the Message Board application', 'uploads/profiles/1/profile_picture/ph-3.png', 'VIC, Australia');
+INSERT INTO `profiles` (`user_id`, `age`, `bio`, `profile_picture`, `location`)
+VALUES (1, 28, 'Creator of the Message Board application', 'uploads/profiles/1/profile_picture/ph-3.png', 'VIC, Australia');
 
 -- Create 'posts' table
 CREATE TABLE posts (

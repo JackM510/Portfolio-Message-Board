@@ -1,14 +1,10 @@
 /* Profile Details */
-#profile-form {
-    width: 100%;
-}
-
-#profile-container {
-    position: relative;
-    max-width: 100%; /* Prevents overflow */
-    overflow: hidden; /* Ensures content stays within boundaries */
+#profile-details {
     display: flex;
     flex-direction: column;
+    position: relative;
+    max-width: 100%; /* Prevents overflow */
+    overflow: hidden; /* Ensures content stays within boundaries */  
     justify-content: center;
     margin: auto;
 }
@@ -23,10 +19,9 @@
     margin-bottom: 1rem;
 }
 
-#profile-picture-label {
-    display: flex;
-    justify-content: center; /* Centers horizontally */
-    align-items: center; /* Centers vertically */
+#profile-details-container {
+    flex-grow: 1;
+    margin: 0 auto;
 }
 
 #profile-picture {
@@ -35,56 +30,7 @@
     max-height: 100%;
 }
 
-#profile-details-container {
-    flex-grow: 1;
-    width: 75%; /* Ensures it takes up full space */
-    height: 75%; /* Adjust as needed */
-    margin: 0 auto;
-}
-
-#profile-details-container input,
-#profile-details-container textarea {
-    width: 100%; /* Takes up full width within the flex container */
-    box-sizing: border-box; /* Ensures padding and borders don’t cause overflow */
-}
-
-.dynamic-input{
-    height: auto;
-    overflow-y: hidden;
-}
-
-#profile-image-upload:not([disabled]) + label #profile-picture:hover {
-    cursor: pointer; /* Enables hover only when input is active */
-    border: 1px solid black;
-    opacity: 0.9; /* Optional: restore full visibility */
-}
-
-#profile-name:not([disabled]):hover,
-#profile-location:not([disabled]):hover,
-#profile-bio:not([disabled]):hover {
-    cursor: pointer; /* Enables hover only when input is active */
-    border: 1px solid black;
-}
-
-
-#profile-name:disabled,
-#profile-location:disabled,
-#profile-bio:disabled {
-    color: black;
-    background: none;
-    border: none;
-    resize: none;
-}
-
-#profile-name,
-#profile-location,
-#profile-bio {
-    border: none;
-    resize: none;
-}
-
 #edit-icon {
-    color: black;
     position: absolute;
     top: 5px;
     right: 5px;
@@ -92,23 +38,36 @@
     cursor: pointer;
 }
 
-#edit-icon:hover,
-#cancel-icon:hover {
+#edit-icon:hover {
     background: lightgrey;
 }
 
-#cancel-icon {
-    display: none;
-    color: red;
-    position: absolute;
-    top: 40px;
-    right: 5px;
-    font-size: 14px;
-    padding: 1px 2px;
-    cursor: pointer;
+
+/* Update Profile */
+#profile-form {
+    background-color: rgb(255, 255, 255);
 }
 
-/* Profile posts (new posts and existing posts styles) */
+#profile-picture-label {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#profile-picture-img {
+    object-fit: cover;
+    max-width: 100%;
+    max-height: 100%;
+}
+
+#profile-picture-btn {
+    margin-right: auto;
+}
+
+
+
+/* Profile posts (new posts and existing posts) */
 #profile-posts-container {
     width: 100%;
 }
@@ -116,23 +75,15 @@
 
 /* Tablets (small screens) */
 @media (min-width: 600px) {
-    #profile-form {
-        width: 60%;
-    }
-
-    #profile-container {
+    
+    #profile-details {
         flex-direction: row;
     }
 
-    #profile-picture-container, 
-    #profile-picture-label {
+    #profile-picture-container {
         display: block;
         width: auto;
         height: auto;
-
-    }
-
-    #profile-picture-container {
         padding-right: 30px;
     }
 
