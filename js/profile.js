@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", function () {
     let profilePictureInput = document.getElementById("profile-picture-input");
     let firstNameInput = document.getElementById("first-name-input");
     let lastNameInput = document.getElementById("last-name-input");
-    let ageInput = document.getElementById("age-input");
+    let occupationInput = document.getElementById("occupation-input");
     let locationInput = document.getElementById("location-input");
     let bioTextarea = document.getElementById("bio-textarea");
 
@@ -21,7 +21,7 @@ document.addEventListener("DOMContentLoaded", function () {
         //Remove disabled attribute from form elements
         firstNameInput.removeAttribute("disabled");
         lastNameInput.removeAttribute("disabled");
-        ageInput.removeAttribute("disabled");
+        occupationInput.removeAttribute("disabled");
         locationInput.removeAttribute("disabled");
         bioTextarea.removeAttribute("disabled");
 
@@ -43,7 +43,7 @@ document.addEventListener("DOMContentLoaded", function () {
         // Add disabled attribute to form elements
         firstNameInput.setAttribute("disabled", "true");
         lastNameInput.setAttribute("disabled", "true");
-        ageInput.setAttribute("disabled", "true");
+        occupationInput.setAttribute("disabled", "true");
         locationInput.setAttribute("disabled", "true");
         bioTextarea.setAttribute("disabled", "true");
 
@@ -94,7 +94,10 @@ document.addEventListener("DOMContentLoaded", function () {
             .then(data => {
                 console.log("Server Response:", data); // Log server response
                 if (data.trim() === "success") {
+                    //details.scrollIntoView({ behavior: 'smooth'});
                     location.reload();
+                    //window.scrollTo({ top: 0, behavior: 'smooth' });
+                    
 
                 } else {
                     alert("Error editing profile: " + data);

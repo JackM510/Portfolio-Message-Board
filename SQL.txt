@@ -10,6 +10,7 @@ CREATE TABLE users (
   user_id INTEGER NOT NULL AUTO_INCREMENT,
   first_name VARCHAR(50) NOT NULL,
   last_name VARCHAR(50) NOT NULL,
+  date_of_birth DATE NOT NULL,
   email VARCHAR(254) UNIQUE NOT NULL,
   password VARCHAR(255) NOT NULL,
   role ENUM('admin', 'user') DEFAULT 'user' NOT NULL,
@@ -24,10 +25,10 @@ VALUES ('Jack', 'Marshall', 'jackmarshall@example.com', '$2y$10$Y6ld32Af8dtZmTWb
 CREATE TABLE profiles (
   profile_id INTEGER NOT NULL AUTO_INCREMENT,
   user_id INTEGER NOT NULL,
-  age INTEGER NOT NULL,
+  location VARCHAR(100),
+  occupation VARCHAR(100),
   bio VARCHAR(255),
   profile_picture VARCHAR(255),
-  location VARCHAR(100),
   PRIMARY KEY(profile_id),
   FOREIGN KEY(user_id) REFERENCES users(user_id) ON DELETE CASCADE
 ) ENGINE = InnoDB DEFAULT CHARSET=utf8;

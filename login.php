@@ -99,13 +99,15 @@
         else {
             $first_name = $_POST['first_name'];
             $last_name = $_POST['last_name'];
+            $date_of_birth = $_POST['date_of_birth'];
             $password = $_POST['password']; // Plaintext password must be hashed prior to INSERT
             $hashedPassword = password_hash($password, PASSWORD_DEFAULT); // Hash the password
 
             try {
-                $stmt = $pdo->prepare("INSERT INTO `users`(`first_name`, `last_name`, `email`, `password`) VALUES (:first_name, :last_name, :email, :password)");
+                $stmt = $pdo->prepare("INSERT INTO `users`(`first_name`, `last_name`, `date_of_birth`, `email` , `password`) VALUES (:first_name, :last_name, :date_of_birth, :email, :password)");
                 $stmt->bindParam(':first_name', $first_name, PDO::PARAM_STR);
                 $stmt->bindParam(':last_name', $last_name, PDO::PARAM_STR);
+                $stmt->bindParam(':date_of_birth', $date_of_birth, PDO::PARAM_STR);
                 $stmt->bindParam(':email', $email, PDO::PARAM_STR);
                 $stmt->bindParam(':password', $hashedPassword, PDO::PARAM_STR); // Store the hashed password
                 $stmt->execute();
@@ -115,6 +117,7 @@
                 // Set SESSION variables
                 $_SESSION['user_id'] = $user_id;
                 $_SESSION['email'] = $email;
+                $_SESSION['first_name'] = $first_name;
 
                 // Insert default profile data
                 $stmt = $pdo->prepare("INSERT INTO profiles (user_id, profile_picture) VALUES (:user_id, 'uploads/default/profile_picture.png')");
@@ -168,6 +171,7 @@
         </div>
         <div class="text-center mt-3" onclick="showSignUp()" style="cursor:pointer;">Don't have an account? Sign Up</div>
     </div>
+
     <!-- Signup form -->
     <div class="container mt-5" id="signup-form" style="<?= $displayForm === 'signup' ? 'display:block;' : 'display:none;' ?>">
         <div class="d-flex justify-content-center mt-3 mb-3">
@@ -181,6 +185,9 @@
                     </div>
                     <div class="col-12 mb-3">
                         <input class="form-control form-control-lg" type="text" name="last_name" placeholder="Last Name" required>
+                    </div>
+                    <div class="col-12 mb-3">
+                        <input class="form-control form-control-lg" type="date" name="date_of_birth" placeholder="Date of Birth" required>
                     </div>
                     <div class="col-12 mb-3">
                     <?php if (isset($_SESSION['signup-email-error'])) { echo "<p class='error-flash'>".$_SESSION['signup-email-error']."</p>"; unset($_SESSION['signup-email-error']); } ?>

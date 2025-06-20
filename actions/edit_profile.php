@@ -8,8 +8,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_SESSION['user_id'])) {
         $last_name = $_POST["last_name"];
         $full_name = $first_name . " " . $last_name;
  
-        $age = $_POST['age'];
         $location = $_POST["location"];
+        $occupation = $_POST['occupation'];
         $bio = $_POST["bio"];
 
         // UPDATE 'user' table
@@ -20,9 +20,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_SESSION['user_id'])) {
         $stmt->execute();
 
         // UPDATE 'profile' table
-        $stmt = $pdo->prepare("UPDATE profiles SET age = :age, location = :location, bio = :bio WHERE user_id = :uid");    
-        $stmt->bindParam(':age', $age, PDO::PARAM_INT);
+        $stmt = $pdo->prepare("UPDATE profiles SET location = :location, occupation = :occupation, bio = :bio WHERE user_id = :uid");    
         $stmt->bindParam(':location', $location, PDO::PARAM_STR);
+        $stmt->bindParam(':occupation', $occupation, PDO::PARAM_STR);
         $stmt->bindParam(':bio', $bio, PDO::PARAM_STR);
         $stmt->bindParam(':uid', $_SESSION['user_id'], PDO::PARAM_STR);
         $stmt->execute();

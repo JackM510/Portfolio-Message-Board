@@ -11,7 +11,7 @@
     $user_id = isset($_GET['user_id']) ? $_GET['user_id'] : $_SESSION['user_id'];
 
     // Set Profile details - get users full name and profile information
-    $sql = "SELECT u.first_name, u.last_name, p.age, p.bio, p.profile_picture, p.location
+    $sql = "SELECT u.first_name, u.last_name, u.created_at, u.date_of_birth, p.location, p.occupation, p.bio, p.profile_picture
         FROM users u
         JOIN profiles p ON u.user_id = p.user_id
         WHERE u.user_id = :user_id";
@@ -26,9 +26,15 @@
     $first_name = $data['first_name'];
     $last_name = $data['last_name'];
     $full_name = $first_name . ' ' . $last_name;
-    $age = $data['age'];
     $location = $data['location'];
+    $occupation = $data['occupation'];
     $bio = $data['bio'];
+    // Joined Date
+    $joinedDAT = $data['created_at'];
+    $joined = date('F j, Y', strtotime($joinedDAT));
+    // Age
+    $dob = $data['date_of_birth'];
+    $age = date_diff(date_create($dob), date_create('today'))->y;
 
 ?>
 <!DOCTYPE html>
@@ -49,9 +55,9 @@
 <body>
     <!-- Navbar -->
     <?php require_once "nav.php"; ?>
-    <section class="mt-5">
+    <section>
         <!-- Profile details section -->
-        <div class="container-fluid">
+        <div class="container-fluid pt-5" style="background-color: #f8f9fa;">
             <?php
                 // Display profile_details.php
                 include 'includes/profile_details.php';
