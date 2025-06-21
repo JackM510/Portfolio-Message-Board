@@ -71,6 +71,14 @@
         $stmt->bindParam(':email', $email, PDO::PARAM_STR);
         $stmt->execute();
 
+        // Flash an error message if users age is not >=18
+        $age = date_diff(date_create($_POST['date_of_birth']), date_create('today'))->y;
+        if ($age < 18) {
+            $_SESSION['signup-age-error'] = "You must be 18 or older to create an account";
+            header("Location: login.php");
+            exit();
+        }
+
         // Flash an error message if the email already exists
         if ($stmt->rowCount() > 0) {
             $_SESSION['signup-email-error'] = "Email Address Already Exists";
@@ -187,6 +195,7 @@
                         <input class="form-control form-control-lg" type="text" name="last_name" placeholder="Last Name" required>
                     </div>
                     <div class="col-12 mb-3">
+                    <?php if (isset($_SESSION['signup-age-error'])) { echo "<p class='error-flash'>".$_SESSION['signup-age-error']."</p>"; unset($_SESSION['signup-age-error']); } ?>
                         <input class="form-control form-control-lg" type="date" name="date_of_birth" placeholder="Date of Birth" required>
                     </div>
                     <div class="col-12 mb-3">

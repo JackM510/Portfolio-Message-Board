@@ -2,7 +2,7 @@
 <div id="profile-details" class="w-75 m-auto">
     <!-- Profile picture -->
     <div id="profile-picture-container">
-        <img id="profile-picture" src="<?php echo htmlentities($profile_picture); ?>" alt="Profile Picture">
+        <img id="profile-picture" class="rounded-pill" src="<?php echo htmlentities($profile_picture); ?>" alt="Profile Picture">
     </div>
     <!-- Profile details -->
     <div id="profile-details-container">
@@ -62,10 +62,10 @@
                 <div class="col-12 mb-4">
                     <input id="profile-picture-input" type="file" name="profile_picture" accept="image/*" disabled hidden>
                     <label id="profile-picture-label" for="profile-image-upload" class="mb-2">
-                        <div class="d-flex flex-column justify-content-center w-100 h-100">
-                            <img id="profile-picture-img" class="mb-2" src="<?php echo htmlentities($profile_picture); ?>" alt="Profile Picture">
-                            <button id="profile-picture-btn" type="button" class="btn btn-sm btn-light" title="Upload Profile Picture">
-                                <i class="bi bi-card-image" style="font-size: 16px;"></i>
+                        <div class="d-flex flex-column justify-content-center w-50 h-100 mb-2">
+                            <img id="profile-picture-img" class="mb-2 rounded-pill" src="<?php echo htmlentities($profile_picture); ?>" alt="Profile Picture">
+                            <button id="profile-picture-btn" type="button" class="btn btn-sm btn-light mx-auto" title="Upload Profile Picture">
+                                <i class="bi bi-card-image" style="font-size: 18px;"></i>
                             </button>
                         </div>
                     </label>
@@ -82,12 +82,12 @@
                     <input id="last-name-input" class="form-control" type="text" name="last_name" value="<?php echo !empty($last_name) ? htmlentities($last_name) : "Last Name Missing"; ?>" disabled required>
                 </div>
                 <!-- Location -->
-                <div class="col-12 col-lg-6 mb-3">
+                <div class="col-12 mb-3">
                     <label class="pb-1" for="location"><strong>Location</strong></label>
                     <input id="location-input" class="form-control" type="location" name="location" value="<?php echo !empty($location) ? htmlentities($location) : "Location Missing"; ?>" disabled required>
                 </div>
-                <!-- Age -->
-                <div class="col-12 col-lg-6 mb-3">
+                <!-- Occupation -->
+                <div class="col-12 mb-3">
                     <label class="pb-1" for="occupation"><strong>Occupation</strong></label>
                     <input id="occupation-input" class="form-control" type="text" name="occupation" value="<?php echo !empty($occupation) ? htmlentities($occupation) : "Occupation Missing"; ?>" disabled required>
                 </div>
