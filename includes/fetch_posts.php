@@ -27,11 +27,8 @@ function getPosts($pdo, $user_id = null) {
             $user_name = $user_first.' '.$user_last; // Users full name
             $profile_picture = $data['profile_picture'];
 
-            $post_timestamp = date('Y-m-d H:i', strtotime($post['post_created']));
-
-            $post_timestamp = $post['post_edited'] 
-                        ?  date('Y-m-d H:i', strtotime($post['post_created'])) . " (edited)" 
-                        :  date('Y-m-d H:i', strtotime($post['post_created']));
+            $timestamp = date('g:iA j/n/y', strtotime($post['post_created']));
+            $post_timestamp = !empty($post['post_edited']) ? $timestamp . ' (edited)' : $timestamp;
 
             // Display each post in HTML
             // Users Profile Picture & Full Name
@@ -125,9 +122,9 @@ function getPosts($pdo, $user_id = null) {
                 foreach ($comments as $comment) {
                     $commentor_name = htmlspecialchars($comment['first_name'] . ' ' . $comment['last_name']);
                     $commentor_profile_picture = htmlspecialchars($comment['profile_picture']);
-                    $comment_timestamp = $comment['comment_edited'] 
-                        ?  date('Y-m-d H:i', strtotime($comment['comment_created'])) . " (edited)" 
-                        :  date('Y-m-d H:i', strtotime($comment['comment_created']));
+
+                    $timestamp = date('g:iA j/n/y', strtotime($comment['comment_created']));
+                    $comment_timestamp = !empty($comment['comment_edited']) ? $timestamp . ' (edited)' : $timestamp;
             
                     echo ('<hr><div class="comment">
                             <div class="d-flex">
