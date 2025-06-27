@@ -29,7 +29,7 @@
     <!-- Navbar -->
     <?php require_once "nav.php"; ?>
     <div class="mt-5 text-center">
-        <h1>Admin Control Panel</h1>
+        <h1 class="display-5">Admin Control Panel</h1>
     </div>
 
     <section class="container d-flex justify-content-center w-50 mx-auto mt-5">
