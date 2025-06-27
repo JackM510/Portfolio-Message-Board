@@ -3,7 +3,6 @@
     display: flex;
     flex-direction: column;
     max-width: 100%; /* Prevents overflow */
-    overflow: hidden; /* Ensures content stays within boundaries */  
     justify-content: center;
     margin: auto;
 }
@@ -26,24 +25,36 @@
 #profile-details-container {
     flex: 1;
     min-width: 0; /* allows wrapping instead of forcing overflow */
-    word-wrap: break-word;
+    max-width: 100%;
 }
 
-#profile-age,
+#profile-fullname {
+    display: block;
+    width: 100%;
+    max-width: 90%;
+    white-space: normal;
+    overflow-wrap: anywhere;
+    word-break: break-all;
+}
+
 #profile-location,
+#profile-joined-date,
+#profile-occupation,
+#profile-age,
 #profile-bio {
     font-size: 16px;
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    white-space: normal;
+    overflow-wrap: anywhere;
+    word-break: break-all;
 }
 
 #edit-icon {
     font-size: 16px;
     cursor: pointer;
 }
-
-#edit-icon:hover {
-    background: lightgrey;
-}
-
 
 /* Update Profile */
 #profile-form {

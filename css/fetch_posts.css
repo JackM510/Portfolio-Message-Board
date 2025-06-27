@@ -66,10 +66,12 @@
 /* Existing Comment & Edit comment styles */
 .comment-textarea {
     padding: 5px;
+
 }
 
 .comment-textarea:disabled,
 .comment-textarea {
+    background: none;
     border: none;
 }
 
