@@ -33,7 +33,7 @@
 
 
     <!-- BS5 Accordian --> 
-    <div class="accordian container">
+    <div id="accordian" class="accordian container">
         <!-- Update email container-->
         <div class="card">
             <div class="card-header text-center">
@@ -41,10 +41,11 @@
                     Change your email address
                 </a>
             </div>
-            <div id="collapse-email" class="collapse" data-bs-parent="#accordion">
+            <div id="collapse-email" class="collapse" data-bs-parent="#accordian">
                 <div class="card-body">
                     <div class="mt-3 w-50 mx-auto">
                         <h1 class="display-5 text-center mb-4">Update Email Address</h1>
+                        <?php if (isset($_SESSION['email-success'])) { echo "<p class='success-flash'>".$_SESSION['email-success']."</p>"; unset($_SESSION['email-success']); } ?>
                         <form id="update-email-form" method="POST" action="actions/update_email.php">
                             <row>
                                 <!-- Current email -->
@@ -83,12 +84,13 @@
                     Change your password
                 </a>
             </div>
-            <div id="collapse-pw" class="collapse" data-bs-parent="#accordion">
+            <div id="collapse-pw" class="collapse" data-bs-parent="#accordian">
                 <div class="card-body">
                     
                     <!-- Update password -->
                     <div class="mt-3 w-50 mx-auto">
                         <h1 class="display-5 text-center mb-4">Update Password</h1>
+                        <?php if (isset($_SESSION['pw-success'])) { echo "<p class='success-flash'>".$_SESSION['pw-success']."</p>"; unset($_SESSION['pw-success']); } ?>
                         <form id="update-pw-form" method="POST" action="actions/update_password.php">
                             <div class="row">
                                 <!-- Current password -->
@@ -126,7 +128,7 @@
                     Close your account
                 </a>
             </div>
-            <div id="collapse-delete-account" class="collapse" data-bs-parent="#accordion">
+            <div id="collapse-delete-account" class="collapse" data-bs-parent="#accordian">
                 <div class="card-body">
                     
                     <!-- Delete account -->

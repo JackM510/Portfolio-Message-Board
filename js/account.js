@@ -1,5 +1,24 @@
 document.addEventListener("DOMContentLoaded", function () {  
 
+    // Keep track of any open accordian cards
+    window.addEventListener("DOMContentLoaded", () => {
+        const id = sessionStorage.getItem("openPanel");
+        if (id) {
+          const el = document.getElementById(id);
+          if (el) {
+            new bootstrap.Collapse(el, {
+              toggle: true
+            });
+            
+            el.scrollIntoView({ behavior: "smooth", block: "start" });
+          }
+          sessionStorage.removeItem("openPanel");
+        }
+      });
+      
+
+
+
     // Event Listeners for delete account checkboxes
     const checkboxes = document.querySelectorAll('.required-checkbox');
     const deleteBtn = document.getElementById('delete-btn');
@@ -31,7 +50,7 @@ document.addEventListener("DOMContentLoaded", function () {
         .then(data => {
             console.log("Server Response:", data); // Log server response
             location.reload();
-            document.getElementById("collapse-pw").classList.add("show");
+            sessionStorage.setItem("openPanel", "collapse-email"); // or "collapse-pw", etc.
         })
         .catch(error => console.error("Fetch Error:", error));
     });
@@ -51,11 +70,8 @@ document.addEventListener("DOMContentLoaded", function () {
         .then(response => response.text())
         .then(data => {
             console.log("Server Response:", data); // Log server response
-            if (data.trim() === "success") {
-                location.reload();
-            } else {
-                alert("Error updating password: " + data);
-            }
+            location.reload();
+            sessionStorage.setItem("openPanel", "collapse-pw"); // or "collapse-pw", etc.
         })
         .catch(error => console.error("Fetch Error:", error));
 });

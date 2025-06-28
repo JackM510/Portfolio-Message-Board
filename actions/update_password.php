@@ -58,6 +58,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_SESSION['user_id'])) {
     }
 
     if ($stmt->execute()) {
+        $_SESSION['pw-success'] = "Your password has been updated";
         echo "success";
     } else {
         echo "error updating password: " . implode(" ", $stmt->errorInfo());
