@@ -43,7 +43,7 @@
             </div>
             <div id="collapse-email" class="collapse" data-bs-parent="#accordian">
                 <div class="card-body">
-                    <div class="mt-3 w-50 mx-auto">
+                    <div id="update-email-body" class="mt-3 mx-auto">
                         <h1 class="display-5 text-center mb-4">Update Email Address</h1>
                         <?php if (isset($_SESSION['email-success'])) { echo "<p class='success-flash'>".$_SESSION['email-success']."</p>"; unset($_SESSION['email-success']); } ?>
                         <form id="update-email-form" method="POST" action="actions/update_email.php">
@@ -88,7 +88,7 @@
                 <div class="card-body">
                     
                     <!-- Update password -->
-                    <div class="mt-3 w-50 mx-auto">
+                    <div id="update-pw-body" class="mt-3 mx-auto">
                         <h1 class="display-5 text-center mb-4">Update Password</h1>
                         <?php if (isset($_SESSION['pw-success'])) { echo "<p class='success-flash'>".$_SESSION['pw-success']."</p>"; unset($_SESSION['pw-success']); } ?>
                         <form id="update-pw-form" method="POST" action="actions/update_password.php">
@@ -132,7 +132,7 @@
                 <div class="card-body">
                     
                     <!-- Delete account -->
-                    <div class="mt-5 w-50 mx-auto d-flex flex-column">
+                    <div id="delete-account-body" class="mt-5 mx-auto d-flex flex-column">
                         <h1 class="display-5 text-center mb-4">Delete Account</h1>
                         <form method="POST" action="actions/delete_user.php">
                             <div class="form-check mb-3">

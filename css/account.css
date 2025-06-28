@@ -1,0 +1,19 @@
+#update-email-body,
+#update-pw-body,
+#delete-account-body {
+    width: 100%;
+    max-width: 100%;
+}
+
+/* Small devices (phones in landscape, ≥576px) */
+@media (min-width: 576px) {
+    #update-email-body,
+    #update-pw-body,
+    #delete-account-body {
+        width: 50%;
+        max-width: 50%;
+    }
+  }
+  
+ 
+  
