@@ -21,20 +21,23 @@
     $stmt->execute();
     $data = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    // Handling default values
-    $profile_picture = $data['profile_picture'];
+    // Full name
     $first_name = $data['first_name'];
     $last_name = $data['last_name'];
     $full_name = $first_name . ' ' . $last_name;
-    $location = $data['location'];
-    $occupation = $data['occupation'];
-    $bio = $data['bio'];
     // Joined Date
     $joinedDAT = $data['created_at'];
     $joined = date('F j, Y', strtotime($joinedDAT));
     // Age
     $dob = $data['date_of_birth'];
     $age = date_diff(date_create($dob), date_create('today'))->y;
+
+    // Handling profile values
+    $profile_picture = $data['profile_picture'];
+    $location = $data['location'];
+    $occupation = $data['occupation'];
+    $bio = $data['bio'];
+    
 
 ?>
 <!DOCTYPE html>

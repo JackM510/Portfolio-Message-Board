@@ -28,7 +28,7 @@
                         <li><a class="dropdown-item nav-dropdown-item" href="admin.php">Admin Panel<a></li>
                     <?php endif; ?>
                     <li><a class="dropdown-item nav-dropdown-item" href="account.php">Account Settings</a></li>
-                    <li><a class="dropdown-item nav-dropdown-item text-danger" href="logout.php">Logout</a></li>
+                    <li><a class="dropdown-item nav-dropdown-item text-danger" href="actions/logout_user.php">Logout</a></li>
                 </ul>
             </div>
         <?php else: ?>

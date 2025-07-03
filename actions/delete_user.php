@@ -9,6 +9,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_SESSION['user_id']) && !empt
     $stmt->bindParam(':uid', $_SESSION['user_id'], PDO::PARAM_INT);
     $stmt->execute();
 
-    header("Location: ../logout.php");
+
+    // Need to also delete the users upload directory
+
+
+
+    header("Location: ../actions/logout_user.php");
 }
 ?>
