@@ -33,17 +33,20 @@ function getPosts($pdo, $user_id = null) {
             // Display each post in HTML
             // Users Profile Picture & Full Name
             echo('<div class="post-container p-4">
-                    <div class="d-flex align-items-center pt-1">
-                        <a class="post-profile-link" href="profile.php?user_id='.htmlspecialchars($post['user_id']).'">
-                            <div class="d-flex align-items-center">    
-                                <img class="me-3 rounded-pill post-profile-picture" src="'.htmlspecialchars($profile_picture). '" alt="Post Image">
-                                <h5 class="text-break">'.$user_name.'</h5>
-                            </div>
-                        </a>');
+                    <div class="d-flex align-items-start pt-1">
+
+                        <div>
+                            <a class="post-profile-link" href="profile.php?user_id='.htmlspecialchars($post['user_id']).'">
+                            <img class="me-3 rounded-pill post-profile-picture" src="'.htmlspecialchars($profile_picture). '" alt="Post Image">
+                        </div>
+                        <div class="w-auto">         
+                            <h5 class="break-text">'.$user_name.'</a></h5>
+                        </div>');
+                        
                         // Display a dropdown on each post if the user is logged in and the post is their own
                         if (isset($_SESSION['user_id']) && $_SESSION['user_id'] == $post['user_id']) {
-                            echo('<div id="post-dropdown-'.htmlspecialchars($post['post_id']).'" class="dropdown ms-auto">
-                                <span id="post-options-'.htmlspecialchars($post['post_id']).'" data-bs-toggle="dropdown" aria-expanded="false" role="button" style="cursor: pointer;">
+                            echo('<div id="post-dropdown-'.htmlspecialchars($post['post_id']).'" class="dropdown ms-auto h-100 d-flex align-items-start">
+                                <span id="post-options-'.htmlspecialchars($post['post_id']).'" data-bs-toggle="dropdown" aria-expanded="false" role="button" style="height: auto; cursor: pointer;">
                                     <i class="bi bi-three-dots-vertical" style="color:grey; font-size:20px;"></i>
                                 </span>
                                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="post-options-'.htmlspecialchars($post['post_id']).'">
@@ -72,7 +75,8 @@ function getPosts($pdo, $user_id = null) {
                             </div>');
                         // Display the post text and DAT the post was created
                         echo('<div class="mt-2">
-                                <textarea id="post-textarea-' . htmlentities($post['post_id']).'" class="form-control post-textarea rounded mb-1 auto-resize" name="post_textarea" maxlength="200" disabled>'.htmlentities($post['post_text']).'</textarea>      
+                                <p id="post-description-' . htmlentities($post['post_id']).'" class="break-text mb-2">' .htmlentities($post['post_text']) . '</p>
+                                <textarea id="post-textarea-' . htmlentities($post['post_id']).'" class="form-control post-textarea rounded mb-1 auto-resize" name="post_textarea" maxlength="200" hidden disabled>'.htmlentities($post['post_text']).'</textarea>      
                                 <div id="edit-post-btn-group-' . htmlentities($post['post_id']).'" class="ms-auto edit-post-btn-group mt-2">
                                     <input type="hidden" name="post_id" value="'.htmlspecialchars($post['post_id']).'">
                                     <button class="btn btn-sm btn-secondary ms-1 edit-post-cancel-btn" type="button" data-post-id="'.htmlspecialchars($post['post_id']).'" name="edit-cancel-post">Cancel</button>
@@ -130,53 +134,53 @@ function getPosts($pdo, $user_id = null) {
                     $comment_timestamp = !empty($comment['comment_edited']) ? $timestamp . ' (edited)' : $timestamp;
             
                     echo ('<hr><div class="comment">
-                            <div class="d-flex">
+                            <div class="d-flex align-items-start">
                                 <div>
                                     <a class="post-profile-link" href="profile.php?user_id=' . $comment['user_id'] . '">
                                     <img class="me-3 rounded-pill comment-profile-picture" src="' . $commentor_profile_picture . '" alt="Profile Picture">
                                 </div>
 
-                                <div class="w-100 position-relative">
+                                <div class="w-auto">
+                                    <p class="break-text mb-2"><strong>' . $commentor_name . '</strong></a></p>
+                                </div>
 
-                                <div class="w-100">
-                                    <p class="mt-2 mb-2"><strong>' . $commentor_name . '</strong></a></p>
-                                    <form id="edit-comment-form-' . htmlspecialchars($comment["comment_id"]) . '" class="w-100" method="POST">
-                                        <textarea id="comment-textarea-' . htmlspecialchars($comment["comment_id"]) . '" class="form-control comment-textarea rounded mb-1 text-break" name="edit_comment" data-post-id="'.htmlspecialchars($comment['comment_id']).'" rows="1" maxlength="150" style="resize:none;" required disabled>' . htmlspecialchars($comment['comment_text']) . '</textarea>
+                                ');
+                                    if (isset($_SESSION['user_id']) && $_SESSION['user_id'] == $comment['user_id']) {
+                                        echo('<div id="comment-dropdown-'.htmlspecialchars($comment['comment_id']).'" class="dropdown ms-auto" style="height:20px;">
+                                            <span id="comment-options-'.htmlspecialchars($comment['comment_id']).'" data-bs-toggle="dropdown" aria-expanded="false" role="button" style="cursor: pointer;">
+                                                <i class="bi bi-three-dots-vertical" style="color:grey; font-size:20px;"></i>
+                                            </span>
+                                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="post-options-'.htmlspecialchars($comment['comment_id']).'">
+                                                <li><button type="button" class="dropdown-item edit-btn edit-comment-dropdown-item" data-post-id="'.htmlspecialchars($comment['comment_id']).'" style="border: none; background: none; cursor: pointer;">Edit</button></li>
+                                                <li>
+                                                    <form id="comment-options-form-'.htmlspecialchars($comment['comment_id']).'" method="POST">
+                                                        <input type="hidden" name="delete_comment" value="true">
+                                                        <input type="hidden" name="comment_id" value="'.htmlspecialchars($comment['comment_id']).'">
+                                                        <button type="submit" class="dropdown-item edit-comment-dropdown-item text-danger" style="cursor: pointer;">Delete</button>
+                                                    </form>
+                                                </li>
+                                            </ul>
+                                        </div>'); 
+                                    }
+
+                            echo ('</div>
+
+                            <div class="mt-1">
+                                <form id="edit-comment-form-' . htmlspecialchars($comment["comment_id"]) . '" class="w-100" method="POST">
+                                        <p id="comment-description-' . htmlentities($comment['comment_id']).'" class="break-text mb-2" >' .htmlspecialchars($comment['comment_text']) . '</p>
+                                        <textarea id="comment-textarea-' . htmlspecialchars($comment["comment_id"]) . '" class="form-control comment-textarea rounded mb-1 text-break" name="edit_comment" data-post-id="'.htmlspecialchars($comment['comment_id']).'" maxlength="150" style="resize:none;" hidden required disabled>' . htmlspecialchars($comment['comment_text']) . '</textarea>
                                         <input type="hidden" name="comment_id" value="' . htmlspecialchars($comment['comment_id']) . '">
-                                        <div id="edit-comment-btns-'.htmlspecialchars($comment['comment_id']).'" class="edit-comment-btns ms-auto">
+                                        <div id="edit-comment-btns-'.htmlspecialchars($comment['comment_id']).'" class="edit-comment-btns ms-auto mt-2">
                                             <button class="btn btn-sm btn-secondary edit-cancel-btn" type="button" data-post-id="'.htmlspecialchars($comment['comment_id']).'">Cancel</button>
                                             <button class="btn btn-sm btn-primary ms-1" type="submit">Comment</button>
                                         </div>
                                     </form>
                                     <p class="mb-0" style="color:grey;">' . $comment_timestamp . '</p>
-                                </div>');
-                            
-                            if (isset($_SESSION['user_id']) && $_SESSION['user_id'] == $comment['user_id']) {
-                                echo('<div id="comment-dropdown-'.htmlspecialchars($comment['comment_id']).'" class="dropdown ms-auto position-absolute" style="top: 0; right: 0; height:20px;">
-                                    <span id="comment-options-'.htmlspecialchars($comment['comment_id']).'" data-bs-toggle="dropdown" aria-expanded="false" role="button" style="cursor: pointer;">
-                                        <i class="bi bi-three-dots-vertical" style="color:grey; font-size:20px;"></i>
-                                    </span>
-                                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="post-options-'.htmlspecialchars($comment['comment_id']).'">
-                                        <li><button type="button" class="dropdown-item edit-btn edit-comment-dropdown-item" data-post-id="'.htmlspecialchars($comment['comment_id']).'" style="border: none; background: none; cursor: pointer;">Edit</button></li>
-                                        <li>
-                                            <form id="comment-options-form-'.htmlspecialchars($comment['comment_id']).'" method="POST">
-                                                <input type="hidden" name="delete_comment" value="true">
-                                                <input type="hidden" name="comment_id" value="'.htmlspecialchars($comment['comment_id']).'">
-                                                <button type="submit" class="dropdown-item edit-comment-dropdown-item text-danger" style="cursor: pointer;">Delete</button>
-                                            </form>
-                                        </li>
-                                    </ul>
-                                    </div>'); 
-                            }
-
-                            echo('</div>');
-
-
-                        echo('</div>');
-                    echo "</div>";
+                            </div>
+                        </div>');
                 }
             }
-            echo('</div><br><br>'); // CLOSE PARENT DIV
+            echo('</div><br><br>'); // CLOSE PARENT (POST) DIV
         }
     } else {
         echo('<p>No Posts Available</p>');

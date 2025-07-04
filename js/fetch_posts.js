@@ -1,19 +1,20 @@
 document.addEventListener("DOMContentLoaded", function() {
 
     // TA responsive height testing
-    /*document.querySelectorAll("textarea").forEach(textarea => {
+    document.querySelectorAll("textarea").forEach(textarea => {
         textarea.style.height = "auto"; // Reset for fresh calculation
         textarea.style.height = textarea.scrollHeight + "px"; // Adjust to content
       });
+
 
       document.addEventListener("input", function (event) {
         if (event.target.tagName.toLowerCase() === "textarea") {
           event.target.style.height = "auto"; 
           event.target.style.height = event.target.scrollHeight + "px"; 
         }
-      });*/
+      });
 
-      function resizeToExactLines(textarea) {
+      /*function resizeToExactLines(textarea) {
         textarea.style.height = "auto";
         const lines = textarea.value.split("\n").length || 1;
         const lineHeight = parseFloat(getComputedStyle(textarea).lineHeight);
@@ -28,10 +29,8 @@ document.addEventListener("DOMContentLoaded", function() {
             resizeToExactLines(textarea);
           });
         });
-      });
+      });*/
       
-
-
 
 
     // Add an event listener to each posts dropdown edit button
@@ -41,17 +40,24 @@ document.addEventListener("DOMContentLoaded", function() {
         const postDropdown = document.querySelector(`#post-dropdown-${postId}`);
         const img = document.querySelector(`#post-picture-${postId}`);
         const imgUploadBtn = document.querySelector(`#post-image-upload-btn-${postId}`);
+        const paragraph = document.querySelector(`#post-description-${postId}`);
         const textarea = document.querySelector(`#post-textarea-${postId}`);
         const btnGroup = document.querySelector(`#edit-post-btn-group-${postId}`);
         
         // Store the original value before editing - used when edit-cancel-btn selected
         img.dataset.originalSrc = img.src;
         textarea.dataset.originalValue = textarea.value;
-       
+
 
         button.addEventListener("click", function() {
             imgUploadBtn.style.display ="block"; // Show img upload btn
+            paragraph.style.display = "none";
+
+
+            textarea.removeAttribute("hidden"); // Make textarea active
             textarea.removeAttribute("disabled"); // Make textarea active
+            textarea.style.display = "block";
+            
             textarea.focus();
             btnGroup.style.display = "block";
             btnGroup.classList.add("d-flex", "float-end");
@@ -60,14 +66,19 @@ document.addEventListener("DOMContentLoaded", function() {
         // Hide new post components when clicked outside of new post layout
         document.addEventListener("click", function (event) {
             if (!postDropdown.contains(event.target) && !postForm.contains(event.target)) {
-                //img.src = img.dataset.originalSrc;
-                //imgUpload.value = "";
+                
+                img.src = img.dataset.originalSrc;
+                img.style.display = "none";
+
+                paragraph.style.display = "block";
+
+                textarea.setAttribute("hidden", "true");
                 textarea.setAttribute("disabled", "true");
                 textarea.value = textarea.dataset.originalValue;
+
                 imgUploadBtn.style.display = "none";
                 btnGroup.style.display = "none";
                 btnGroup.classList.remove("d-flex", "float-end");
-                //document.getElementById("new-post-form").reset();
             }
         });
 
@@ -79,16 +90,25 @@ document.addEventListener("DOMContentLoaded", function() {
             const postId = button.getAttribute("data-post-id"); // Get post ID from button
             const img = document.querySelector(`#post-picture-${postId}`);
             const imgUploadBtn = document.querySelector(`#post-image-upload-btn-${postId}`);
+            const paragraph = document.querySelector(`#post-description-${postId}`);
             const textarea = document.querySelector(`#post-textarea-${postId}`); // Find correct textarea
             const buttonGroup = document.querySelector(`#edit-post-btn-group-${postId}`);
 
             if (textarea) {
-                textarea.value = textarea.dataset.originalValue; // Restore the original comment text
+
                 img.src = img.dataset.originalSrc;  // Restore img original src (if any)
+                img.style.display = "none";
+                
+                paragraph.style.display = "block";
+
+                textarea.value = textarea.dataset.originalValue; // Restore the original comment text
+                textarea.setAttribute("hidden", "true");
+                textarea.setAttribute("disabled", "true");
+                
+                
                 imgUploadBtn.style.display ="none";
                 buttonGroup.style.display = "none";
                 buttonGroup.classList.remove("d-flex", "float-end");
-                textarea.setAttribute("disabled", "true");
             }
         });
     });
@@ -158,6 +178,7 @@ document.addEventListener("DOMContentLoaded", function() {
     // Event listener for edit btn in comment dropdown
     document.querySelectorAll(".edit-btn").forEach(button => {
         const postId = button.getAttribute("data-post-id");
+        const paragraph = document.querySelector(`#comment-description-${postId}`);
         const textarea = document.querySelector(`#comment-textarea-${postId}`);
         const commentDropdown = document.querySelector(`#comment-dropdown-${postId}`);
         const buttonGroup = document.querySelector(`#edit-comment-btns-${postId}`);
@@ -167,8 +188,12 @@ document.addEventListener("DOMContentLoaded", function() {
 
         button.addEventListener("click", function() {
 
+            paragraph.style.display = "none";
+
             // Make textarea active
+            textarea.removeAttribute("hidden");
             textarea.removeAttribute("disabled");
+            textarea.style.display = "block";
 
             // Show the button group
             buttonGroup.style.display = "block";
@@ -178,8 +203,14 @@ document.addEventListener("DOMContentLoaded", function() {
 
         document.addEventListener("click", function(event) {
             if (!textarea.contains(event.target) && !commentDropdown.contains(event.target) && !buttonGroup.contains(event.target)) {
+
+                paragraph.style.display = "block";
+
+                textarea.setAttribute("hidden", "true");
                 textarea.setAttribute("disabled", "true");
                 textarea.value = textarea.dataset.originalValue;
+                textarea.style.display = "none";
+
                 buttonGroup.style.display = "none";
                 buttonGroup.classList.remove("d-flex", "float-end");
             }
@@ -190,12 +221,18 @@ document.addEventListener("DOMContentLoaded", function() {
     document.querySelectorAll(".edit-cancel-btn").forEach(button => {
         button.addEventListener("click", function() {
             const postId = button.getAttribute("data-post-id"); // Get post ID from button
+            const paragraph = document.querySelector(`#comment-description-${postId}`);
             const textarea = document.querySelector(`#comment-textarea-${postId}`); // Find correct textarea
             const buttonGroup = document.querySelector(`#edit-comment-btns-${postId}`);
 
             if (textarea) {
-                // Restore the original comment text
+                
+                paragraph.style.display = "block";
+
+                textarea.setAttribute("hidden", "true");
+                textarea.setAttribute("disabled", "true");
                 textarea.value = textarea.dataset.originalValue;
+                textarea.style.display = "none";
 
                 buttonGroup.style.display = "none";
                 buttonGroup.classList.remove("d-flex", "float-end");

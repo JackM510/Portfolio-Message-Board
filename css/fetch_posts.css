@@ -1,7 +1,5 @@
 /* Default styles for XS devices */
-h5 {
-    font-size: 16px;
-}
+
 
 
 .post-container {
@@ -16,27 +14,15 @@ h5 {
     width: 30px;
 }
 
-
-
-.text-break {
-    max-width: 100%;
-    white-space: normal;
-    overflow-wrap: anywhere;
-    word-break: break-all;
+.break-text{
+    word-wrap: break-word;       /* legacy support */
+    overflow-wrap: break-word;   /* modern standard */
+    word-break: break-word;      /* optional for aggressive breaking */
   }
 
-  textarea.auto-resize {
-    overflow: hidden;
-    resize: none;
-    padding: 0;
-    line-height: 16px; /* Adjust to match your font size */
-    height: auto;
-    min-height: 16px;
-    font-size: 16px; /* Optional: ensure consistent sizing */
-    border: 1px solid #ccc; /* Optional: for visibility */
-  }
-
-
+textarea {
+    height: auto !important;
+}
 
 .post-picture {
     object-fit: cover;
@@ -119,17 +105,14 @@ h5 {
 
 /* Tablets (small screens) */
 @media (min-width: 600px) {
-    h5 {
-        font-size: 20px;
-    }
 }
 
 /* Larger tablets & small laptops */
 @media (min-width: 768px) {
     .post-profile-picture,
     .comment-profile-picture {
-        height: 40px;
-        width: 40px;
+        height: 30px;
+        width: 30px;
     }
 }
 
