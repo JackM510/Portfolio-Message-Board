@@ -33,10 +33,13 @@ function getPosts($pdo, $user_id = null) {
             // Display each post in HTML
             // Users Profile Picture & Full Name
             echo('<div class="post-container p-4">
-                    <div class="d-flex align-items-center pt-1 px-2">
+                    <div class="d-flex align-items-center pt-1">
                         <a class="post-profile-link" href="profile.php?user_id='.htmlspecialchars($post['user_id']).'">
-                            <img class="me-3 rounded-pill post-profile-picture" src="'.htmlspecialchars($profile_picture). '" alt="Post Image">
-                            <h5>'.$user_name.'</a></h5>');
+                            <div class="d-flex align-items-center">    
+                                <img class="me-3 rounded-pill post-profile-picture" src="'.htmlspecialchars($profile_picture). '" alt="Post Image">
+                                <h5 class="text-break">'.$user_name.'</h5>
+                            </div>
+                        </a>');
                         // Display a dropdown on each post if the user is logged in and the post is their own
                         if (isset($_SESSION['user_id']) && $_SESSION['user_id'] == $post['user_id']) {
                             echo('<div id="post-dropdown-'.htmlspecialchars($post['post_id']).'" class="dropdown ms-auto">
@@ -69,7 +72,7 @@ function getPosts($pdo, $user_id = null) {
                             </div>');
                         // Display the post text and DAT the post was created
                         echo('<div class="mt-2">
-                                <textarea id="post-textarea-' . htmlentities($post['post_id']).'" class="form-control post-textarea rounded" name="post_textarea" rows="1" maxlength="250" disabled>'.htmlentities($post['post_text']).'</textarea>      
+                                <textarea id="post-textarea-' . htmlentities($post['post_id']).'" class="form-control post-textarea rounded mb-1 auto-resize" name="post_textarea" maxlength="200" disabled>'.htmlentities($post['post_text']).'</textarea>      
                                 <div id="edit-post-btn-group-' . htmlentities($post['post_id']).'" class="ms-auto edit-post-btn-group mt-2">
                                     <input type="hidden" name="post_id" value="'.htmlspecialchars($post['post_id']).'">
                                     <button class="btn btn-sm btn-secondary ms-1 edit-post-cancel-btn" type="button" data-post-id="'.htmlspecialchars($post['post_id']).'" name="edit-cancel-post">Cancel</button>
@@ -88,12 +91,12 @@ function getPosts($pdo, $user_id = null) {
                 $stmt->execute();
                 $data = $stmt->fetch(PDO::FETCH_ASSOC);
                 $your_profile_picture = $data['profile_picture'];
-                echo('<hr><div class="d-flex px-2 pt-3">
+                echo('<hr><div class="d-flex pt-3">
                         <div>
                             <img class="me-3 rounded-pill comment-profile-picture" src="'.htmlspecialchars($your_profile_picture).'" alt="Post Image">
                         </div>
                         <form id="add-comment-form-'.htmlspecialchars($post['post_id']).'" data-post-id="'.htmlspecialchars($post['post_id']).'" method="POST" class="w-100">
-                            <textarea id="add-comment-textarea-'.htmlspecialchars($post['post_id']).'" class="form-control w-100 add-comment-textarea rounded mb-2" name="comment_text" placeholder="Add a comment..." rows="1" maxlength="250" style="resize:none;"></textarea>
+                            <textarea id="add-comment-textarea-'.htmlspecialchars($post['post_id']).'" class="form-control w-100 add-comment-textarea rounded mb-2" name="comment_text" placeholder="Add a comment..." rows="1" maxlength="150" style="resize:none;"></textarea>
                             <input type="hidden" name="post_id" value="'.htmlspecialchars($post['post_id']).'">
                             <div id="add-comment-btns-'.htmlspecialchars($post['post_id']).'" class="add-comment-btns">
                                 <button class="btn btn-sm btn-secondary cancel-btn" type="button" data-post-id="'.htmlspecialchars($post['post_id']).'">Cancel</button>
@@ -126,7 +129,7 @@ function getPosts($pdo, $user_id = null) {
                     $timestamp = date('g:iA j/n/y', strtotime($comment['comment_created']));
                     $comment_timestamp = !empty($comment['comment_edited']) ? $timestamp . ' (edited)' : $timestamp;
             
-                    echo ('<hr><div class="comment px-1">
+                    echo ('<hr><div class="comment">
                             <div class="d-flex">
                                 <div>
                                     <a class="post-profile-link" href="profile.php?user_id=' . $comment['user_id'] . '">
@@ -138,7 +141,7 @@ function getPosts($pdo, $user_id = null) {
                                 <div class="w-100">
                                     <p class="mt-2 mb-2"><strong>' . $commentor_name . '</strong></a></p>
                                     <form id="edit-comment-form-' . htmlspecialchars($comment["comment_id"]) . '" class="w-100" method="POST">
-                                        <textarea id="comment-textarea-' . htmlspecialchars($comment["comment_id"]) . '" class="form-control comment-textarea rounded mb-2" name="edit_comment" data-post-id="'.htmlspecialchars($comment['comment_id']).'" rows="1" maxlength="250" style="resize:none;" required disabled>' . htmlspecialchars($comment['comment_text']) . '</textarea>
+                                        <textarea id="comment-textarea-' . htmlspecialchars($comment["comment_id"]) . '" class="form-control comment-textarea rounded mb-1 text-break" name="edit_comment" data-post-id="'.htmlspecialchars($comment['comment_id']).'" rows="1" maxlength="150" style="resize:none;" required disabled>' . htmlspecialchars($comment['comment_text']) . '</textarea>
                                         <input type="hidden" name="comment_id" value="' . htmlspecialchars($comment['comment_id']) . '">
                                         <div id="edit-comment-btns-'.htmlspecialchars($comment['comment_id']).'" class="edit-comment-btns ms-auto">
                                             <button class="btn btn-sm btn-secondary edit-cancel-btn" type="button" data-post-id="'.htmlspecialchars($comment['comment_id']).'">Cancel</button>

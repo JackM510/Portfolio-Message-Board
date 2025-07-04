@@ -50,7 +50,7 @@
 <!-- Update profile container -->
 <div id="update-profile" class="container" style="display:none;">
     <h1 class="display-5 text-center mb-5">Update Profile</h1>
-    <form id="profile-form" class="w-50 mx-auto" action="profile.php" method="POST" enctype="multipart/form-data" style="background-color: #f8f9fa;">
+    <form id="profile-form" class="w-50 mx-auto" action="profile.php" method="POST" enctype="multipart/form-data" style="background-color: #F8F9FA;">
             <div class="row">
                 <!-- Profile Picture -->
                 <div class="col-12 mb-4">
@@ -68,12 +68,12 @@
                 <!-- First Name -->
                 <div class="col-12 col-lg-6 mb-3">
                     <label class="pb-1" for="first_name"><strong>First Name</strong></label>
-                    <input id="first-name-input" class="form-control" type="text" name="first_name" maxlength="30" value="<?php echo !empty($first_name) ? htmlentities($first_name) : "First Name Missing"; ?>" disabled required>
+                    <input id="first-name-input" class="form-control" type="text" name="first_name" maxlength="20" value="<?php echo !empty($first_name) ? htmlentities($first_name) : "First Name Missing"; ?>" disabled required>
                 </div>
                 <!-- Last Name -->
                 <div class="col-12 col-lg-6 mb-3">
                     <label class="pb-1" for="last_name"><strong>Last Name</strong></label>
-                    <input id="last-name-input" class="form-control" type="text" name="last_name" maxlength="30" value="<?php echo !empty($last_name) ? htmlentities($last_name) : "Last Name Missing"; ?>" disabled required>
+                    <input id="last-name-input" class="form-control" type="text" name="last_name" maxlength="20" value="<?php echo !empty($last_name) ? htmlentities($last_name) : "Last Name Missing"; ?>" disabled required>
                 </div>
                 <!-- Location -->
                 <div class="col-12 mb-3">

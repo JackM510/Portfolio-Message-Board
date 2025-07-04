@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", function() {
 
     // TA responsive height testing
-    document.querySelectorAll("textarea").forEach(textarea => {
+    /*document.querySelectorAll("textarea").forEach(textarea => {
         textarea.style.height = "auto"; // Reset for fresh calculation
         textarea.style.height = textarea.scrollHeight + "px"; // Adjust to content
       });
@@ -11,7 +11,25 @@ document.addEventListener("DOMContentLoaded", function() {
           event.target.style.height = "auto"; 
           event.target.style.height = event.target.scrollHeight + "px"; 
         }
+      });*/
+
+      function resizeToExactLines(textarea) {
+        textarea.style.height = "auto";
+        const lines = textarea.value.split("\n").length || 1;
+        const lineHeight = parseFloat(getComputedStyle(textarea).lineHeight);
+        textarea.style.height = (lines * lineHeight) + "px";
+      }
+      
+      document.addEventListener("DOMContentLoaded", () => {
+        document.querySelectorAll("textarea.auto-resize").forEach(textarea => {
+          resizeToExactLines(textarea); // Initial sizing
+      
+          textarea.addEventListener("input", () => {
+            resizeToExactLines(textarea);
+          });
+        });
       });
+      
 
 
 
