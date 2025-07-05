@@ -48,9 +48,9 @@
 </div>
     
 <!-- Update profile container -->
-<div id="update-profile" class="container" style="display:none;">
+<div id="update-profile" class="container" style="display:none; ">
     <h1 class="display-5 text-center mb-5">Update Profile</h1>
-    <form id="profile-form" class="w-50 mx-auto" action="profile.php" method="POST" enctype="multipart/form-data" style="background-color: #F8F9FA;">
+    <form id="profile-form" class="w-50 mx-auto" action="profile.php" method="POST" enctype="multipart/form-data" style="background-color: #FAFAFA;">
             <div class="row">
                 <!-- Profile Picture -->
                 <div class="col-12 mb-4">

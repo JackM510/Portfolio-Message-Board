@@ -64,17 +64,17 @@ function getPosts($pdo, $user_id = null) {
                     echo('</div>
                     <form id="edit-post-form-' . htmlspecialchars($post['post_id']) .'" method="POST">');
                         // Display any pictures added to the post
-                        echo('<div class="mt-3">
-                                <img id="post-picture-' . htmlentities($post['post_id']) . '" class="post-picture" src="' . (!empty($post['post_picture']) ? htmlspecialchars($post['post_picture']) : "") . '" alt="Post Image"' . (empty($post['post_picture']) ? 'style="display:none;"' : '') .'>
+                        echo('<div>
+                                <img id="post-picture-' . htmlentities($post['post_id']) . '" class="post-picture mt-3" src="' . (!empty($post['post_picture']) ? htmlspecialchars($post['post_picture']) : "") . '" alt="Post Image"' . (empty($post['post_picture']) ? 'style="display:none;"' : '') .'>
                             </div>
-                            <div class="mt-4">
+                            <div>
                                 <input type="file" name="post-image-upload" id="post-image-upload-' . htmlentities($post['post_id']).'" class="post-image-upload" accept="image/*" hidden>
-                                <button type="button" class="btn btn-sml btn-light" id="post-image-upload-btn-' . htmlentities($post['post_id']) . '" onclick="document.getElementById(\'post-image-upload-' . htmlentities($post['post_id']) . '\').click()" style="border:none; display:none;">
+                                <button type="button" class="btn btn-sml btn-light mt-3" id="post-image-upload-btn-' . htmlentities($post['post_id']) . '" onclick="document.getElementById(\'post-image-upload-' . htmlentities($post['post_id']) . '\').click()" style="border:none; display:none;">
                                     <i class="bi bi-card-image" style="font-size: 16px;"></i>
                                 </button>
                             </div>');
                         // Display the post text and DAT the post was created
-                        echo('<div class="mt-2">
+                        echo('<div class="mt-3">
                                 <p id="post-description-' . htmlentities($post['post_id']).'" class="break-text mb-2">' .htmlentities($post['post_text']) . '</p>
                                 <textarea id="post-textarea-' . htmlentities($post['post_id']).'" class="form-control post-textarea rounded mb-1 auto-resize" name="post_textarea" maxlength="200" hidden disabled>'.htmlentities($post['post_text']).'</textarea>      
                                 <div class="d-flex">

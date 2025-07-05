@@ -20,7 +20,7 @@
             <!-- Dropdown for logged-in users -->
             <div class="dropdown float-end">
                 <a id="avatarDropdown" class="navbar-brand nav-profile m-0 dropdown-toggle" href="#" data-bs-toggle="dropdown" aria-expanded="false">
-                    <img id="avatar-icon" class="avatar-icon" src="icon/profile.png" alt="Profile icon">
+                    <img id="avatar-icon" src="icon/profile.png" alt="Profile icon">
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="avatarDropdown">
                     <li><a class="dropdown-item nav-dropdown-item" href="profile.php">View Profile</a></li>
@@ -34,7 +34,7 @@
         <?php else: ?>
             <!-- Link to login.php for guests -->
             <a class="navbar-brand nav-profile m-0 float-end" href="login.php">
-                <img class="avatar-icon" src="icon/profile.png" alt="Profile icon">
+                <img src="icon/profile.png" alt="Profile icon" style="width:40px;">
             </a>
         <?php endif; ?>
     </div>

@@ -60,7 +60,7 @@
     <?php require_once "nav.php"; ?>
     <section>
         <!-- Profile details section -->
-        <div class="container-fluid pt-5" style="background-color: #f8f9fa;">
+        <div class="container-fluid pt-5" style="background-color: #FAFAFA;">
             <?php
                 // Display profile_details.php
                 include 'includes/profile_details.php';
