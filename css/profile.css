@@ -2,7 +2,7 @@
 #profile-details {
     display: flex;
     flex-direction: column;
-    max-width: 100%; /* Prevents overflow */
+    max-width: 90%;
     justify-content: center;
     margin: auto;
 }
@@ -98,15 +98,15 @@
 
     
     
-    #profile-details {
-        flex-direction: row;
-    }
+    
 
     
 }
 
 /* Larger tablets & small laptops */
 @media (min-width: 768px) {
+    
+    
     #profile-posts-container {
         width: 75%;
     }
@@ -114,6 +114,14 @@
 
 /* Standard laptops & desktops */
 @media (min-width: 1024px) {
+    #profile-details {
+        width: 90%;
+    }
+
+    #profile-details {
+        flex-direction: row;
+    }
+
     #profile-posts-container {
         width: 50%;
     }
@@ -121,7 +129,9 @@
 
 /* Large screens */
 @media (min-width: 1280px) {
-    
+    #profile-details {
+        width: 75%;
+    }
 }
 
 /* Extra large screens (4K monitors) */
