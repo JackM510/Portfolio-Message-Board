@@ -39,7 +39,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
            
             if ($stmt->execute()) {
        
-                $stmt = $pdo->prepare("SELECT email, first_name, role FROM users WHERE user_id = :uid");
+                $stmt = $pdo->prepare(" SELECT users.email, users.first_name, users.role, profiles.profile_picture
+                    FROM users
+                    JOIN profiles ON users.user_id = profiles.user_id
+                    WHERE users.user_id = :uid");
                 $stmt->bindParam(':uid', $user_id, PDO::PARAM_INT);
                 $stmt->execute();
                 $data = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -47,6 +50,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $_SESSION["first_name"] = $data['first_name'];
                 $_SESSION["email"] = $data['email'];
                 $_SESSION["role"] = $data['role'];
+                // Navbar avatar
+                $_SESSION['avatar'] = $data['profile_picture'];
         
                 echo "success";
             } else {

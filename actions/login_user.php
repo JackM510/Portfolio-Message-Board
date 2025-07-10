@@ -23,23 +23,26 @@ require_once('../includes/db_connection.php');
                 if (password_verify($password, $user['password'])) {
                     
                     // Check the user has finalised their profile before allowing them to use the application
-                    $stmt = $pdo->prepare("SELECT profile_id FROM profiles WHERE user_id = :uid");
+                    $stmt = $pdo->prepare("SELECT profile_id, profile_picture FROM profiles WHERE user_id = :uid");
                     $stmt->bindParam(':uid', $user['user_id'], PDO::PARAM_STR);
                     $stmt->execute();
+                    $profile = $stmt->fetch(PDO::FETCH_ASSOC);
                     
-                    if (!$stmt->fetch()) {
+                    if (!$profile) {
                         // Redirect to dashboard after successful login
                         $_SESSION['display_form'] = "profile";
                         $_SESSION['user_id'] = $user['user_id'];
                         header("Location: ../login.php");
                         exit();
                     } else {
+                        // get profile picture
+                        $_SESSION['avatar'] = $profile['profile_picture'];
                         // Successful login - set $_SESSION variables
                         $_SESSION['user_id'] = $user['user_id'];
                         $_SESSION['email'] = $user['email'];
                         $_SESSION['first_name'] = $user['first_name'];
                         $_SESSION['role'] = $user['role'];
-
+                        
                         // If 'Remember Me' checkbox is selected
                         if (!empty($_POST['remember_me'])) {
                             setcookie("user_login", $email, time() + (30 * 24 * 60 * 60), "/"); // Expires in 30 days

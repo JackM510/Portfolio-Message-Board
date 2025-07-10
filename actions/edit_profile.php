@@ -63,6 +63,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_SESSION['user_id'])) {
             $stmt->bindParam(':profile_picture', $imageForDB, PDO::PARAM_STR);
             $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
             $stmt->execute();
+
+            // Update the avatar icon on the navbar using $_SESSION
+            $_SESSION['avatar'] = $imageForDB; // Need to move to outside if stmt
+
         } else {
             echo "Error uploading image.";
             exit();

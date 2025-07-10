@@ -17,8 +17,11 @@
     margin-right: 5px;
 }
 
-.avatar-icon {
+#avatar-icon {
     width: 36px;
+    height: 36px;
+    object-fit: cover;
+    border-radius: 50%;
 }
 
 .nav-dropdown-item:active {
@@ -32,7 +35,9 @@
 /* Tablets (small screens) */
 @media (min-width: 600px) {
     .avatar-icon {
-        width: 40px;
+        width: 36px;
+        height: 36px;
+        
     }
 
     #home-icon {

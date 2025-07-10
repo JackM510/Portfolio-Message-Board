@@ -1,6 +1,9 @@
 <?php
     $isLoggedIn = isset($_SESSION['user_id']) && isset($_SESSION['email']); // Check login status
     $isAdmin = isset($_SESSION['role']) && $_SESSION['role'] === 'admin';
+
+    $navIcon = isset($_SESSION['avatar']) ? $_SESSION['avatar'] : "icon/profile.png";
+
 ?>
 
 <nav class="navbar navbar-expand-lg sticky-top bg-light shadow-lg">
@@ -20,7 +23,7 @@
             <!-- Dropdown for logged-in users -->
             <div class="dropdown float-end">
                 <a id="avatarDropdown" class="navbar-brand nav-profile m-0 dropdown-toggle" href="#" data-bs-toggle="dropdown" aria-expanded="false">
-                    <img id="avatar-icon" src="icon/profile.png" alt="Profile icon">
+                    <img id="avatar-icon" src="<?php echo htmlentities($navIcon) ?>" alt="Profile icon">
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="avatarDropdown">
                     <li><a class="dropdown-item nav-dropdown-item" href="profile.php">View Profile</a></li>
