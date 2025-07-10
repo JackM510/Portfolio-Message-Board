@@ -65,13 +65,13 @@
         <div class="d-flex justify-content-center">
             <form id="signup-form" action="actions/add_user.php" method="POST" class="w-50">
                 <div id="signup-form-container" class="row">
-                    <div class="col-12 col-lg-6 mb-3">
+                    <div class="col-12 mb-3">
                         <label class="pb-1" for="first_name">First Name</label>
-                        <input class="form-control" type="text" name="first_name" required>
+                        <input class="form-control" type="text" maxlength="20" name="first_name" required>
                     </div>
-                    <div class="col-12 col-lg-6 mb-3">
+                    <div class="col-12 mb-3">
                         <label class="pb-1" for="last_name">Last Name</label>
-                        <input class="form-control" type="text" name="last_name" required>
+                        <input class="form-control" type="text" maxlength="20" name="last_name" required>
                     </div>
                     <div class="col-12 mb-3">
                     <?php if (isset($_SESSION['signup-age-error'])) { echo "<p class='error-flash'>".$_SESSION['signup-age-error']."</p>"; unset($_SESSION['signup-age-error']); } ?>
@@ -145,6 +145,6 @@
             </form>
         </div>
         <div class="text-center mt-3" onclick="showLogin()" style="cursor:pointer;">Already have an account? Login</div>
-</div>
+    </div>
 </body>
 </html>
