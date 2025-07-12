@@ -100,8 +100,6 @@
 
 /* Larger tablets & small laptops */
 @media (min-width: 768px) {
-    
-    
     #profile-posts-container {
         width: 75%;
     }
@@ -118,7 +116,7 @@
     }
 
     #profile-posts-container {
-        width: 50%;
+        width: 40%;
     }
 }
 
@@ -126,7 +124,7 @@
 @media (min-width: 1280px) {
     #profile-details {
         width: 75%;
-    }
+    }  
 }
 
 /* Extra large screens (4K monitors) */

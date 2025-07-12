@@ -44,44 +44,69 @@ document.addEventListener("DOMContentLoaded", function() {
         const textarea = document.querySelector(`#post-textarea-${postId}`);
         const btnGroup = document.querySelector(`#edit-post-btn-group-${postId}`);
         
-        // Store the original value before editing - used when edit-cancel-btn selected
-        img.dataset.originalSrc = img.src;
-        textarea.dataset.originalValue = textarea.value;
-
-
+        // Show form elements and buttons to update the post
         button.addEventListener("click", function() {
+            
+            const imgSrc = img.getAttribute("src")?.trim();
+
+            // Only treat it as valid if it's a real image file (not fallback or preview)
+            const isValidImage = imgSrc &&
+                !imgSrc.includes("index.php") &&
+                !imgSrc.includes("profile.php") &&
+                !imgSrc.includes("Post Image") &&
+                !imgSrc.startsWith("data:") && // prevent preview from being stored
+                /\.(jpg|jpeg|png|gif|webp)$/i.test(imgSrc);
+            
+            img.dataset.hasOriginalImage = isValidImage ? "true" : "false";
+            
+            if (isValidImage) {
+                img.dataset.originalSrc = imgSrc;
+                img.style.display = "block";
+            } else {
+                img.style.display = "none";
+            }
+            
+            textarea.dataset.originalValue = textarea.value;
+            
             imgUploadBtn.style.display ="block"; // Show img upload btn
             paragraph.style.display = "none";
-
 
             textarea.removeAttribute("hidden"); // Make textarea active
             textarea.removeAttribute("disabled"); // Make textarea active
             textarea.style.display = "block";
-            
             textarea.focus();
+
             btnGroup.style.display = "block";
             btnGroup.classList.add("d-flex", "float-end");
+
+            // Hide/restore elements if the user clicks outside of the edit post layout
+            const outsideClickHandler = function (event) {
+                if (!postDropdown.contains(event.target) && !postForm.contains(event.target)) {
+                    
+                    if (img.dataset.hasOriginalImage === "true") {
+                        img.src = img.dataset.originalSrc;
+                        img.style.display = "block";
+                    } else {
+                        img.src = ""; // clear anything accidental
+                        img.style.display = "none";
+                    }
+                    
+                    paragraph.style.display = "block";
+                    textarea.setAttribute("hidden", "true");
+                    textarea.setAttribute("disabled", "true");
+                    textarea.value = textarea.dataset.originalValue;
+                    
+                    // Hide buttons
+                    imgUploadBtn.style.display = "none";
+                    btnGroup.style.display = "none";
+                    btnGroup.classList.remove("d-flex", "float-end");
+    
+                    // Remove this listener so it doesn't fire again
+                    document.removeEventListener("click", outsideClickHandler);
+                }
+            };
+            document.addEventListener("click", outsideClickHandler);
         });
-
-        // Hide new post components when clicked outside of new post layout
-        document.addEventListener("click", function (event) {
-            if (!postDropdown.contains(event.target) && !postForm.contains(event.target)) {
-                
-                img.src = img.dataset.originalSrc;
-                img.style.display = "none";
-
-                paragraph.style.display = "block";
-
-                textarea.setAttribute("hidden", "true");
-                textarea.setAttribute("disabled", "true");
-                textarea.value = textarea.dataset.originalValue;
-
-                imgUploadBtn.style.display = "none";
-                btnGroup.style.display = "none";
-                btnGroup.classList.remove("d-flex", "float-end");
-            }
-        });
-
     });
 
     // Event listener for 'cancel' button when editing a post
@@ -96,8 +121,13 @@ document.addEventListener("DOMContentLoaded", function() {
 
             if (textarea) {
 
-                img.src = img.dataset.originalSrc;  // Restore img original src (if any)
-                img.style.display = "none";
+                if (img.dataset.hasOriginalImage === "true") {
+                    img.src = img.dataset.originalSrc;
+                    img.style.display = "block";
+                } else {
+                    img.src = "";
+                    img.style.display = "none";
+                }
                 
                 paragraph.style.display = "block";
 
@@ -113,19 +143,15 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     });
 
+    
+
     // Event listener if image uploaded when editing a post
     document.querySelectorAll(".post-image-upload").forEach(input => {
         input.addEventListener("change", function(event) {
             const postId = input.id.replace("post-image-upload-", ""); // Extract post ID
             const imgTag = document.querySelector(`#post-picture-${postId}`);
 
-            // Store the original image src before changing it
-            if (!imgTag.dataset.originalSrc) {
-                imgTag.dataset.originalSrc = imgTag.src;
-            }
-
             const file = event.target.files[0];
-    
             if (file) {
                 const reader = new FileReader();
     
@@ -241,7 +267,6 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     });
 
-
     // Edit post AJAX for edit_post.php
     document.querySelectorAll("[id^=edit-post-form]").forEach(form => {
         form.addEventListener("submit", function(event) {
@@ -265,6 +290,42 @@ document.addEventListener("DOMContentLoaded", function() {
             .catch(error => console.error("Fetch Error:", error));
         });
     });
+
+    // Like post AJAX for like_post.php
+    document.querySelectorAll(".like-btn").forEach(button => {
+        button.addEventListener("click", () => {
+          const container = button.closest(".like-container");
+          const postId = container.dataset.postId;
+      
+          fetch("actions/like_post.php", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/x-www-form-urlencoded"
+            },
+            body: new URLSearchParams({
+              post_id: postId
+            })
+          })
+          .then(res => res.json())
+          .then(data => {
+            if (data.success) {
+              // Update like count
+              button.querySelector(".like-count").textContent = data.like_count;
+      
+              // Toggle heart icon
+              const icon = button.querySelector("i");
+              icon.classList.toggle("bi-heart-fill", data.liked);
+              icon.classList.toggle("bi-heart", !data.liked);
+            } else if (data.unauthorized) {
+                window.location.href = "login.php";
+                return;
+            } else {
+              alert("Something went wrong with liking.");
+            }
+          });
+        });
+      });
+      
 
 
     // Add comment AJAX for add_comment.php

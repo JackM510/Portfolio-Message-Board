@@ -17,9 +17,11 @@
 }
 
 /* Large screens */
-/*@media (min-width: 1280px) {
-
-} */
+@media (min-width: 1280px) {
+    #index-container {
+        width: 40%;
+    }
+}
 
 /* Extra large screens (4K monitors) */
 /*@media (min-width: 1600px) {

@@ -1,7 +1,5 @@
 /* Default styles for XS devices */
 
-
-
 .post-container {
     border: #DEE2E6 solid 2px;
     overflow: hidden;
@@ -25,9 +23,14 @@ textarea {
 }
 
 .post-picture {
+    object-position: center;
     object-fit: cover;
-    height: 100%;
+    aspect-ratio: 1 / 1;
     width: 100%;
+}
+
+.post-picture[src=""] {
+    display: none !important;
 }
 
 .post-textarea {

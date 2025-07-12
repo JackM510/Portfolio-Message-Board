@@ -27,12 +27,28 @@ function getPosts($pdo, $user_id = null) {
             $user_name = $user_first.' '.$user_last; // Users full name
             $profile_picture = $data['profile_picture'];
 
+
+
+            // Get the posts like count
+            $likeCountStmt = $pdo->prepare("SELECT COUNT(*) FROM post_likes WHERE post_id = ?");
+            $likeCountStmt->execute([$post['post_id']]);
+            $likeCount = $likeCountStmt->fetchColumn();
+
+            if (isset($_SESSION['user_id'])) {
+                $userLikedStmt = $pdo->prepare("SELECT 1 FROM post_likes WHERE post_id = ? AND user_id = ?");
+                $userLikedStmt->execute([$post['post_id'], $_SESSION['user_id']]);
+                $userLiked = $userLikedStmt->fetchColumn() ? true : false;
+            } else {
+                $userLiked = false;
+            }
+
+            
             $timestamp = date('g:iA j/n/y', strtotime($post['post_created']));
             $post_timestamp = !empty($post['post_edited']) ? $timestamp . ' (edited)' : $timestamp;
 
             // Display each post in HTML
             // Users Profile Picture & Full Name
-            echo('<div class="post-container p-4">
+            echo('<div class="post-container py-4 px-4">
                     <div class="d-flex align-items-start pt-1">
 
                         <div>
@@ -75,6 +91,12 @@ function getPosts($pdo, $user_id = null) {
                             </div>');
                         // Display the post text and DAT the post was created
                         echo('<div class="mt-3">
+                                <div class="like-container mb-2" data-post-id="' . htmlentities($post['post_id']) . '">
+                                    <button type="button" class="like-btn btn btn-outline-primary btn-sm">
+                                        <i class="bi bi-heart' . ($userLiked ? "-fill" : "") . '"></i>
+                                        <span class="like-count">' . htmlspecialchars($likeCount) . '</span>
+                                    </button>
+                                </div>
                                 <p id="post-description-' . htmlentities($post['post_id']).'" class="break-text mb-2">' .htmlentities($post['post_text']) . '</p>
                                 <textarea id="post-textarea-' . htmlentities($post['post_id']).'" class="form-control post-textarea rounded mb-1 auto-resize" name="post_textarea" maxlength="200" hidden disabled>'.htmlentities($post['post_text']).'</textarea>      
                                 <div class="d-flex">
