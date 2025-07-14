@@ -1,6 +1,7 @@
 <?php
     session_start();
     require_once('includes/db_connection.php');
+    require_once('utilities.php');
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -10,10 +11,10 @@
     <link href="css/index.css" rel="stylesheet">
     <!-- CSS & JS to create posts if user logged in -->
     <link href="css/create_post.css" rel="stylesheet">
-    <script src="js/create_post.js"></script>
+    <script type="module" src="js/create_post.js"></script>
     <!-- CSS & JS to fetch ALL posts from mysql -->
     <link href="css/fetch_posts.css" rel="stylesheet">
-    <script src="js/fetch_posts.js"></script>
+    <script type="module" src="js/fetch_posts.js"></script>
     <title>Message Board</title>
 </head>
 <body>
@@ -35,7 +36,6 @@
 
                 // Include the create post section
                 if (isset($_SESSION['user_id'])) {
-                    $user_id = $_SESSION['user_id'];
                     include 'includes/create_post.php';
                 }
             ?>    

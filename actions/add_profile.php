@@ -7,7 +7,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
     //$profile_picture = $_POST['profile_picture'];
 
-    $user_id = $_SESSION['user_id'];
+    $user_id = $_SESSION['id_token'];
     $location = $_POST['location'];
     $occupation = $_POST['occupation'];
     $bio = $_POST['bio'];
@@ -46,7 +46,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $stmt->bindParam(':uid', $user_id, PDO::PARAM_INT);
                 $stmt->execute();
                 $data = $stmt->fetch(PDO::FETCH_ASSOC);
-               
+
+                $_SESSION["user_id"] = $_SESSION["id_token"];
+                unset($_SESSION["id_token"]);
                 $_SESSION["first_name"] = $data['first_name'];
                 $_SESSION["email"] = $data['email'];
                 $_SESSION["role"] = $data['role'];

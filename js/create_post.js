@@ -1,3 +1,5 @@
+import { predictLines } from "./utils/textarea.js";
+
 document.addEventListener("DOMContentLoaded", function () {  
     
     // New post functionality
@@ -24,12 +26,22 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
+    // Textarea height event listener
+    textarea.addEventListener("input", () => {
+        const lines = predictLines(textarea);
+        textarea.setAttribute("rows", lines);     
+    });
+    
     // Hide new post components when clicked outside of new post layout
     document.addEventListener("click", function (event) {
         if (!container.contains(event.target)) {
             postImg.src = "";
             imgUpload.value = "";
             textarea.value = "";
+            
+            const lines = predictLines(textarea);
+            textarea.setAttribute("rows", lines);
+
             imgUploadBtn.style.display = "none";
             buttonGroup.style.display = "none";
             document.getElementById("new-post-form").reset();
@@ -39,8 +51,11 @@ document.addEventListener("DOMContentLoaded", function () {
     // New post cancel button
     document.getElementById("cancel-post-btn").addEventListener("click", function () {
         postImg.src = "";
-        imgUpload.value = "";
+        imgUpload.value = "";  
         textarea.value = "";
+        const lines = predictLines(textarea);
+        textarea.setAttribute("rows", lines);
+
         imgUploadBtn.style.display = "none";
         buttonGroup.style.display = "none";
         document.getElementById("new-post-form").reset();

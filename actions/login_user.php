@@ -31,7 +31,7 @@ require_once('../includes/db_connection.php');
                     if (!$profile) {
                         // Redirect to dashboard after successful login
                         $_SESSION['display_form'] = "profile";
-                        $_SESSION['user_id'] = $user['user_id'];
+                        $_SESSION['id_token'] = $user['user_id'];
                         header("Location: ../login.php");
                         exit();
                     } else {

@@ -88,7 +88,7 @@
                 <!-- Bio -->
                 <div class="col-12 mb-4">
                     <label class="pb-1" for="bio"><strong>Bio</strong></label>
-                    <textarea id="bio-textarea" class="form-control" name="bio" maxlength="250" rows="2" style="resize:none;" disabled required><?php echo !empty($bio) ? htmlentities($bio) : "Bio Missing"; ?></textarea>
+                    <textarea id="bio-textarea" class="form-control responsive-textarea" name="bio" maxlength="250" rows="1" style="resize:none;" disabled required><?php echo !empty($bio) ? htmlentities($bio) : "Bio Missing"; ?></textarea>
                 </div>
                 <!-- Form Buttons -->
                 <div class="col-12 d-flex justify-content-center">

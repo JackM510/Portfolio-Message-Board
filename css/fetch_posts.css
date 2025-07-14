@@ -18,9 +18,6 @@
     word-break: break-word;      /* optional for aggressive breaking */
   }
 
-textarea {
-    height: auto !important;
-}
 
 .post-picture {
     object-position: center;
@@ -33,18 +30,13 @@ textarea {
     display: none !important;
 }
 
-.post-textarea {
+.post-textarea, 
+.comment-textarea {
     width: 100%;
     resize: none !important;
     color: #212529;
     padding: 5px;
     border-color: #DEE2E6;
-}
-
-.post-textarea:disabled {
-    background: none;
-    border: none;
-    padding: 0px;
 }
 
 /* Edit Post styles */
@@ -66,6 +58,8 @@ textarea {
 .add-comment-textarea {
     border-color: #DEE2E6;
     padding: 5px;
+    resize: none;
+    transition: height 0.2s ease;
 }
 
 .add-comment-btns,
@@ -82,20 +76,6 @@ textarea {
 }
 
 /* Existing Comment & Edit comment styles */
-.comment-textarea {
-    padding: 5px;
-
-}
-
-.comment-textarea:disabled {
-    padding: 0px;
-}
-
-.comment-textarea:disabled,
-.comment-textarea {
-    background: none;
-    border: none;
-}
 
 .edit-comment-dropdown-item:hover {
     background-color: #f8f9fa !important;
@@ -121,7 +101,9 @@ textarea {
 
 /* Standard laptops & desktops */
 @media (min-width: 1024px) {
-    
+    .post-picture {
+        aspect-ratio: 4 / 3;
+    }
 }
 
 /* Large screens */

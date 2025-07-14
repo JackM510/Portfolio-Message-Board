@@ -45,14 +45,14 @@
 <head>
     <?php require_once "head.php"; ?>
     <link href="css/profile.css" rel="stylesheet">
-    <script src="js/profile.js"></script>
+    <script type="module" src="js/profile.js"></script>
     <!-- CSS & JS to create posts if user logged in -->
     <link href="css/create_post.css" rel="stylesheet">
-    <script src="js/create_post.js"></script>
+    <script type="module" src="js/create_post.js"></script>
     <!-- CSS & JS to fetch posts from mysql for a specified user -->
     <link href="css/fetch_posts.css" rel="stylesheet">
-    <script src="js/fetch_posts.js"></script>
-    
+    <script type="module" src="js/fetch_posts.js"></script>
+   
     <title>Profile</title>
 </head>
 <body>

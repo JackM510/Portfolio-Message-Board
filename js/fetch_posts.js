@@ -1,38 +1,16 @@
+import { predictLines } from "./utils/textarea.js";
+
 document.addEventListener("DOMContentLoaded", function() {
 
     // TA responsive height testing
-    document.querySelectorAll("textarea").forEach(textarea => {
-        textarea.style.height = "auto"; // Reset for fresh calculation
-        textarea.style.height = textarea.scrollHeight + "px"; // Adjust to content
-      });
-
-
-      document.addEventListener("input", function (event) {
-        if (event.target.tagName.toLowerCase() === "textarea") {
-          event.target.style.height = "auto"; 
-          event.target.style.height = event.target.scrollHeight + "px"; 
-        }
-      });
-
-      /*function resizeToExactLines(textarea) {
-        textarea.style.height = "auto";
-        const lines = textarea.value.split("\n").length || 1;
-        const lineHeight = parseFloat(getComputedStyle(textarea).lineHeight);
-        textarea.style.height = (lines * lineHeight) + "px";
-      }
-      
-      document.addEventListener("DOMContentLoaded", () => {
-        document.querySelectorAll("textarea.auto-resize").forEach(textarea => {
-          resizeToExactLines(textarea); // Initial sizing
-      
-          textarea.addEventListener("input", () => {
-            resizeToExactLines(textarea);
-          });
+    document.querySelectorAll(".responsive-textarea").forEach(textarea => {
+        textarea.addEventListener("input", () => {
+            const lines = predictLines(textarea);
+            textarea.setAttribute("rows", lines);
         });
-      });*/
+    });    
+  
       
-
-
     // Add an event listener to each posts dropdown edit button
     document.querySelectorAll(".edit-post-btn").forEach(button => {
         const postId = button.getAttribute("data-post-id"); // Get post ID from button
@@ -76,6 +54,9 @@ document.addEventListener("DOMContentLoaded", function() {
             textarea.style.display = "block";
             textarea.focus();
 
+            const lines = predictLines(textarea);
+            textarea.setAttribute("rows", lines);
+            
             btnGroup.style.display = "block";
             btnGroup.classList.add("d-flex", "float-end");
 
@@ -178,7 +159,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
         document.addEventListener("click", function(event) {
             if (!textarea.contains(event.target) && !buttonGroup.contains(event.target)) {
-                textarea.value = ""; // Clear the textarea without refreshing
+                textarea.value = "";
                 buttonGroup.style.display = "none";
                 buttonGroup.classList.remove("d-flex", "float-end");
             }
@@ -193,7 +174,7 @@ document.addEventListener("DOMContentLoaded", function() {
             const buttonGroup = document.querySelector(`#add-comment-btns-${postId}`);
 
             if (textarea) {
-                textarea.value = ""; // Clear the textarea without refreshing
+                textarea.value = "";
                 buttonGroup.style.display = "none";
                 buttonGroup.classList.remove("d-flex", "float-end");
             }
@@ -217,14 +198,18 @@ document.addEventListener("DOMContentLoaded", function() {
             paragraph.style.display = "none";
 
             // Make textarea active
-            textarea.removeAttribute("hidden");
             textarea.removeAttribute("disabled");
+            textarea.removeAttribute("hidden");
             textarea.style.display = "block";
+            textarea.focus();
+
+            const lines = predictLines(textarea);
+            textarea.setAttribute("rows", lines);
 
             // Show the button group
             buttonGroup.style.display = "block";
             buttonGroup.classList.add("d-flex", "float-end");
-            textarea.focus();
+            
         });
 
         document.addEventListener("click", function(event) {

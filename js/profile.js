@@ -1,3 +1,5 @@
+import { predictLines } from "./utils/textarea.js";
+
 document.addEventListener("DOMContentLoaded", function () {
 
     // Profile container elements
@@ -11,12 +13,19 @@ document.addEventListener("DOMContentLoaded", function () {
     let occupationInput = document.getElementById("occupation-input");
     let locationInput = document.getElementById("location-input");
     let bioTextarea = document.getElementById("bio-textarea");
+    let originalValues = {};
 
     // Profile details edit icon
     document.getElementById("edit-icon").addEventListener("click", function () {
 
-        /*let profilePictureImg = document.getElementById("profile-picture");
-        let originalImgSrc = profilePictureImg.src; */
+        // Get original values of inputs
+        originalValues = {
+            first: firstNameInput.value,
+            last: lastNameInput.value,
+            occupation: occupationInput.value,
+            location: locationInput.value,
+            bio: bioTextarea.value
+        };
 
         //Remove disabled attribute from form elements
         firstNameInput.removeAttribute("disabled");
@@ -25,14 +34,15 @@ document.addEventListener("DOMContentLoaded", function () {
         locationInput.removeAttribute("disabled");
         bioTextarea.removeAttribute("disabled");
 
+        // Hide profile details
+        details.style.display = 'none';
+        details.classList.remove("d-flex");
         // Show the 'update profile' form and hide the profile details div
         form.style.display = 'block'; // Display 'Update Profile' form
         form.classList.add("d-flex", "flex-column", "justify-content-center");
-        details.style.display = 'none'; // Hide profile details
-        details.classList.remove("d-flex");
-
-       
-
+        // Textarea height
+        const lines = predictLines(bioTextarea);
+        bioTextarea.setAttribute("rows", lines);
     });
 
    
@@ -47,18 +57,17 @@ document.addEventListener("DOMContentLoaded", function () {
         locationInput.setAttribute("disabled", "true");
         bioTextarea.setAttribute("disabled", "true");
 
+        firstNameInput.value = originalValues.first;
+        lastNameInput.value = originalValues.last;
+        occupationInput.value = originalValues.occupation;
+        locationInput.value = originalValues.location;
+        bioTextarea.value = originalValues.bio;
+
         details.style.display = 'block'; // Display profile details
         details.classList.add("d-flex");
         form.style.display = 'none'; // Hide 'Update Profile' form
         form.classList.remove("d-flex", "flex-column", "justify-content-center");
     });
-
-
-
-    // Update button when editing profile details
-
-
-
 
     // Event listener for profile picture image btn
     document.getElementById('profile-picture-btn').addEventListener('click', function () {

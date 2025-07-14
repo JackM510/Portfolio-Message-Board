@@ -2,6 +2,13 @@
     width: 100%;
 }
 
+#new-post-image {
+    object-position: center;
+    object-fit: cover;
+    aspect-ratio: 1 / 1;
+    width: 100%;
+}
+
 #image-upload-btn {
     display: none;
 }

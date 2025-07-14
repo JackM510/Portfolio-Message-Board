@@ -19,7 +19,7 @@
 <head>
     <?php require_once "head.php"; ?>
     <link href="css/login.css" rel="stylesheet">
-    <script src="js/login.js"></script>
+    <script type="module" src="js/login.js"></script>
     <title>Messageboard - Login</title>
 </head>
 <body>
@@ -54,7 +54,7 @@
                 </div>   
             </form>
         </div>
-        <div class="text-center mt-3" onclick="showSignUp()" style="cursor:pointer;">Don't have an account? Sign Up</div>
+        <div id="signup-tab" class="text-center mt-3" style="cursor:pointer;">Don't have an account? Sign Up</div>
     </div>
 
     <!-- Signup form -->
@@ -98,7 +98,7 @@
                 </div> 
             </form>
         </div>
-        <div class="text-center mt-3" onclick="showLogin()" style="cursor:pointer;">Already have an account? Login</div>
+        <div class="login-tab text-center mt-3" style="cursor:pointer;">Already have an account? Login</div>
     </div>
 
     <!-- Complete Profile form -->
@@ -135,7 +135,7 @@
                     <!-- Bio -->
                     <div class="col-12 mb-4">
                         <label class="pb-1" for="bio">Bio</label>
-                        <textarea id="bio-textarea" class="form-control" name="bio" maxlength="250" rows="2" style="resize:none;" required></textarea>
+                        <textarea id="bio-textarea" class="form-control responsive-textarea" name="bio" maxlength="250" rows="1" style="resize:none;" required></textarea>
                     </div>
                     <!-- Complete profile btn -->
                     <div class="col-12 d-flex justify-content-center">
@@ -144,7 +144,7 @@
                 </div>  
             </form>
         </div>
-        <div class="text-center mt-3" onclick="showLogin()" style="cursor:pointer;">Already have an account? Login</div>
+        <div class="login-tab text-center mt-3" style="cursor:pointer;">Already have an account? Login</div>
     </div>
 </body>
 </html>

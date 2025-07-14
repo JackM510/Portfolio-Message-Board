@@ -1,6 +1,13 @@
 <?php
     session_start();
+    require_once('utilities.php');
+    if (isLoggedIn() === false) {
+        header("Location: login.php");
+    }
+
     require_once('includes/db_connection.php');
+
+    
 
     // Delete a user
     if (isset($_POST['delete_user_id'])) {

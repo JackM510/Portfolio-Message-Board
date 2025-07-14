@@ -1,8 +1,27 @@
+import { predictLines } from "./utils/textarea.js";
+
 document.addEventListener("DOMContentLoaded", function() {
     
+    let signupTab = document.getElementById("signup-tab");
     let profilePictureInput = document.getElementById("profile-picture-input");
     let profilePictureBtn = document.getElementById("profile-picture-btn");
+    
+    // Show signup tab
+    signupTab.addEventListener("click", () => {
+        document.getElementById("login-form").style.display = "none";
+        document.getElementById("profile-container").style.display = "none";
+        document.getElementById("signup-container").style.display = "block";
+    });
 
+    // Show login tab
+    document.querySelectorAll(".login-tab").forEach(tab => {
+        tab.addEventListener("click", () => {
+            document.getElementById("login-form").style.display = "block";
+            document.getElementById("signup-container").style.display = "none";
+            document.getElementById("profile-container").style.display = "none";
+        });
+    });
+    
     // Event listener for profile picture image btn
     profilePictureBtn.addEventListener('click', function () {
         // Make the input active and call click()
@@ -21,6 +40,14 @@ document.addEventListener("DOMContentLoaded", function() {
             };
             reader.readAsDataURL(file);
         }
+    });
+
+    // Responsive textarea (#bio-textarea)
+    document.querySelectorAll(".responsive-textarea").forEach(textarea => {
+        textarea.addEventListener("input", () => {
+            const lines = predictLines(textarea);
+            textarea.setAttribute("rows", lines);
+        });
     });
     
     // Signup form AJAX for add_user.php
@@ -83,17 +110,3 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 
 });
-
-function showLogin() {
-    document.getElementById("login-form").style.display = "block";
-    document.getElementById("signup-container").style.display = "none";
-    document.getElementById("profile-container").style.display = "none";
-
-}
-
-function showSignUp() {
-    document.getElementById("login-form").style.display = "none";
-    document.getElementById("profile-container").style.display = "none";
-    document.getElementById("signup-container").style.display = "block";
-}
-

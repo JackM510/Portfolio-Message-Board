@@ -98,7 +98,7 @@ function getPosts($pdo, $user_id = null) {
                                     </button>
                                 </div>
                                 <p id="post-description-' . htmlentities($post['post_id']).'" class="break-text mb-2">' .htmlentities($post['post_text']) . '</p>
-                                <textarea id="post-textarea-' . htmlentities($post['post_id']).'" class="form-control post-textarea rounded mb-1 auto-resize" name="post_textarea" maxlength="200" hidden disabled>'.htmlentities($post['post_text']).'</textarea>      
+                                <textarea id="post-textarea-' . htmlentities($post['post_id']).'" class="form-control post-textarea rounded mb-1 responsive-textarea" name="post_textarea" rows="1" maxlength="250" hidden required disabled>'.htmlentities($post['post_text']).'</textarea>      
                                 <div class="d-flex">
                                     <p class="mb-0" style="color:grey;">'.htmlentities($post_timestamp).'</p>
                                     <div id="edit-post-btn-group-' . htmlentities($post['post_id']).'" class="ms-auto edit-post-btn-group mt-1">
@@ -124,7 +124,7 @@ function getPosts($pdo, $user_id = null) {
                             <img class="me-3 rounded-pill comment-profile-picture" src="'.htmlspecialchars($your_profile_picture).'" alt="Post Image">
                         </div>
                         <form id="add-comment-form-'.htmlspecialchars($post['post_id']).'" data-post-id="'.htmlspecialchars($post['post_id']).'" method="POST" class="w-100">
-                            <textarea id="add-comment-textarea-'.htmlspecialchars($post['post_id']).'" class="form-control w-100 add-comment-textarea rounded mb-2" name="comment_text" placeholder="Add a comment..." rows="1" maxlength="150" style="resize:none;"></textarea>
+                            <textarea id="add-comment-textarea-'.htmlspecialchars($post['post_id']).'" class="form-control w-100 add-comment-textarea rounded responsive-textarea mb-2" name="comment_text" placeholder="Add a comment..." rows="1" maxlength="250"></textarea>
                             <input type="hidden" name="post_id" value="'.htmlspecialchars($post['post_id']).'">
                             <div id="add-comment-btns-'.htmlspecialchars($post['post_id']).'" class="add-comment-btns">
                                 <button class="btn btn-sm btn-secondary cancel-btn" type="button" data-post-id="'.htmlspecialchars($post['post_id']).'">Cancel</button>
@@ -192,7 +192,7 @@ function getPosts($pdo, $user_id = null) {
                             <div class="mt-2">
                                 <form id="edit-comment-form-' . htmlspecialchars($comment["comment_id"]) . '" class="w-100" method="POST">
                                     <p id="comment-description-' . htmlentities($comment['comment_id']).'" class="break-text mb-2" >' .htmlspecialchars($comment['comment_text']) . '</p>
-                                    <textarea id="comment-textarea-' . htmlspecialchars($comment["comment_id"]) . '" class="form-control comment-textarea rounded mb-1 text-break" name="edit_comment" data-post-id="'.htmlspecialchars($comment['comment_id']).'" maxlength="150" style="resize:none;" hidden required disabled>' . htmlspecialchars($comment['comment_text']) . '</textarea>
+                                    <textarea id="comment-textarea-' . htmlspecialchars($comment["comment_id"]) . '" class="form-control comment-textarea rounded mb-1 responsive-textarea" name="edit_comment" data-post-id="'.htmlspecialchars($comment['comment_id']).'" maxlength="250" rows="1" hidden required disabled>' . htmlspecialchars($comment['comment_text']) . '</textarea>
                                     <input type="hidden" name="comment_id" value="' . htmlspecialchars($comment['comment_id']) . '">
                                     <div class="d-flex">          
                                         <p class="mb-0" style="color:grey;">' . $comment_timestamp . '</p>
@@ -211,7 +211,7 @@ function getPosts($pdo, $user_id = null) {
             echo('</div><br><br>'); // CLOSE PARENT (POST) DIV
         }
     } else {
-        echo('<p>No Posts Available</p>');
+        echo('<p class="text-center">No Posts Available</p>');
     }
 }
 ?>
