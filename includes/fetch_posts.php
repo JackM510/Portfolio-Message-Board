@@ -21,28 +21,26 @@ function getPosts($pdo, $user_id = null) {
             $stmt->bindParam(':user_id', $post['user_id'], PDO::PARAM_INT);
             $stmt->execute();
             $data = $stmt->fetch(PDO::FETCH_ASSOC);
-
+            // Store postee name and profile picture data
             $user_first = $data['first_name'];
             $user_last = $data['last_name'];
             $user_name = $user_first.' '.$user_last; // Users full name
             $profile_picture = $data['profile_picture'];
 
-
-
-            // Get the posts like count
-            $likeCountStmt = $pdo->prepare("SELECT COUNT(*) FROM post_likes WHERE post_id = ?");
-            $likeCountStmt->execute([$post['post_id']]);
-            $likeCount = $likeCountStmt->fetchColumn();
-
+            // Get each posts like count
+            $postLikesStmt = $pdo->prepare("SELECT COUNT(*) FROM post_likes WHERE post_id = ?");
+            $postLikesStmt->execute([$post['post_id']]);
+            $postLikeCount = $postLikesStmt->fetchColumn();
+            // Check whether the user signed in has liked each post returned
             if (isset($_SESSION['user_id'])) {
-                $userLikedStmt = $pdo->prepare("SELECT 1 FROM post_likes WHERE post_id = ? AND user_id = ?");
-                $userLikedStmt->execute([$post['post_id'], $_SESSION['user_id']]);
-                $userLiked = $userLikedStmt->fetchColumn() ? true : false;
+                $postLikedStmt = $pdo->prepare("SELECT 1 FROM post_likes WHERE post_id = ? AND user_id = ?");
+                $postLikedStmt->execute([$post['post_id'], $_SESSION['user_id']]);
+                $postLiked = $postLikedStmt->fetchColumn() ? true : false;
             } else {
-                $userLiked = false;
+                $postLiked = false;
             }
 
-            
+            //Post timestamp data
             $timestamp = date('g:iA j/n/y', strtotime($post['post_created']));
             $post_timestamp = !empty($post['post_edited']) ? $timestamp . ' (edited)' : $timestamp;
 
@@ -50,7 +48,6 @@ function getPosts($pdo, $user_id = null) {
             // Users Profile Picture & Full Name
             echo('<div class="post-container py-4 px-4">
                     <div class="d-flex align-items-start pt-1">
-
                         <div>
                             <a class="post-profile-link" href="profile.php?user_id='.htmlspecialchars($post['user_id']).'">
                             <img class="me-3 rounded-pill post-profile-picture" src="'.htmlspecialchars($profile_picture). '" alt="Post Image">
@@ -91,10 +88,10 @@ function getPosts($pdo, $user_id = null) {
                             </div>');
                         // Display the post text and DAT the post was created
                         echo('<div class="mt-3">
-                                <div class="like-container mb-2" data-post-id="' . htmlentities($post['post_id']) . '">
-                                    <button type="button" class="like-btn btn btn-outline-primary btn-sm">
-                                        <i class="bi bi-heart' . ($userLiked ? "-fill" : "") . '"></i>
-                                        <span class="like-count">' . htmlspecialchars($likeCount) . '</span>
+                                <div class="post-like-container mb-2" data-post-id="' . htmlentities($post['post_id']) . '">
+                                    <button type="button" class="post-like-btn btn btn-outline-primary btn-sm">
+                                        <i class="bi bi-heart' . ($postLiked ? "-fill" : "") . '"></i>
+                                        <span class="post-like-count">' . htmlspecialchars($postLikeCount) . '</span>
                                     </button>
                                 </div>
                                 <p id="post-description-' . htmlentities($post['post_id']).'" class="break-text mb-2">' .htmlentities($post['post_text']) . '</p>
@@ -151,9 +148,23 @@ function getPosts($pdo, $user_id = null) {
 
             if ($comments) {
                 foreach ($comments as $comment) {
+
+                    // Get the commentors name and profile picture
                     $commentor_name = htmlspecialchars($comment['first_name'] . ' ' . $comment['last_name']);
                     $commentor_profile_picture = htmlspecialchars($comment['profile_picture']);
-
+                    // Get each comments like count
+                    $commentLikesStmt = $pdo->prepare("SELECT COUNT(*) FROM comment_likes WHERE comment_id = ?");
+                    $commentLikesStmt->execute([$comment['comment_id']]);
+                    $commentLikeCount = $commentLikesStmt->fetchColumn();
+                    // Check whether the user signed in has liked the comment
+                    if (isset($_SESSION['user_id'])) {
+                        $commentLikedStmt = $pdo->prepare("SELECT 1 FROM comment_likes WHERE comment_id = ? AND user_id = ?");
+                        $commentLikedStmt->execute([$comment['comment_id'], $_SESSION['user_id']]);
+                        $commentLiked = $commentLikedStmt->fetchColumn() ? true : false;
+                    } else {
+                        $commentLiked = false;
+                    }
+                    // Get comment timestamp data
                     $timestamp = date('g:iA j/n/y', strtotime($comment['comment_created']));
                     $comment_timestamp = !empty($comment['comment_edited']) ? $timestamp . ' (edited)' : $timestamp;
             
@@ -194,6 +205,14 @@ function getPosts($pdo, $user_id = null) {
                                     <p id="comment-description-' . htmlentities($comment['comment_id']).'" class="break-text mb-2" >' .htmlspecialchars($comment['comment_text']) . '</p>
                                     <textarea id="comment-textarea-' . htmlspecialchars($comment["comment_id"]) . '" class="form-control comment-textarea rounded mb-1 responsive-textarea" name="edit_comment" data-post-id="'.htmlspecialchars($comment['comment_id']).'" maxlength="250" rows="1" hidden required disabled>' . htmlspecialchars($comment['comment_text']) . '</textarea>
                                     <input type="hidden" name="comment_id" value="' . htmlspecialchars($comment['comment_id']) . '">
+                                    
+                                    <div class="comment-like-container mb-2" data-post-id="' . htmlentities($comment['comment_id']) . '">
+                                        <button type="button" class="comment-like-btn btn btn-outline-primary btn-sm">
+                                            <i class="bi bi-heart' . ($commentLiked ? "-fill" : "") . '"></i>
+                                            <span class="comment-like-count">' . htmlspecialchars($commentLikeCount) . '</span>
+                                        </button>
+                                    </div>
+                                    
                                     <div class="d-flex">          
                                         <p class="mb-0" style="color:grey;">' . $comment_timestamp . '</p>
                                         <div id="edit-comment-btns-'.htmlspecialchars($comment['comment_id']).'" class="edit-comment-btns ms-auto mt-1">

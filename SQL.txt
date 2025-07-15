@@ -63,12 +63,24 @@ CREATE TABLE comments (
 
 -- Create 'post_likes' table
 CREATE TABLE post_likes (
-    like_id INT NOT NULL AUTO_INCREMENT,
+    post_like_id INT NOT NULL AUTO_INCREMENT,
     post_id INT NOT NULL,
     user_id INT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     UNIQUE KEY unique_like (post_id, user_id),
-    PRIMARY KEY (like_id),
+    PRIMARY KEY (post_like_id),
     FOREIGN KEY (post_id) REFERENCES posts(post_id) ON DELETE CASCADE,
+    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
+);
+
+-- Create 'post_likes' table
+CREATE TABLE comment_likes (
+    comment_like_id INT NOT NULL AUTO_INCREMENT,
+    comment_id INT NOT NULL,
+    user_id INT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE KEY unique_like (comment_id, user_id),
+    PRIMARY KEY (comment_like_id),
+    FOREIGN KEY (comment_id) REFERENCES comments(comment_id) ON DELETE CASCADE,
     FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
 );
