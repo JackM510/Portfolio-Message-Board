@@ -334,8 +334,8 @@ document.addEventListener("DOMContentLoaded", function() {
       
               // Toggle heart icon
               const icon = button.querySelector("i");
-              icon.classList.toggle("bi-heart-fill", data.liked);
-              icon.classList.toggle("bi-heart", !data.liked);
+              icon.classList.toggle("bi-hand-thumbs-up-fill", data.liked);
+              icon.classList.toggle("bi-hand-thumbs-up", !data.liked);
             } else if (data.unauthorized) {
                 window.location.href = "login.php";
                 return;
@@ -428,7 +428,7 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     });
 
-    // Like post AJAX for like_post.php
+    // Like post AJAX for like_comment.php
     document.querySelectorAll(".comment-like-btn").forEach(button => {
         button.addEventListener("click", () => {
           const container = button.closest(".comment-like-container");
@@ -448,14 +448,10 @@ document.addEventListener("DOMContentLoaded", function() {
             if (data.success) {
               // Update like count
               button.querySelector(".comment-like-count").textContent = data.like_count;
-      
               // Toggle heart icon
               const icon = button.querySelector("i");
-              icon.classList.toggle("bi-heart-fill", data.liked);
-              icon.classList.toggle("bi-heart", !data.liked);
-
-              alert("comment was liked/unliked.");
-
+              icon.classList.toggle("bi-hand-thumbs-up-fill", data.liked);
+              icon.classList.toggle("bi-hand-thumbs-up", !data.liked);
             } else if (data.unauthorized) {
                 window.location.href = "login.php";
                 return;

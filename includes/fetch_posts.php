@@ -90,7 +90,7 @@ function getPosts($pdo, $user_id = null) {
                         echo('<div class="mt-3">
                                 <div class="post-like-container mb-2" data-post-id="' . htmlentities($post['post_id']) . '">
                                     <button id="post-like-btn-'.htmlentities($post["post_id"]).'" type="button" class="post-like-btn btn btn-outline-primary btn-sm">
-                                        <i class="bi bi-heart' . ($postLiked ? "-fill" : "") . '"></i>
+                                        <i class="bi bi-hand-thumbs-up' . ($postLiked ? "-fill" : "") . '"></i>
                                         <span class="post-like-count">' . htmlspecialchars($postLikeCount) . '</span>
                                     </button>
                                 </div>
@@ -208,7 +208,7 @@ function getPosts($pdo, $user_id = null) {
                                     
                                     <div class="comment-like-container mb-2" data-post-id="' . htmlentities($comment['comment_id']) . '">
                                         <button type="button" class="comment-like-btn btn btn-outline-primary btn-sm">
-                                            <i class="bi bi-heart' . ($commentLiked ? "-fill" : "") . '"></i>
+                                            <i class="bi bi-hand-thumbs-up' . ($commentLiked ? "-fill" : "") . '"></i>
                                             <span class="comment-like-count">' . htmlspecialchars($commentLikeCount) . '</span>
                                         </button>
                                     </div>
