@@ -21,6 +21,8 @@ document.addEventListener("DOMContentLoaded", function () {
     if (imgUpload) {
         imgUpload.addEventListener("change", function () {
             if (this.files.length > 0) { // Check if a file was uploaded
+                postImg.style.display = "block";
+
                 buttonGroup.style.display = "flex";
             }
         });
@@ -36,6 +38,7 @@ document.addEventListener("DOMContentLoaded", function () {
     document.addEventListener("click", function (event) {
         if (!container.contains(event.target)) {
             postImg.src = "";
+            postImg.style.display = "none";
             imgUpload.value = "";
             textarea.value = "";
             
@@ -51,7 +54,9 @@ document.addEventListener("DOMContentLoaded", function () {
     // New post cancel button
     document.getElementById("cancel-post-btn").addEventListener("click", function () {
         postImg.src = "";
+        postImg.style.display = "none";
         imgUpload.value = "";  
+
         textarea.value = "";
         const lines = predictLines(textarea);
         textarea.setAttribute("rows", lines);
@@ -64,7 +69,6 @@ document.addEventListener("DOMContentLoaded", function () {
     // Set img-upload as the image uploaded by the user
     document.getElementById("image-upload").addEventListener("change", function(event) {
         const file = event.target.files[0]; // Get the selected file
-
         if (file) {
             const reader = new FileReader(); // Create a FileReader object
             reader.onload = function(e) {

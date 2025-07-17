@@ -2,7 +2,8 @@
     width: 100%;
 }
 
-#new-post-image {
+#new-post-img {
+    display: none;
     object-position: center;
     object-fit: cover;
     aspect-ratio: 1 / 1;
@@ -14,6 +15,7 @@
 }
 
 #new-post-textarea {
+    
     resize: none;
     border-color: #DEE2E6;
     padding: 5px;
@@ -26,7 +28,7 @@
 /* Tablets (small screens) */
 @media (min-width: 600px) {
     #new-post-form {
-        width: 75%;
+        width: 100%;
     }
 }
 
@@ -37,7 +39,9 @@
 
 /* Standard laptops & desktops */
 @media (min-width: 1024px) {
-
+    #new-post-img {
+        aspect-ratio: 4 / 3;
+    }
 }
 
 /* Large screens */

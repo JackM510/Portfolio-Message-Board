@@ -1,9 +1,10 @@
 <?php 
 if (isLoggedIn() === true): ?>
     <div id="new-post-container" class="mt-5">
-        <form id="new-post-form" class="d-flex flex-column justify-content-center m-auto" method="POST" enctype="multipart/form-data">
+        <form id="new-post-form" class="d-flex flex-column justify-content-center m-auto p-4" method="POST" enctype="multipart/form-data">
             <div class="d-flex flex-column">
                 <img id="new-post-img" class="mb-2" src="">
+               
                 <div class="mb-2">
                     <input type="file" name="image" id="image-upload" accept="image/*" hidden>
                     <button id="image-upload-btn" type="button" class="btn btn-sm btn-light" onclick="document.getElementById('image-upload').click()" style="border:none;">
@@ -18,6 +19,6 @@ if (isLoggedIn() === true): ?>
                 </div>
             </div>
         </form>
-        <hr class="mt-5">
+        <hr class="mt-5 mb-5">
     </div>
 <?php endif; ?>  
