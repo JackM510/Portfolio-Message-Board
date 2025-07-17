@@ -89,7 +89,7 @@ function getPosts($pdo, $user_id = null) {
                         // Display the post text and DAT the post was created
                         echo('<div class="mt-3">
                                 <div class="post-like-container mb-2" data-post-id="' . htmlentities($post['post_id']) . '">
-                                    <button type="button" class="post-like-btn btn btn-outline-primary btn-sm">
+                                    <button id="post-like-btn-'.htmlentities($post["post_id"]).'" type="button" class="post-like-btn btn btn-outline-primary btn-sm">
                                         <i class="bi bi-heart' . ($postLiked ? "-fill" : "") . '"></i>
                                         <span class="post-like-count">' . htmlspecialchars($postLikeCount) . '</span>
                                     </button>

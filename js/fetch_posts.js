@@ -21,6 +21,7 @@ document.addEventListener("DOMContentLoaded", function() {
         const paragraph = document.querySelector(`#post-description-${postId}`);
         const textarea = document.querySelector(`#post-textarea-${postId}`);
         const btnGroup = document.querySelector(`#edit-post-btn-group-${postId}`);
+        const likeBtn = document.querySelector(`#post-like-btn-${postId}`);
         
         // Show form elements and buttons to update the post
         button.addEventListener("click", function() {
@@ -44,10 +45,12 @@ document.addEventListener("DOMContentLoaded", function() {
                 img.style.display = "none";
             }
             
+            
             textarea.dataset.originalValue = textarea.value;
             
             imgUploadBtn.style.display ="block"; // Show img upload btn
             paragraph.style.display = "none";
+            likeBtn.style.display = "none";
 
             textarea.removeAttribute("hidden"); // Make textarea active
             textarea.removeAttribute("disabled"); // Make textarea active
@@ -78,6 +81,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     textarea.value = textarea.dataset.originalValue;
                     
                     // Hide buttons
+                    likeBtn.style.display = "block";
                     imgUploadBtn.style.display = "none";
                     btnGroup.style.display = "none";
                     btnGroup.classList.remove("d-flex", "float-end");
@@ -96,6 +100,7 @@ document.addEventListener("DOMContentLoaded", function() {
             const postId = button.getAttribute("data-post-id"); // Get post ID from button
             const img = document.querySelector(`#post-picture-${postId}`);
             const imgUploadBtn = document.querySelector(`#post-image-upload-btn-${postId}`);
+            const likeBtn = document.querySelector(`#post-like-btn-${postId}`);
             const paragraph = document.querySelector(`#post-description-${postId}`);
             const textarea = document.querySelector(`#post-textarea-${postId}`); // Find correct textarea
             const buttonGroup = document.querySelector(`#edit-post-btn-group-${postId}`);
@@ -110,6 +115,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     img.style.display = "none";
                 }
                 
+                likeBtn.style.display = "block";
                 paragraph.style.display = "block";
 
                 textarea.value = textarea.dataset.originalValue; // Restore the original comment text
