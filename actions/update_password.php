@@ -2,66 +2,102 @@
 session_start();
 require_once('../includes/db_connection.php');
 
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_SESSION['user_id'])) {
-
-    $currentPW = $_POST['current_pw'];
-    $newPW = $_POST['new_pw'];
-    $confirmPW = $_POST['confirm_pw'];
-
-    // Need to check the current password matches the password stored in the DB
-    $stmt = $pdo->prepare("SELECT password FROM users WHERE user_id = :uid");
-    $stmt->bindParam(':uid', $_SESSION['user_id'], PDO::PARAM_INT);
-    $stmt->execute();
-    $storedHash = $stmt->fetchColumn();
-
-    // Verify the current password
-    if (!password_verify($currentPW, $storedHash)) {
-        $_SESSION['invalid-password-error'] = "Current password invalid";
-        exit();
+// Update password function
+function updateUserPassword($pdo, $user_id, $newPW) {
+    // Validation
+    if (strlen($newPW) < 8) {
+        $_SESSION['update-password-error'] = "Password must be at least 8 characters";
+        return false;
+    }
+    if (!preg_match('/\d/', $newPW)) {
+        $_SESSION['update-password-error'] = "Password must contain at least 1 number";
+        return false;
+    }
+    if (!preg_match('/[A-Z]/', $newPW)) {
+        $_SESSION['update-password-error'] = "Password must contain at least 1 capital letter";
+        return false;
     }
 
-    // Need to check that the passwords match
-    $isMatch = ($newPW === $confirmPW);
-    if ($isMatch) {
+    // Hash and update
+    $hashedPassword = password_hash($newPW, PASSWORD_DEFAULT);
+    $stmt = $pdo->prepare("UPDATE users SET password = :new_pw WHERE user_id = :uid");
+    $stmt->bindParam(':new_pw', $hashedPassword, PDO::PARAM_STR);
+    $stmt->bindParam(':uid', $user_id, PDO::PARAM_INT);
+    return $stmt->execute();
+}
 
-        // Need to check the password meets certain conditions
-        // Flash error message if password is < 8 characters
-        if (strlen($newPW) < 8) {
-            $_SESSION['update-password-error'] = "Password must be at least 8 characters";
+
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['form_type'])) {
+    // Reset password from account.php
+    if ($_POST['form_type'] === 'self_update_pw' && isset($_SESSION['user_id'])) {
+        
+        // Get password values
+        $currentPW = $_POST['current_pw'];
+        $newPW = $_POST['new_pw'];
+        $confirmPW = $_POST['confirm_pw'];
+
+        // Need to check the current password matches the password stored in the DB
+        $stmt = $pdo->prepare("SELECT password FROM users WHERE user_id = :uid");
+        $stmt->bindParam(':uid', $_SESSION['user_id'], PDO::PARAM_INT);
+        $stmt->execute();
+        $storedHash = $stmt->fetchColumn();
+
+        // Verify the current password
+        if (!password_verify($currentPW, $storedHash)) {
+            $_SESSION['invalid-password-error'] = "Current password invalid";
             exit();
-        }
-        // Flash error message if password contains <1 number
-        else if (!preg_match('/\d/', $newPW)) {
-            $_SESSION['update-password-error'] = "Password must contain at least 1 number";
-            exit();
-        }
-        // Flash error message if password contains <1 number
-        else if (!preg_match('/[A-Z]/', $newPW)) {
-            $_SESSION['update-password-error'] = "Password must contain at least 1 capital letter";
+        } 
+        // Check the new passwords are the same
+        else if ($newPW !== $confirmPW) {
+            $_SESSION['update-password-error'] = "New passwords don't match";
             exit();
         } 
 
-        // Need to hash the new password first
-        $hashedPassword = password_hash($newPW, PASSWORD_DEFAULT); // Hash the password
+        // Default else to update the users password
+        else {
+            if (updateUserPassword($pdo, $_SESSION['user_id'], $newPW)) {
+                $_SESSION['pw-success'] = "Your password has been updated";
+                echo "success";
+            } else {
+                echo $_SESSION['update-password-error'] ?? "Error updating password.";
+            }
+        }   
+    } 
 
-        // Prepare the SQL UPDATE statement
-        $stmt = $pdo->prepare("UPDATE users SET password = :new_pw WHERE user_id = :uid AND email = :current_email");
-        $stmt->bindParam(':new_pw', $hashedPassword, PDO::PARAM_STR);
-        $stmt->bindParam(':uid', $_SESSION['user_id'], PDO::PARAM_INT);   
-        $stmt->bindParam(':current_email', $_SESSION['email'], PDO::PARAM_STR);
+    // Reset a users password as an admin from admin.php
+    else if ($_POST['form_type'] === 'admin_update_pw' && isset($_POST['profile_id']) && isset($_SESSION['role']) && $_SESSION['role'] === 'admin') {
+        // Get password & profile_id values
+        $newPW = $_POST['new_pw'];
+        $confirmPW = $_POST['confirm_pw'];
+        $profile_id = $_POST['profile_id'];
         
-        $stmt->execute();
+        // Get user_id from profile_id
+        $stmt = $pdo->prepare("SELECT user_id FROM profiles WHERE profile_id = ?");
+        $stmt->execute([$profile_id]);
+        $user_id = $stmt->fetchColumn();
 
-    } else {
-        $_SESSION['update-password-error'] = "New passwords don't match";
-        exit();
+        if (!$user_id) {
+            echo "User not found.";
+            exit();
+        }
+        // Check the new passwords are the same
+        else if ($newPW !== $confirmPW) {
+            $_SESSION['update-password-error'] = "New passwords don't match";
+            exit();
+        } 
+
+        if (updateUserPassword($pdo, $user_id, $newPW)) {
+            $_SESSION['pw-success'] = "User password has been updated";
+            echo "success";
+        } else {
+            echo $_SESSION['update-password-error'] ?? "Error updating password.";
+        }
     }
-
-    if ($stmt->execute()) {
-        $_SESSION['pw-success'] = "Your password has been updated";
-        echo "success";
-    } else {
-        echo "error updating password: " . implode(" ", $stmt->errorInfo());
+    
+    // Default else
+    else {
+        echo "Invalid request.";
+        exit();
     }
 }
 ?>

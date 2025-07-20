@@ -70,7 +70,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if ($stmt->execute()) {
                 $_SESSION['display_form'] = "profile"; // Display the profile form to add profile details
                 $user_id = $pdo->lastInsertId();
-                $_SESSION['user_id'] = $user_id; // Store the user_id for future mysql INSERTS 
+                $_SESSION['id_token'] = $user_id; // Store the user_id for future mysql INSERTS 
                 echo "success";
             } else {
                 echo "Error adding user: " . implode(" ", $stmt->errorInfo());

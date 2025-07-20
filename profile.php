@@ -37,15 +37,29 @@
     $location = $data['location'];
     $occupation = $data['occupation'];
     $bio = $data['bio'];
-    
 
+    $isAdmin = isset($_SESSION['role']) && $_SESSION['role'] === 'admin';
+    // Admin specific data - get if signed in:
+    if ($isAdmin) {
+        $sql = "SELECT u.email, p.profile_id
+            FROM users u
+            JOIN profiles p ON u.user_id = p.user_id
+            WHERE u.user_id = :user_id";
+            $stmt = $pdo->prepare($sql);
+            $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+            $stmt->execute();
+            $adminData = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        $email = $adminData['email'];
+        $profile_id = $adminData['profile_id'];
+    }
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <?php require_once "head.php"; ?>
     <link href="css/profile.css" rel="stylesheet">
-    <script type="module" src="js/profile.js"></script>
+    <script type="module"src="js/profile.js"></script>
     <!-- CSS & JS to create posts if user logged in -->
     <link href="css/create_post.css" rel="stylesheet">
     <script type="module" src="js/create_post.js"></script>

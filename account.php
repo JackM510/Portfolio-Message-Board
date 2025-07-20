@@ -55,6 +55,8 @@
                         <?php if (isset($_SESSION['email-success'])) { echo "<p class='success-flash'>".$_SESSION['email-success']."</p>"; unset($_SESSION['email-success']); } ?>
                         <form id="update-email-form" method="POST" action="actions/update_email.php">
                             <row>
+                                <!-- Hidden inputs -->
+                                <input type="hidden" name="form_type" value="self_update_email" hidden>
                                 <!-- Current email -->
                                 <div class="col-12 mb-3">
                                     <?php if (isset($_SESSION['invalid-email-error'])) { echo "<p class='error-flash'>".$_SESSION['invalid-email-error']."</p>"; unset($_SESSION['invalid-email-error']); } ?>
@@ -100,6 +102,8 @@
                         <?php if (isset($_SESSION['pw-success'])) { echo "<p class='success-flash'>".$_SESSION['pw-success']."</p>"; unset($_SESSION['pw-success']); } ?>
                         <form id="update-pw-form" method="POST" action="actions/update_password.php">
                             <div class="row">
+                                <!-- Hidden inputs -->
+                                <input type="hidden" name="form_type" value="self_update_pw" hidden>
                                 <!-- Current password -->
                                 <?php if (isset($_SESSION['invalid-password-error'])) { echo "<p class='error-flash'>".$_SESSION['invalid-password-error']."</p>"; unset($_SESSION['invalid-password-error']); } ?>
                                 <div class="col-12 mb-3">
@@ -142,14 +146,19 @@
                     <div id="delete-account-body" class="mt-5 mx-auto d-flex flex-column">
                         <h1 class="display-5 text-center mb-4">Delete Account</h1>
                         <form method="POST" action="actions/delete_user.php">
+                            <!-- Hidden inputs -->
+                            <input type="hidden" name="form_type" value="self_delete_user" hidden>
+                            <!-- Checkbox 1 -->
                             <div class="form-check mb-3">
                                 <input class="form-check-input required-checkbox" type="checkbox" name="delete_checkbox_1">
                                 <label class="form-check-label">Yes - I really want to delete the account</label>
                             </div>
+                            <!-- Checkbox 2 -->
                             <div class="form-check mb-4">
                                 <input class="form-check-input required-checkbox" type="checkbox" name="delete_checkbox_2">
                                 <label class="form-check-label">I acknowledge once deleted the account cannot be restored and all data associated with the account will be removed.</label>
                             </div>
+                            <!-- Submit btn -->
                             <div class="d-flex mx-auto">
                                 <button id="delete-btn" class="btn btn-sm btn-danger mx-auto disabled" type="submit">Delete Account</button>
                             </div> 

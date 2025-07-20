@@ -21,7 +21,16 @@
         }
     }
     
+    // Retrieve all users from mysql - FOR SEARCH -------TEMPORARY STATEMENT FOR UI DESIGN---------------------
+    $sql = "SELECT u.user_id, u.email, u.role, p.profile_id 
+    FROM users u
+    INNER JOIN profiles p ON u.user_id = p.user_id";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute();
+    $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+    // Retrieve specific users data from mysql - FOR VIEW PROFILE
+    
 
 ?>
 <!DOCTYPE html>
@@ -29,6 +38,8 @@
 <head>
     <?php require_once "head.php"; ?>
     <link href="css/index.css" rel="stylesheet">
+    <link href="css/admin.css" rel="stylesheet">
+    <script src="js/admin.js"></script>
     <title>Admin Panel</title>
 </head>
 <body>
@@ -38,45 +49,210 @@
         <h1 class="display-5">Admin Control Panel</h1>
     </div>
 
-    <section class="container d-flex justify-content-center w-50 mx-auto mt-5">
+
+    <section class="container d-flex flex-column justify-content-center w-50 mx-auto mt-5">
+        <!-- List of users -->
     
-    <?php
-    // Retrieve all users from mysql
-    $sql = "SELECT user_id, first_name, last_name, email, role FROM users";
-    $stmt = $pdo->prepare($sql);
-    $stmt->execute();
-    $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        <div id="user-search" class="scrollbox-wrapper">
+                <!-- Search Input -->
+                <input type="text" id="user-search-input" class="form-control rounded-0" placeholder="Search users by profile id or email">
 
-    // Create a table to store the data
-    echo '<table class="table" border="1">
-        <tr class="table-secondary">
-            <th>First Name</th>
-            <th>Last Name</th>
-            <th>Email</th>
-            <th>Role</th>
-            <th>Action</th>
-        </tr>';
+            <div class="scrollbox-header d-flex">
+                <div class="header-id">Profile ID</div>
+                <div class="header-email">Email</div>
+                <div class="header-role">Role</div>
+            </div>
 
-    // Loop through each user and add as table data
-    foreach ($users as $user) {
-        echo "<tr>
-                <td>{$user['first_name']}</td>
-                <td>{$user['last_name']}</td>
-                <td>{$user['email']}</td>
-                <td>{$user['role']}</td>
-                <td>
-                    <form method='POST' style='display:inline;'>
-                        <input type='hidden' name='delete_user_id' value='{$user['user_id']}'>
-                        <button type='submit' onclick='return confirm(\"Are you sure you want to delete this user?\");'>Delete</button>
-                    </form>
-                </td>
-            </tr>";
-    }
-    
-    echo "</table>";
+            <div class="scrollbox-container">
+                <?php foreach ($users as $user): ?>
+                <div class="user-row" data-user-id="<?= $user['profile_id'] ?>">
+                    <div class="user-id"><?= htmlspecialchars($user['profile_id']) ?></div>
+                    <div class="user-email"><?= htmlspecialchars($user['email']) ?></div>
+                    <div class="user-role"><?= htmlspecialchars($user['role']) ?></div>
+                </div>
+                <?php endforeach; ?>
+            </div>
+        </div>
 
-    ?>
+    <div id="view-profile" class="container" style="display:none;">
+        <div class="view-profile-wrapper w-50 mx-auto">
+            <div class="row">
+                <!-- Profile Picture -->
+                <div class="col-12 mb-4">
+                    <div id="profile-picture-wrapper">
+                        <div class="d-flex flex-column justify-content-center w-50 h-100 mb-2">
+                            <img id="profile-picture-img" class="mb-2" src="" alt="Profile Picture">
+                    </div> 
+                    </div> 
+                </div>
+                <!-- First Name -->
+                <div class="col-12 col-lg-6 mb-3">
+                    <label class="pb-1" for="last_name"><strong>First Name</strong></label>
+                    <input id="first-name-input" class="form-control" type="text" name="" maxlength="20" disabled required>
+                </div>
+                <!-- Last Name -->
+                <div class="col-12 col-lg-6 mb-3">
+                    <label class="pb-1" for=""><strong>Last Name</strong></label>
+                    <input id="last-name-input" class="form-control" type="text" name="" maxlength="20" disabled required>
+                </div>
+                <!-- Profile ID -->
+                <div class="col-12 col-lg-6 mb-3">
+                    <label class="pb-1" for=""><strong>Profile ID</strong></label>
+                    <input id="profileid-input" class="form-control" type="text" name="" maxlength="50" disabled required>
+                </div>
+                <!-- Joined Date -->
+                <div class="col-12 col-lg-6 mb-3">
+                    <label class="pb-1" for=""><strong>Joined Date:</strong></label>
+                    <input id="joined-date-input" class="form-control" type="text" name="" maxlength="50" disabled required>
+                </div>
+                <!-- Email -->
+                <div class="col-12 col-lg-6 mb-3">
+                    <label class="pb-1" for=""><strong>Email</strong></label>
+                    <input id="email-input" class="form-control" type="text" name="" maxlength="50" disabled required>
+                </div>
+                <!-- Role -->
+                <div class="col-12 col-lg-6 mb-3">
+                    <label class="pb-1" for=""><strong>Role</strong></label>
+                    <input id="role-input" class="form-control" type="text" name="" maxlength="50" disabled required>
+                </div>
+            </div>
+        </div><hr class="mt-5 mb-5">    
+        
+        <!-- BS5 Accordian --> 
+        <div id="accordian" class="accordian container">
+
+            <!-- Update email container-->
+            <div class="card">
+                <div class="card-header text-center">
+                    <a class="btn" data-bs-toggle="collapse" href="#collapse-email">
+                        Reset email
+                    </a>
+                </div>
+                <div id="collapse-email" class="collapse" data-bs-parent="#accordian">
+                    <div class="card-body">
+                        <div id="update-email-body" class="w-50 mt-3 mx-auto">
+                            <h1 class="display-5 text-center mb-4">Update Email Address</h1>
+                            <?php if (isset($_SESSION['email-success'])) { echo "<p class='success-flash'>".$_SESSION['email-success']."</p>"; unset($_SESSION['email-success']); } ?>
+                            <form id="reset-email-form" method="POST" action="actions/update_email.php">
+                                <row>
+                                    <!-- Hidden inputs -->
+                                    <input type="hidden" name="form_type" value="admin_update_email" hidden>
+                                    <input type="hidden" id="hidden-email-input" name="profile_id" value="" hidden>
+                                    <!-- New email -->
+                                    <div class="col-12 mb-3">
+                                        <?php if (isset($_SESSION['new-email-error'])) { echo "<p class='error-flash'>".$_SESSION['new-email-error']."</p>"; unset($_SESSION['new-email-error']); } ?>
+                                        <label class="pb-1" for="new_email">New Email</label>
+                                        <input class="form-control" type="email" name="new_email" required>
+                                    </div>
+                                    <!-- Confirm email -->
+                                    <div class="col-12 mb-4">
+                                        <label class="pb-1" for="confirm_email">Confirm Email</label>
+                                        <input class="form-control" type="email" name="confirm_email" required>
+                                    </div>
+                                    <!-- Submit btn -->
+                                    <div class="col-12 d-flex justify-content-center mb-2"> 
+                                        <button class="btn btn-sm btn-primary" type="submit">Submit</button>
+                                    </div>
+                                </row>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Update password container-->
+            <div class="card">
+                <div class="card-header text-center">
+                    <a class="btn" data-bs-toggle="collapse" href="#collapse-pw">
+                        Reset password
+                    </a>
+                </div>
+                <div id="collapse-pw" class="collapse" data-bs-parent="#accordian">
+                    <div class="card-body">
+                        
+                        <!-- Update password -->
+                        <div id="update-pw-body" class="w-50 mt-3 mx-auto">
+                            <h1 class="display-5 text-center mb-4">Update Password</h1>
+                            <?php if (isset($_SESSION['pw-success'])) { echo "<p class='success-flash'>".$_SESSION['pw-success']."</p>"; unset($_SESSION['pw-success']); } ?>
+                            <form id="reset-pw-form" method="POST" action="actions/update_password.php">
+                                <div class="row">
+                                    <!-- Hidden inputs -->
+                                    <input type="hidden" name="form_type" value="admin_update_pw" hidden>
+                                    <input type="number" id="hidden-pw-input" name="profile_id" value="" hidden>
+                                    <!-- New password -->
+                                    <div class="col-12 mb-3">
+                                    <?php if (isset($_SESSION['update-password-error'])) { echo "<p class='error-flash'>".$_SESSION['update-password-error']."</p>"; unset($_SESSION['update-password-error']); } ?>
+                                        <label class="pb-1" for="new_pw">New Password</label> 
+                                        <input class="form-control" type="password" name="new_pw" required>
+                                    </div>
+                                    <!-- Confirm password -->
+                                    <div class="col-12 mb-4">
+                                        <label class="pb-1" for="confirm_pw">Confirm Password</label>
+                                        <input class="form-control" type="password" name="confirm_pw" required>
+                                    </div>
+                                    <!-- Submit btn -->
+                                    <div class="col-12 d-flex justify-content-center">
+                                        <button class="btn btn-sm btn-primary" type="submit">Submit</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Delete account container-->
+            <div class="card">
+                <div class="card-header text-center">
+                    <a class="btn" data-bs-toggle="collapse" href="#collapse-delete-account">
+                        Delete user
+                    </a>
+                </div>
+                <div id="collapse-delete-account" class="collapse" data-bs-parent="#accordian">
+                    <div class="card-body">
+                        
+                        <!-- Delete account -->
+                        <div id="delete-account-body" class="w-50 mt-5 mx-auto d-flex flex-column">
+                            <h1 class="display-5 text-center mb-4">Delete Account</h1>
+                            <form id="delete-user-form" method="POST" action="actions/delete_user.php">
+                                <!-- Hidden inputs -->
+                                <input type="hidden" name="form_type" value="admin_delete_user" hidden>
+                                <input type="number" id="hidden-delete-input" name="profile_id" value="" hidden>
+                                <!-- Checkbox 1-->
+                                <div class="form-check mb-3">
+                                    <input class="form-check-input required-checkbox" type="checkbox" name="delete_checkbox_1">
+                                    <label class="form-check-label">Yes - delete the user and all associated data.</label>
+                                </div>
+                                <!-- Submit btn -->
+                                <div class="d-flex mx-auto">
+                                    <button id="delete-btn" class="btn btn-sm btn-danger mx-auto disabled" type="submit">Delete Account</button>
+                                </div> 
+                            </form>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        
+    </div>        
+
+
+
+               
+    </div>
+
+
+
+
+
+        
     <section>
+
+
+
+
 
 </body>
 </html>

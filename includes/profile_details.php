@@ -18,6 +18,17 @@
         </div><hr>
 
         <div class="row">
+            <?php if ($isAdmin): ?>
+                <!-- Location -->
+                <div class="col-12 col-lg-7"> 
+                    <p id="profile-email" ><strong>Email: </strong><?php echo !empty($email) ? htmlentities($email) : 'N/A'; ?></p>
+                </div>
+                
+                <!-- Joined Date -->
+                <div class="col-12 col-lg-5">  
+                    <p id="profile-id"><strong>Profile ID: </strong><?php echo !empty($profile_id) ? htmlentities($profile_id) : 'N/A'; ?></p>
+                </div>
+            <?php endif; ?>
             <!-- Location -->
             <div class="col-12 col-lg-7"> 
                 <p id="profile-location" ><strong>Location: </strong><?php echo !empty($location) ? htmlentities($location) : 'N/A'; ?></p>
