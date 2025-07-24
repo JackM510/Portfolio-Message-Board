@@ -7,19 +7,8 @@
 
     require_once('includes/db_connection.php');
     
-
-    // Delete a user
-    if (isset($_POST['delete_user_id'])) {
-        try {
-            $stmt = $pdo->prepare("DELETE FROM users WHERE user_id = :user_id");
-            $stmt->bindParam(':user_id', $_POST['delete_user_id'], PDO::PARAM_INT);
-            $stmt->execute();
-    
-            echo "User and associated data deleted successfully.";
-        } catch (PDOException $e) {
-            echo "Error deleting user: " . $e->getMessage();
-        }
-    }
+    $displayForm = isset($_SESSION['display_form']) ? $_SESSION['display_form'] : "user_search";
+    unset($_SESSION['display_form']);
     
     // Retrieve all users from mysql - FOR SEARCH -------TEMPORARY STATEMENT FOR UI DESIGN---------------------
     $sql = "SELECT u.user_id, u.email, u.role, p.profile_id 
@@ -28,10 +17,7 @@
     $stmt = $pdo->prepare($sql);
     $stmt->execute();
     $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-    // Retrieve specific users data from mysql - FOR VIEW PROFILE
     
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -49,14 +35,15 @@
         <h1 class="display-5">Admin Control Panel</h1>
     </div>
 
-
-    <section class="container d-flex flex-column justify-content-center w-50 mx-auto mt-5">
-        <!-- List of users -->
     
-        <div id="user-search" class="scrollbox-wrapper">
-                <!-- Search Input -->
-                <input type="text" id="user-search-input" class="form-control rounded-0" placeholder="Search users by profile id or email">
-
+    <section class="container d-flex flex-column justify-content-center w-50 mx-auto mt-5">
+        <?php echo $displayForm; ?>
+        <!-- Delete success flash -->
+        <?php if (isset($_SESSION['delete-success'])) { echo "<p class='success-flash'>".$_SESSION['delete-success']."</p>"; unset($_SESSION['delete-success']); } ?>
+        <!-- View a list of all users -->
+        <div id="user-search" class="scrollbox-wrapper" style="<?= $displayForm === 'user_search' ? 'display:block;' : 'display:none;' ?>">
+            <!-- Search Input -->
+            <input type="text" id="user-search-input" class="form-control rounded-0" placeholder="Search users by profile id or email">
             <div class="scrollbox-header d-flex">
                 <div class="header-id">Profile ID</div>
                 <div class="header-email">Email</div>
@@ -74,48 +61,53 @@
             </div>
         </div>
 
-    <div id="view-profile" class="container" style="display:none;">
-        <div class="view-profile-wrapper w-50 mx-auto">
-            <div class="row">
-                <!-- Profile Picture -->
-                <div class="col-12 mb-4">
-                    <div id="profile-picture-wrapper">
-                        <div class="d-flex flex-column justify-content-center w-50 h-100 mb-2">
-                            <img id="profile-picture-img" class="mb-2" src="" alt="Profile Picture">
-                    </div> 
-                    </div> 
+        <!-- View a users profile -->
+        <div id="view-profile" class="container" style="<?= $displayForm === 'view_profile' ? 'display:block;' : 'display:none;' ?>">
+            <div class="view-profile-wrapper w-50 mx-auto">
+                <button id="return-btn" class="btn btn-outline-secondary">
+                    <i id="return-btn" class="bi bi-arrow-left"></i> Return
+                </button>
+
+                <div class="row">
+                    <!-- Profile Picture -->
+                    <div class="col-12 mb-4">
+                        <div id="profile-picture-wrapper">
+                            <div class="d-flex flex-column justify-content-center w-50 h-100 mb-2">
+                                <img id="profile-picture-img" class="mb-2" src="" alt="Profile Picture">
+                        </div> 
+                        </div> 
+                    </div>
+                    <!-- First Name -->
+                    <div class="col-12 col-lg-6 mb-3">
+                        <label class="pb-1" for="last_name"><strong>First Name</strong></label>
+                        <input id="first-name-input" class="form-control" type="text" name="" maxlength="20" disabled required>
+                    </div>
+                    <!-- Last Name -->
+                    <div class="col-12 col-lg-6 mb-3">
+                        <label class="pb-1" for=""><strong>Last Name</strong></label>
+                        <input id="last-name-input" class="form-control" type="text" name="" maxlength="20" disabled required>
+                    </div>
+                    <!-- Profile ID -->
+                    <div class="col-12 col-lg-6 mb-3">
+                        <label class="pb-1" for=""><strong>Profile ID</strong></label>
+                        <input id="profileid-input" class="form-control" type="text" name="" maxlength="50" disabled required>
+                    </div>
+                    <!-- Joined Date -->
+                    <div class="col-12 col-lg-6 mb-3">
+                        <label class="pb-1" for=""><strong>Joined Date:</strong></label>
+                        <input id="joined-date-input" class="form-control" type="text" name="" maxlength="50" disabled required>
+                    </div>
+                    <!-- Email -->
+                    <div class="col-12 col-lg-6 mb-3">
+                        <label class="pb-1" for=""><strong>Email</strong></label>
+                        <input id="email-input" class="form-control" type="text" name="" maxlength="50" disabled required>
+                    </div>
+                    <!-- Role -->
+                    <div class="col-12 col-lg-6 mb-3">
+                        <label class="pb-1" for=""><strong>Role</strong></label>
+                        <input id="role-input" class="form-control" type="text" name="" maxlength="50" disabled required>
+                    </div>
                 </div>
-                <!-- First Name -->
-                <div class="col-12 col-lg-6 mb-3">
-                    <label class="pb-1" for="last_name"><strong>First Name</strong></label>
-                    <input id="first-name-input" class="form-control" type="text" name="" maxlength="20" disabled required>
-                </div>
-                <!-- Last Name -->
-                <div class="col-12 col-lg-6 mb-3">
-                    <label class="pb-1" for=""><strong>Last Name</strong></label>
-                    <input id="last-name-input" class="form-control" type="text" name="" maxlength="20" disabled required>
-                </div>
-                <!-- Profile ID -->
-                <div class="col-12 col-lg-6 mb-3">
-                    <label class="pb-1" for=""><strong>Profile ID</strong></label>
-                    <input id="profileid-input" class="form-control" type="text" name="" maxlength="50" disabled required>
-                </div>
-                <!-- Joined Date -->
-                <div class="col-12 col-lg-6 mb-3">
-                    <label class="pb-1" for=""><strong>Joined Date:</strong></label>
-                    <input id="joined-date-input" class="form-control" type="text" name="" maxlength="50" disabled required>
-                </div>
-                <!-- Email -->
-                <div class="col-12 col-lg-6 mb-3">
-                    <label class="pb-1" for=""><strong>Email</strong></label>
-                    <input id="email-input" class="form-control" type="text" name="" maxlength="50" disabled required>
-                </div>
-                <!-- Role -->
-                <div class="col-12 col-lg-6 mb-3">
-                    <label class="pb-1" for=""><strong>Role</strong></label>
-                    <input id="role-input" class="form-control" type="text" name="" maxlength="50" disabled required>
-                </div>
-            </div>
         </div><hr class="mt-5 mb-5">    
         
         <!-- BS5 Accordian --> 
@@ -238,21 +230,11 @@
         
     </div>        
 
-
-
-               
+          
     </div>
 
 
-
-
-
-        
-    <section>
-
-
-
-
+    <section></br>
 
 </body>
 </html>

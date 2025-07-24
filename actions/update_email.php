@@ -62,10 +62,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['form_type'])) {
     // Update another users email as an admin from admin.php 
     else if ($_POST['form_type'] === 'admin_update_email' && isset($_POST['profile_id']) && isset($_SESSION['role']) && $_SESSION['role'] === 'admin') {
         
+        // Stay on the view_profile view after the POST form submission
+        $_SESSION['display_form'] = "view_profile"; 
+        
         $profile_id = $_POST['profile_id'];
         $newEmail = $_POST['new_email'];
         $confirmEmail = $_POST['confirm_email'];
         $isMatch = ($newEmail === $confirmEmail); //Check that the new email addresses match
+
+
 
         if ($isMatch) {
             // Check that the email doesn't already exist in the DB
@@ -94,7 +99,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['form_type'])) {
         }
 
         if ($stmt->execute()) {
-            $_SESSION['email-success'] = "Your email address has been updated";
+            $_SESSION['email-success'] = "Email updated";
             echo "success";
         } else {
             echo "error updating email address: " . implode(" ", $stmt->errorInfo());

@@ -37,8 +37,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['form_type'])) {
     
     // Delete another users account as an admin from admin.php
     else if ($_POST['form_type'] === 'admin_delete_user' && $_POST['profile_id'] && isset($_SESSION['role']) && $_SESSION['role'] === 'admin' && !empty($_POST['delete_checkbox_1'])) {
+        
         $profileId = (int) $_POST['profile_id'];
-
         // Fetch user_id from profile_id
         $userStmt = $pdo->prepare("SELECT user_id FROM profiles WHERE profile_id = ?");
         $userStmt->execute([$profileId]);
@@ -55,7 +55,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['form_type'])) {
     
         // Delete user's profile directory
         deleteUserDirectory($user_id);
-    
+        // Go back to user_search after user deleted
+        $_SESSION['display_form'] = "user_search";
+        $_SESSION['delete-success'] ="User deleted";
+
         echo json_encode(["success" => true, "message" => "User deleted"]);
     } 
     

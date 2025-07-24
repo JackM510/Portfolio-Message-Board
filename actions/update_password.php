@@ -56,7 +56,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['form_type'])) {
         // Default else to update the users password
         else {
             if (updateUserPassword($pdo, $_SESSION['user_id'], $newPW)) {
-                $_SESSION['pw-success'] = "Your password has been updated";
+                $_SESSION['pw-success'] = "Password updated";
                 echo "success";
             } else {
                 echo $_SESSION['update-password-error'] ?? "Error updating password.";
@@ -66,6 +66,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['form_type'])) {
 
     // Reset a users password as an admin from admin.php
     else if ($_POST['form_type'] === 'admin_update_pw' && isset($_POST['profile_id']) && isset($_SESSION['role']) && $_SESSION['role'] === 'admin') {
+        
+        // Stay on the view_profile view after the POST form submission
+        $_SESSION['display_form'] = "view_profile"; 
+        
         // Get password & profile_id values
         $newPW = $_POST['new_pw'];
         $confirmPW = $_POST['confirm_pw'];

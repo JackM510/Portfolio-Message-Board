@@ -35,6 +35,8 @@ require_once('../includes/db_connection.php');
                         header("Location: ../login.php");
                         exit();
                     } else {
+                        // Unset form session variable
+                        unset($_SESSION['display_form']);
                         // get profile picture
                         $_SESSION['avatar'] = $profile['profile_picture'];
                         // Successful login - set $_SESSION variables

@@ -5,7 +5,6 @@ require_once('../includes/db_connection.php');
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
-    //$profile_picture = $_POST['profile_picture'];
 
     $user_id = $_SESSION['id_token'];
     $location = $_POST['location'];

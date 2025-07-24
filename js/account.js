@@ -14,7 +14,7 @@ document.addEventListener("DOMContentLoaded", function () {
           }
           sessionStorage.removeItem("openPanel");
         }
-      });
+    });
       
 
 
