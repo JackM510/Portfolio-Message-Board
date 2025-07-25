@@ -63,8 +63,8 @@
 
         <!-- View a users profile -->
         <div id="view-profile" class="container" style="<?= $displayForm === 'view_profile' ? 'display:block;' : 'display:none;' ?>">
-            <div class="view-profile-wrapper w-50 mx-auto">
-                <button id="return-btn" class="btn btn-outline-secondary">
+            <div class="view-profile-wrapper mx-auto">
+                <button id="return-btn" class="btn btn-sm btn-outline-secondary">
                     <i id="return-btn" class="bi bi-arrow-left"></i> Return
                 </button>
 
@@ -74,7 +74,7 @@
                         <div id="profile-picture-wrapper">
                             <div class="d-flex flex-column justify-content-center w-50 h-100 mb-2">
                                 <img id="profile-picture-img" class="mb-2" src="" alt="Profile Picture">
-                        </div> 
+                            </div> 
                         </div> 
                     </div>
                     <!-- First Name -->

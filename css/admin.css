@@ -62,4 +62,13 @@
     border-radius: 50%;
     width: 100%;
 }
+
+#first-name-input,
+#last-name-input,
+#profile-id-input,
+#joined-date-input,
+#email-input,
+#role-input {
+  background: #FAFAFA !important;
+}
   

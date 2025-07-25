@@ -8,6 +8,21 @@ function validateCheckboxes(deleteBtn, checkboxes) {
     }
 }
 
+function hideEchoFlash() {
+    document.querySelectorAll('.success-flash').forEach(el => el.style.display = 'none');
+    document.querySelectorAll('.error-flash').forEach(el => el.style.display = 'none');
+}
+
+function closeAllPanels() {
+    document.querySelectorAll('.accordion .collapse').forEach(panel => {
+        if (panel.classList.contains('show')) {
+            panel.classList.remove('show');
+        }
+    });
+}
+
+
+
 document.addEventListener("DOMContentLoaded", () => {
     const profileSearch = document.getElementById("user-search");
     const profileView = document.getElementById("view-profile");
@@ -15,7 +30,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // search bar event listener
     document.getElementById("user-search-input").addEventListener("input", function() {
         const searchTerm = this.value.toLowerCase();
-        document.querySelectorAll("div").forEach(row => {
+        document.querySelectorAll(".user-row").forEach(row => {
           const rowText = row.textContent.toLowerCase();
           row.style.display = rowText.includes(searchTerm) ? "" : "none";
         });
@@ -58,6 +73,9 @@ document.addEventListener("DOMContentLoaded", () => {
                   
    
                 // Update view
+                closeAllPanels();
+                hideEchoFlash();
+                
                 document.getElementById("user-search").style.display = "none";
                 document.getElementById("view-profile").style.display = "block";
             } else {
@@ -101,11 +119,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Return btn to user_search
     document.getElementById("return-btn").addEventListener("click", () => {
-
         // Update view
         document.getElementById("user-search").style.display = "block";
         document.getElementById("view-profile").style.display = "none";
-        alert('hey');
     });
 
     // Keep track of any open accordian cards
