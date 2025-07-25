@@ -83,7 +83,7 @@ function getPosts($pdo, $user_id = null) {
                             <div>
                                 <input type="file" name="post-image-upload" id="post-image-upload-' . htmlentities($post['post_id']).'" class="post-image-upload" accept="image/*" hidden>
                                 <button type="button" class="btn btn-sml btn-light mt-3" id="post-image-upload-btn-' . htmlentities($post['post_id']) . '" onclick="document.getElementById(\'post-image-upload-' . htmlentities($post['post_id']) . '\').click()" style="border:none; display:none;">
-                                    <i class="bi bi-card-image" style="font-size: 16px;"></i>
+                                    <i class="bi bi-card-image" style="font-size: 16px !important;"></i>
                                 </button>
                             </div>');
                         // Display the post text and DAT the post was created
@@ -202,16 +202,17 @@ function getPosts($pdo, $user_id = null) {
 
                             <div class="mt-2">
                                 <form id="edit-comment-form-' . htmlspecialchars($comment["comment_id"]) . '" class="w-100" method="POST">
-                                    <p id="comment-description-' . htmlentities($comment['comment_id']).'" class="break-text mb-2" >' .htmlspecialchars($comment['comment_text']) . '</p>
-                                    <textarea id="comment-textarea-' . htmlspecialchars($comment["comment_id"]) . '" class="form-control comment-textarea rounded mb-1 responsive-textarea" name="edit_comment" data-post-id="'.htmlspecialchars($comment['comment_id']).'" maxlength="250" rows="1" hidden required disabled>' . htmlspecialchars($comment['comment_text']) . '</textarea>
-                                    <input type="hidden" name="comment_id" value="' . htmlspecialchars($comment['comment_id']) . '">
-                                    
+
                                     <div class="comment-like-container mb-2" data-post-id="' . htmlentities($comment['comment_id']) . '">
-                                        <button type="button" class="comment-like-btn btn btn-outline-primary btn-sm">
+                                        <button id="comment-like-btn-'.htmlentities($comment['comment_id']).'" type="button" class="comment-like-btn btn btn-outline-primary btn-sm">
                                             <i class="bi bi-hand-thumbs-up' . ($commentLiked ? "-fill" : "") . '"></i>
                                             <span class="comment-like-count">' . htmlspecialchars($commentLikeCount) . '</span>
                                         </button>
                                     </div>
+
+                                    <p id="comment-description-' . htmlentities($comment['comment_id']).'" class="break-text mb-2" >' .htmlspecialchars($comment['comment_text']) . '</p>
+                                    <textarea id="comment-textarea-' . htmlspecialchars($comment["comment_id"]) . '" class="form-control comment-textarea rounded mb-1 responsive-textarea" name="edit_comment" data-post-id="'.htmlspecialchars($comment['comment_id']).'" maxlength="250" rows="1" hidden required disabled>' . htmlspecialchars($comment['comment_text']) . '</textarea>
+                                    <input type="hidden" name="comment_id" value="' . htmlspecialchars($comment['comment_id']) . '">
                                     
                                     <div class="d-flex">          
                                         <p class="mb-0" style="color:grey;">' . $comment_timestamp . '</p>

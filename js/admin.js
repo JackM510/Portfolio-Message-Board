@@ -102,10 +102,10 @@ document.addEventListener("DOMContentLoaded", () => {
     // Return btn to user_search
     document.getElementById("return-btn").addEventListener("click", () => {
 
-// Update view
-document.getElementById("user-search").style.display = "block";
-document.getElementById("view-profile").style.display = "none";
-alert('hey');
+        // Update view
+        document.getElementById("user-search").style.display = "block";
+        document.getElementById("view-profile").style.display = "none";
+        alert('hey');
     });
 
     // Keep track of any open accordian cards

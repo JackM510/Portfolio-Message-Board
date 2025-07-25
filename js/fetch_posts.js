@@ -21,7 +21,7 @@ document.addEventListener("DOMContentLoaded", function() {
         const paragraph = document.querySelector(`#post-description-${postId}`);
         const textarea = document.querySelector(`#post-textarea-${postId}`);
         const btnGroup = document.querySelector(`#edit-post-btn-group-${postId}`);
-        const likeBtn = document.querySelector(`#post-like-btn-${postId}`);
+        const postLikeBtn = document.querySelector(`#post-like-btn-${postId}`);
         
         // Show form elements and buttons to update the post
         button.addEventListener("click", function() {
@@ -50,7 +50,7 @@ document.addEventListener("DOMContentLoaded", function() {
             
             imgUploadBtn.style.display ="block"; // Show img upload btn
             paragraph.style.display = "none";
-            likeBtn.style.display = "none";
+            postLikeBtn.style.display = "none";
 
             textarea.removeAttribute("hidden"); // Make textarea active
             textarea.removeAttribute("disabled"); // Make textarea active
@@ -81,7 +81,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     textarea.value = textarea.dataset.originalValue;
                     
                     // Hide buttons
-                    likeBtn.style.display = "block";
+                    postLikeBtn.style.display = "block";
                     imgUploadBtn.style.display = "none";
                     btnGroup.style.display = "none";
                     btnGroup.classList.remove("d-flex", "float-end");
@@ -195,12 +195,14 @@ document.addEventListener("DOMContentLoaded", function() {
         const textarea = document.querySelector(`#comment-textarea-${postId}`);
         const commentDropdown = document.querySelector(`#comment-dropdown-${postId}`);
         const buttonGroup = document.querySelector(`#edit-comment-btns-${postId}`);
+        const commentLikeBtn = document.querySelector(`#comment-like-btn-${postId}`);
 
         // Store the original value before editing - used when edit-cancel-btn selected
         textarea.dataset.originalValue = textarea.value;
 
         button.addEventListener("click", function() {
 
+            commentLikeBtn.style.display = "none";
             paragraph.style.display = "none";
 
             // Make textarea active
@@ -221,6 +223,7 @@ document.addEventListener("DOMContentLoaded", function() {
         document.addEventListener("click", function(event) {
             if (!textarea.contains(event.target) && !commentDropdown.contains(event.target) && !buttonGroup.contains(event.target)) {
 
+                commentLikeBtn.style.display = "block";
                 paragraph.style.display = "block";
 
                 textarea.setAttribute("hidden", "true");
@@ -241,9 +244,11 @@ document.addEventListener("DOMContentLoaded", function() {
             const paragraph = document.querySelector(`#comment-description-${postId}`);
             const textarea = document.querySelector(`#comment-textarea-${postId}`); // Find correct textarea
             const buttonGroup = document.querySelector(`#edit-comment-btns-${postId}`);
+            const commentLikeBtn = document.querySelector(`#comment-like-btn-${postId}`);
 
             if (textarea) {
                 
+                commentLikeBtn.style.display = "block";
                 paragraph.style.display = "block";
 
                 textarea.setAttribute("hidden", "true");
