@@ -14,7 +14,7 @@ function hideEchoFlash() {
 }
 
 function closeAllPanels() {
-    document.querySelectorAll('.accordion .collapse').forEach(panel => {
+    document.querySelectorAll('.collapse').forEach(panel => {
         if (panel.classList.contains('show')) {
             panel.classList.remove('show');
         }
@@ -73,11 +73,11 @@ document.addEventListener("DOMContentLoaded", () => {
                   
    
                 // Update view
-                closeAllPanels();
+                profileSearch.style.display = "none";
+                profileView.style.display = "block";
                 hideEchoFlash();
-                
-                document.getElementById("user-search").style.display = "none";
-                document.getElementById("view-profile").style.display = "block";
+                closeAllPanels();
+
             } else {
             alert("User not found.");
             }
@@ -109,8 +109,8 @@ document.addEventListener("DOMContentLoaded", () => {
             document.querySelector("#hidden-pw-input").value = u.profile_id;
             document.querySelector("#hidden-delete-input").value = u.profile_id;
 
-            document.getElementById("user-search").style.display = "none";
-            document.getElementById("view-profile").style.display = "block";
+            profileSearch.style.display = "none";
+            profileView.style.display = "block";
             }
             // Optional: clear sessionStorage after use
             sessionStorage.removeItem("selectedProfileId");
@@ -119,9 +119,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Return btn to user_search
     document.getElementById("return-btn").addEventListener("click", () => {
-        // Update view
-        document.getElementById("user-search").style.display = "block";
-        document.getElementById("view-profile").style.display = "none";
+        profileSearch.style.display = "block";
+        profileView.style.display = "none";
     });
 
     // Keep track of any open accordian cards
@@ -159,8 +158,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
             const profileId = document.getElementById("hidden-email-input").value;
             sessionStorage.setItem("selectedProfileId", profileId);
-            sessionStorage.setItem("openPanel", "collapse-email"); // if needed
+            
             location.reload();
+
+            profileSearch.style.display = "none";
+            profileView.style.display = "block";
+            sessionStorage.setItem("openPanel", "collapse-email"); // if needed
         })
         .catch(error => console.error("Fetch Error:", error));
     });

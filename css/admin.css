@@ -1,5 +1,5 @@
 .scrollbox-wrapper {
-    max-height: 550px;
+    max-height: 500px;
     border: 1px solid #ccc;
     border-radius: 8px;
     overflow: hidden;
@@ -35,7 +35,7 @@
     margin-bottom: 0.5rem;
     border-radius: 6px;
     cursor: pointer;
-    transition: background 0.2s ease;
+    transition: background-color 0.2s ease;
   }
   .user-row:hover {
     background-color: #eef;
@@ -48,13 +48,6 @@
     font-size: 0.95rem;
   }
 
-  #profile-picture-wrapper {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-  }
-
   #profile-picture-img {
     object-position: center;
     object-fit: cover;
@@ -65,10 +58,27 @@
 
 #first-name-input,
 #last-name-input,
-#profile-id-input,
+#profileid-input,
 #joined-date-input,
 #email-input,
 #role-input {
   background: #FAFAFA !important;
 }
+
+/* Small devices (phones in landscape, ≥576px) */
+@media (min-width: 576px) {
+ 
+  #user-search {
+    width: 75%;
+  }
+
+  #update-email-body,
+  #update-pw-body,
+  #delete-account-body {
+      width: 50%;
+      max-width: 50%;
+  }
+
+}
+
   
