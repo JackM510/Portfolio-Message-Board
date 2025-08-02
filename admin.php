@@ -30,14 +30,14 @@
     <?php require_once "nav.php"; ?>
     
     <section class="container d-flex flex-column justify-content-center">
-        <!-- Delete success flash -->
-        <?php if (isset($_SESSION['delete-success'])) { echo "<p class='success-flash'>".$_SESSION['delete-success']."</p>"; unset($_SESSION['delete-success']); } ?>
         
         <!-- View a list of all users -->
         <div id="user-search" class="mx-auto ">
             <div class="mt-5 mb-5 text-center">
                 <h1 class="display-5">Admin Control Panel</h1>
             </div>
+            <!-- Delete success flash -->
+            <?php if (isset($_SESSION['delete-success'])) { echo "<p class='success-flash'>".$_SESSION['delete-success']."</p>"; unset($_SESSION['delete-success']); } ?>
             <div class="scrollbox-wrapper">
                 <!-- Search Input -->
                 <input type="text" id="user-search-input" class="form-control rounded-0" placeholder="Search users by profile id or email">
@@ -62,18 +62,17 @@
         <!-- View a users profile -->
         <div id="view-profile" style="display:none;">
         
-        <div class="view-profile-wrapper w-75 mx-auto">
-                <div class="d-flex justify-content-center align-items-center text-center mt-5">
+            <div class="view-profile-wrapper w-75 mx-auto">
+                <div class="position-relative d-flex justify-content-center align-items-center text-center mt-5">
                     <!-- Return btn -->
-                    <span>
-                    <button id="return-btn" class="btn btn-sm btn-secondary" title="Return to user list">
-                        <i id="return-btn" class="bi bi-arrow-left"></i>
-                    </button>           
+                    <span class="position-absolute" style="top: 50%; transform: translateY(-50%); left:0;">
+                        <button id="return-btn" class="btn btn-sm btn-secondary" title="Return to user list">
+                            <i id="return-btn" class="bi bi-arrow-left"></i>
+                        </button>           
                     </span>
-                         
-                    
+                    <div>
                         <h1 class="display-5 mx-auto">Profile View</h1>
-                    
+                    </div>      
                 </div>
             
                 <div class="row">
