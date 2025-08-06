@@ -130,8 +130,6 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     });
 
-    
-
     // Event listener if image uploaded when editing a post
     document.querySelectorAll(".post-image-upload").forEach(input => {
         input.addEventListener("change", function(event) {
@@ -186,7 +184,6 @@ document.addEventListener("DOMContentLoaded", function() {
             }
         });
     });
-
 
     // Event listener for edit btn in comment dropdown
     document.querySelectorAll(".edit-btn").forEach(button => {
@@ -260,6 +257,28 @@ document.addEventListener("DOMContentLoaded", function() {
                 buttonGroup.classList.remove("d-flex", "float-end");
                 textarea.setAttribute("disabled", "true");
             }
+        });
+    });
+
+    // Event listener for 'view more' comments btn
+    document.querySelectorAll(".view-more-comments-btn").forEach(btn => {
+        btn.addEventListener("click", function () {
+            const postId = this.getAttribute("data-post-id");
+            document.querySelectorAll(".extra-comment-" + postId).forEach(el => {
+                el.classList.remove("d-none");
+            });
+            this.remove();
+        });
+    });
+
+    // Event listener for 'view more' comments btn
+    document.querySelectorAll(".post-comment-btn").forEach(btn => {
+        btn.addEventListener("click", function () {
+            const postId = this.getAttribute("data-post-id");
+            document.querySelectorAll(".extra-comment-" + postId).forEach(el => {
+                el.classList.remove("d-none");
+            });
+            this.remove();
         });
     });
 
