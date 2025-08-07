@@ -1,7 +1,7 @@
 <?php 
 
 // Render comments on posts
-function renderComment(PDO $pdo, array $comment): string {
+function renderComment(PDO $pdo, array $comment, int $postId): string {
     $commentorName = htmlspecialchars($comment['first_name'] . ' ' . $comment['last_name']);
     $commentorPic = htmlspecialchars($comment['profile_picture']);
     $commentId = htmlspecialchars($comment['comment_id']);
@@ -26,8 +26,9 @@ function renderComment(PDO $pdo, array $comment): string {
     $commentTimestamp = !empty($comment['comment_edited']) ? "$timestamp (edited)" : $timestamp;
 
     ob_start(); ?>
+    
+    <div class="comment comment-<?= $postId ?>">
     <hr>
-    <div class="comment">
         <div class="d-flex align-items-start">
             <div>
                 <a class="post-profile-link" href="profile.php?user_id=<?= $userId ?>">
@@ -78,6 +79,9 @@ function renderComment(PDO $pdo, array $comment): string {
                 </div>
             </form>
         </div>
+
+        <!-- <button class="view-more-comments-btn-<?= $postId ?>" data-post-id="<?= $postId ?>" style="display: none;">View more comments</button> -->
+
     </div>
     <?php
     return ob_get_clean();
@@ -214,7 +218,7 @@ function renderPost(PDO $pdo, array $post): string {
                         <i class="bi bi-hand-thumbs-up<?= $liked ? '-fill' : '' ?>"></i>
                         <span class="post-like-count"><?= $likeCount ?></span>
                     </button>
-                    <button id="post-comment-btn-<?= $postId ?>" type="button" class="post-like-btn btn btn-outline-primary btn-sm">
+                    <button id="post-comment-btn-<?= $postId ?>" type="button" class="view-comments-btn btn btn-outline-primary btn-sm" data-post-id="<?= $postId ?>">
                         <i class="bi bi-chat<?= $commented ? '-fill' : '' ?>"></i>
                         <span class="post-comment-count"><?= $commentCount ?></span>
                     </button>
@@ -233,28 +237,31 @@ function renderPost(PDO $pdo, array $post): string {
                 </div>
             </div>
         </form>
+        
+        <!-- Comment section -->
+        <div class="comment-section-<?= $postId ?>" style="display:none">
+            <?= renderAddComment($pdo, $postId) ?>
 
-        <?= renderAddComment($pdo, $postId) ?>
+            <?php
+            // Fetch comments for this post
+            $stmt = $pdo->prepare("
+                SELECT c.comment_id, c.comment_text, c.comment_created, comment_edited, u.user_id, u.first_name, u.last_name, p.profile_picture 
+                FROM comments c 
+                INNER JOIN users u ON c.user_id = u.user_id 
+                INNER JOIN profiles p ON c.user_id = p.user_id 
+                WHERE c.post_id = :pid
+            ");
+            $stmt->bindParam(':pid', $postId, PDO::PARAM_INT);
+            $stmt->execute();
+            $comments = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-        <?php
-        // Fetch comments for this post
-        $stmt = $pdo->prepare("
-            SELECT c.comment_id, c.comment_text, c.comment_created, comment_edited, u.user_id, u.first_name, u.last_name, p.profile_picture 
-            FROM comments c 
-            INNER JOIN users u ON c.user_id = u.user_id 
-            INNER JOIN profiles p ON c.user_id = p.user_id 
-            WHERE c.post_id = :pid
-        ");
-        $stmt->bindParam(':pid', $postId, PDO::PARAM_INT);
-        $stmt->execute();
-        $comments = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-        if ($comments) {
-            foreach ($comments as $comment) {
-                echo renderComment($pdo, $comment);
+            if ($comments) {
+                foreach ($comments as $comment) {
+                    echo renderComment($pdo, $comment, $postId);
+                }
             }
-        }
-        ?>
+            ?>
+        </div>
     </div><br><br>
     <?php
     return ob_get_clean();
