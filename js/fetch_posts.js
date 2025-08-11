@@ -69,7 +69,7 @@ document.addEventListener("DOMContentLoaded", function() {
             const outsideClickHandler = function (event) {
                 if (!postDropdown.contains(event.target) && !postForm.contains(event.target)) {
                     
-                    if (img.dataset.hasOriginalImage === "true") {
+                    if (img && img.dataset.hasOriginalImage === "true") {
                         img.src = img.dataset.originalSrc;
                         img.style.display = "block";
                     } else {
@@ -84,7 +84,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     
                     // Hide buttons
                     postLikeBtn.style.display = "block";
-                    viewCommentsBtn.style.display = "none";
+                    viewCommentsBtn.style.display = "block";
                     imgUploadBtn.style.display = "none";
                     btnGroup.style.display = "none";
                     btnGroup.classList.remove("d-flex", "float-end");
@@ -111,13 +111,14 @@ document.addEventListener("DOMContentLoaded", function() {
 
             if (textarea) {
 
-                if (img.dataset.hasOriginalImage === "true") {
+                if (img && img.dataset.hasOriginalImage === "true") {
                     img.src = img.dataset.originalSrc;
                     img.style.display = "block";
-                } else {
+                } else if (img) {
                     img.src = "";
                     img.style.display = "none";
                 }
+                
                 
                 likeBtn.style.display = "block";
                 commentsBtn.style.display = "block";
@@ -161,7 +162,8 @@ document.addEventListener("DOMContentLoaded", function() {
             const postId = this.getAttribute("data-post-id");
             const commentSection = document.querySelector(`.comment-section-${postId}`);
             const comments = commentSection.querySelectorAll(`.comment-${postId}`);
-            const viewMoreBtn = document.querySelector(`.view-more-comments-btn-${postId}`);
+            const viewMoreWrapper = document.querySelector(`#view-more-comments-wrapper-${postId}`);
+            //const viewMoreBtn = document.querySelector(`#view-more-comments-btn-${postId}`);
     
             // Show/Hide comment section on post
             const isVisible = commentSection.style.display === "block";
@@ -171,12 +173,13 @@ document.addEventListener("DOMContentLoaded", function() {
             if (!isVisible) {
                 comments.forEach(comment => comment.style.display = "none");
     
-                for (let i = 0; i < Math.min(5, comments.length); i++) {
+                // Show first 10 comments when comment button clicked
+                for (let i = 0; i < Math.min(10, comments.length); i++) {
                     comments[i].style.display = "block";
                 }
-    
-                viewMoreBtn.setAttribute("data-visible-count", "5");
-                viewMoreBtn.style.display = comments.length > 5 ? "block" : "none";
+
+                viewMoreWrapper.setAttribute("data-visible-count", "10");
+                viewMoreWrapper.style.display = comments.length > 10 ? "flex" : "none";
             }
         });
     });
@@ -184,34 +187,62 @@ document.addEventListener("DOMContentLoaded", function() {
     // Remember the comment section on a post is visible
     window.addEventListener("DOMContentLoaded", () => {
         const postIdToShow = sessionStorage.getItem("showCommentsFor");
+    
         if (postIdToShow) {
             const section = document.querySelector(`.comment-section-${postIdToShow}`);
-            if (section) section.style.display = "block";
+            const comments = section?.querySelectorAll(`.comment-${postIdToShow}`);
+            const viewMoreWrapper = document.querySelector(`#view-more-comments-wrapper-${postIdToShow}`);
+    
+            if (section) {
+                section.style.display = "block";
+    
+                if (sessionStorage.getItem("scrollToNewComment") === "true") {
+                    // Show all comments
+                    comments.forEach(comment => comment.style.display = "block");
+    
+                    // Hide view more button
+                    if (viewMoreWrapper) {
+                        viewMoreWrapper.style.display = "none";
+                    }
+    
+                    // Scroll to last comment element
+                    if (comments && comments.length) {
+                        const lastCommentEl = comments[comments.length - 1];
+                        requestAnimationFrame(() => {
+                            lastCommentEl.scrollIntoView({ behavior: "smooth", block: "center" });
+                        });
+                    }
+                }
+            }
+    
+            // Clean up both keys
             sessionStorage.removeItem("showCommentsFor");
+            sessionStorage.removeItem("scrollToNewComment");
         }
     });
     
     
-    /*document.querySelectorAll("[class^='view-more-comments-btn-']").forEach(btn => {
+    // Event listner for view more comments buttons
+    document.querySelectorAll(".view-more-comments-btn").forEach(btn => {
         btn.addEventListener("click", function () {
             const postId = this.getAttribute("data-post-id");
-    
             const commentSection = document.querySelector(`.comment-section-${postId}`);
             const comments = commentSection.querySelectorAll(`.comment-${postId}`);
-            let visibleCount = parseInt(this.getAttribute("data-visible-count"));
+            const viewMoreWrapper = document.querySelector(`#view-more-comments-wrapper-${postId}`);
+            let visibleCount = parseInt(viewMoreWrapper.getAttribute("data-visible-count"));
     
-            for (let i = visibleCount; i < Math.min(visibleCount + 5, comments.length); i++) {
+            for (let i = visibleCount; i < Math.min(visibleCount + 10, comments.length); i++) {
                 comments[i].style.display = "block";
             }
     
-            visibleCount += 5;
-            this.setAttribute("data-visible-count", visibleCount);
+            visibleCount += 10;
+            viewMoreWrapper.setAttribute("data-visible-count", visibleCount);
     
             if (visibleCount >= comments.length) {
-                this.style.display = "none";
+                viewMoreWrapper.style.display = "none";
             }
         });
-    });*/
+    });
     
     // Add an event listener to each add comment textarea on each post
      document.querySelectorAll(".add-comment-textarea").forEach(textarea => {
@@ -337,7 +368,6 @@ document.addEventListener("DOMContentLoaded", function() {
     document.querySelectorAll("[id^=edit-post-form]").forEach(form => {
         form.addEventListener("submit", function(event) {
             event.preventDefault(); // Stop default form submission
-    
             const formData = new FormData(this);
     
             fetch("actions/edit_post.php", {
@@ -361,7 +391,6 @@ document.addEventListener("DOMContentLoaded", function() {
     document.querySelectorAll("[id^=post-options-form]").forEach(form => {
         form.addEventListener("submit", function(event) {
             event.preventDefault(); // Stop default form submission
-
             const formData = new FormData(this);
     
             // Debugging - Log the values
@@ -420,7 +449,7 @@ document.addEventListener("DOMContentLoaded", function() {
           });
         });
       });
-      
+
     // Add comment AJAX for add_comment.php
     document.querySelectorAll("[id^=add-comment-form]").forEach(form => {
         form.addEventListener("submit", function(event) {
@@ -438,6 +467,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 console.log("Server Response:", data); // Log server response
                 if (data.trim() === "success") {
                     sessionStorage.setItem("showCommentsFor", postId);
+                    sessionStorage.setItem("scrollToNewComment", "true");
                     location.reload();
                 } else {
                     alert("Error adding comment: " + data);
@@ -452,6 +482,7 @@ document.addEventListener("DOMContentLoaded", function() {
         form.addEventListener("submit", function(event) {
             event.preventDefault(); // Stop default form submission
     
+            const postId = this.getAttribute("data-post-id");
             const formData = new FormData(this);
     
             fetch("actions/edit_comment.php", {
@@ -462,6 +493,7 @@ document.addEventListener("DOMContentLoaded", function() {
             .then(data => {
                 console.log("Server Response:", data); // Log server response
                 if (data.trim() === "success") {
+                    sessionStorage.setItem("showCommentsFor", postId);
                     location.reload();
                 } else {
                     alert("Error adding comment: " + data);
@@ -476,6 +508,7 @@ document.addEventListener("DOMContentLoaded", function() {
         form.addEventListener("submit", function(event) {
             event.preventDefault(); // Stop default form submission
 
+            const postId = this.getAttribute("data-post-id");
             const formData = new FormData(this);
     
             // Debugging - Log the values
@@ -491,6 +524,7 @@ document.addEventListener("DOMContentLoaded", function() {
             .then(data => {
                 console.log("Server Response:", data); // Log server response
                 if (data.trim() === "success") {
+                    sessionStorage.setItem("showCommentsFor", postId);
                     location.reload();
                 } else {
                     alert("Error deleting comment: " + data);

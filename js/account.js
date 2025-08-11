@@ -10,15 +10,14 @@ document.addEventListener("DOMContentLoaded", function () {
               toggle: true
             });
             
-            el.scrollIntoView({ behavior: "smooth", block: "start" });
+            requestAnimationFrame(() => {
+                el.scrollIntoView({ behavior: "smooth", block: "center" });
+            });
           }
           sessionStorage.removeItem("openPanel");
         }
     });
       
-
-
-
     // Event Listeners for delete account checkboxes
     const checkboxes = document.querySelectorAll('.required-checkbox');
     const deleteBtn = document.getElementById('delete-btn');

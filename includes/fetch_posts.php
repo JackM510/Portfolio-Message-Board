@@ -6,6 +6,7 @@ function renderComment(PDO $pdo, array $comment, int $postId): string {
     $commentorPic = htmlspecialchars($comment['profile_picture']);
     $commentId = htmlspecialchars($comment['comment_id']);
     $commentText = htmlspecialchars($comment['comment_text']);
+    $postIdEscaped = htmlspecialchars($postId);
     $userId = $comment['user_id'];
 
     // Like count
@@ -46,7 +47,7 @@ function renderComment(PDO $pdo, array $comment, int $postId): string {
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="post-options-<?= $commentId ?>">
                         <li><button type="button" class="dropdown-item edit-btn edit-comment-dropdown-item" data-post-id="<?= $commentId ?>">Edit</button></li>
                         <li>
-                            <form id="comment-options-form-<?= $commentId ?>" method="POST">
+                            <form id="comment-options-form-<?= $commentId ?>" data-post-id="<?= $postIdEscaped ?>" method="POST">
                                 <input type="hidden" name="delete_comment" value="true">
                                 <input type="hidden" name="comment_id" value="<?= $commentId ?>">
                                 <button type="submit" class="dropdown-item edit-comment-dropdown-item text-danger">Delete</button>
@@ -58,7 +59,7 @@ function renderComment(PDO $pdo, array $comment, int $postId): string {
         </div>
 
         <div class="mt-2">
-            <form id="edit-comment-form-<?= $commentId ?>" class="w-100" method="POST">
+            <form id="edit-comment-form-<?= $commentId ?>" data-post-id="<?= $postIdEscaped ?>" class="w-100" method="POST">
                 <div class="comment-like-container mb-2" data-post-id="<?= $commentId ?>">
                     <button id="comment-like-btn-<?= $commentId ?>" type="button" class="comment-like-btn btn btn-outline-primary btn-sm">
                         <i class="bi bi-hand-thumbs-up<?= $liked ? '-fill' : '' ?>"></i>
@@ -79,9 +80,6 @@ function renderComment(PDO $pdo, array $comment, int $postId): string {
                 </div>
             </form>
         </div>
-
-        <!-- <button class="view-more-comments-btn-<?= $postId ?>" data-post-id="<?= $postId ?>" style="display: none;">View more comments</button> -->
-
     </div>
     <?php
     return ob_get_clean();
@@ -187,7 +185,7 @@ function renderPost(PDO $pdo, array $post): string {
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="post-options-<?= $postId ?>">
                     <li><button class="dropdown-item edit-post-btn edit-post-dropdown-item" type="button" data-post-id="<?= $postId ?>">Edit</button></li>
                     <li>
-                        <form id="post-options-form-<?= $postId ?>" method="POST">
+                        <form id="post-options-form-<?= $postId ?>" data-post-id="<?= $postId ?>" method="POST">
                             <input type="hidden" name="delete_post" value="true">
                             <input type="hidden" name="post_id" value="<?= $postId ?>">
                             <button type="submit" class="dropdown-item edit-post-dropdown-item text-danger">Delete</button>
@@ -199,11 +197,14 @@ function renderPost(PDO $pdo, array $post): string {
         </div>
 
         <form id="edit-post-form-<?= $postId ?>" method="POST">
-            <?php if (!empty($post['post_picture'])): ?>
-            <div>
-                <img id="post-picture-<?= $postId ?>" class="post-picture mt-3" src="<?= htmlspecialchars($post['post_picture']) ?>" alt="Post Image">
-            </div>
-            <?php endif; ?>
+        <div>
+            <img id="post-picture-<?= $postId ?>"
+                class="post-picture mt-3"
+                src="<?= !empty($post['post_picture']) ? htmlspecialchars($post['post_picture']) : '' ?>"
+                alt="Post Image"
+                style="<?= empty($post['post_picture']) ? 'display:none;' : '' ?>">
+        </div>
+
 
             <div>
                 <input type="file" name="post-image-upload" id="post-image-upload-<?= $postId ?>" class="post-image-upload" accept="image/*" hidden>
@@ -212,8 +213,20 @@ function renderPost(PDO $pdo, array $post): string {
                 </button>
             </div>
 
-            <div class="mt-3">
-                <div class="post-like-container mb-2" data-post-id="<?= $postId ?>">
+            <div class="mt-3">           
+                <p id="post-description-<?= $postId ?>" class="break-text mb-2"><?= htmlspecialchars($post['post_text']) ?></p>
+                <textarea id="post-textarea-<?= $postId ?>" class="form-control post-textarea rounded mb-1 responsive-textarea" name="post_textarea" rows="1" maxlength="250" hidden required disabled><?= htmlspecialchars($post['post_text']) ?></textarea>
+
+                <div class="d-flex">
+                    <p class="mb-1" style="color:grey;"><?= $postTimestamp ?></p>
+                    <div id="edit-post-btn-group-<?= $postId ?>" class="ms-auto edit-post-btn-group mt-1">
+                        <input type="hidden" name="post_id" value="<?= $postId ?>">
+                        <button class="btn btn-sm btn-secondary ms-1 edit-post-cancel-btn" type="button" data-post-id="<?= $postId ?>" name="edit-cancel-post">Cancel</button>
+                        <button id="edit-post-submit-btn" class="btn btn-sm btn-primary ms-1" type="submit">Post</button>
+                    </div>
+                </div>
+
+                <div class="post-like-container d-flex" data-post-id="<?= $postId ?>">
                     <button id="post-like-btn-<?= $postId ?>" type="button" class="post-like-btn btn btn-outline-primary btn-sm">
                         <i class="bi bi-hand-thumbs-up<?= $liked ? '-fill' : '' ?>"></i>
                         <span class="post-like-count"><?= $likeCount ?></span>
@@ -222,18 +235,6 @@ function renderPost(PDO $pdo, array $post): string {
                         <i class="bi bi-chat<?= $commented ? '-fill' : '' ?>"></i>
                         <span class="post-comment-count"><?= $commentCount ?></span>
                     </button>
-                </div>
-
-                <p id="post-description-<?= $postId ?>" class="break-text mb-2"><?= htmlspecialchars($post['post_text']) ?></p>
-                <textarea id="post-textarea-<?= $postId ?>" class="form-control post-textarea rounded mb-1 responsive-textarea" name="post_textarea" rows="1" maxlength="250" hidden required disabled><?= htmlspecialchars($post['post_text']) ?></textarea>
-
-                <div class="d-flex">
-                    <p class="mb-0" style="color:grey;"><?= $postTimestamp ?></p>
-                    <div id="edit-post-btn-group-<?= $postId ?>" class="ms-auto edit-post-btn-group mt-1">
-                        <input type="hidden" name="post_id" value="<?= $postId ?>">
-                        <button class="btn btn-sm btn-secondary ms-1 edit-post-cancel-btn" type="button" data-post-id="<?= $postId ?>" name="edit-cancel-post">Cancel</button>
-                        <button id="edit-post-submit-btn" class="btn btn-sm btn-primary ms-1" type="submit">Post</button>
-                    </div>
                 </div>
             </div>
         </form>
@@ -261,6 +262,9 @@ function renderPost(PDO $pdo, array $post): string {
                 }
             }
             ?>
+            <div id="view-more-comments-wrapper-<?= $postId ?>" class="justify-content-center view-more-comments-wrapper mt-3" style="display: none;">
+                <button id="view-more-comments-btn-<?= $postId ?>" class="btn btn-secondary view-more-comments-btn" data-post-id="<?= $postId ?>">View more comments</button>
+            </div>
         </div>
     </div><br><br>
     <?php
@@ -282,142 +286,7 @@ function getPosts($pdo, $user_id = null) {
 
     if ($posts) {
         foreach ($posts as $post) {
-
             echo renderPost($pdo, $post);
-
-            // Get the profile picture and name of the user that made a post
-            /*$sql = "SELECT u.first_name, u.last_name, p.profile_picture FROM users u JOIN profiles p ON u.user_id = p.user_id WHERE u.user_id = :user_id";
-            $stmt = $pdo->prepare($sql);
-            $stmt->bindParam(':user_id', $post['user_id'], PDO::PARAM_INT);
-            $stmt->execute();
-            $data = $stmt->fetch(PDO::FETCH_ASSOC);
-            // Store postee name and profile picture data
-            $user_first = $data['first_name'];
-            $user_last = $data['last_name'];
-            $user_name = $user_first.' '.$user_last; // Users full name
-            $profile_picture = $data['profile_picture'];
-
-            // Get each posts like count
-            $postLikesStmt = $pdo->prepare("SELECT COUNT(*) FROM post_likes WHERE post_id = ?");
-            $postLikesStmt->execute([$post['post_id']]);
-            $postLikeCount = $postLikesStmt->fetchColumn();
-            // Get each posts comment count
-            $commentLikesStmt = $pdo->prepare("SELECT COUNT(*) FROM comments WHERE post_id = ?");
-            $commentLikesStmt->execute([$post['post_id']]);
-            $commentLikeCount = $commentLikesStmt->fetchColumn();
-
-            // Check whether the user signed in and if liked a post or commented on a post
-            if (isset($_SESSION['user_id'])) {
-                $postLikedStmt = $pdo->prepare("SELECT 1 FROM post_likes WHERE post_id = ? AND user_id = ?");
-                $postLikedStmt->execute([$post['post_id'], $_SESSION['user_id']]);
-                $postLiked = $postLikedStmt->fetchColumn() ? true : false;
-
-                $commentedStmt = $pdo->prepare("SELECT 1 FROM comments WHERE post_id = ? AND user_id = ?");
-                $commentedStmt->execute([$post['post_id'], $_SESSION['user_id']]);
-                $commented = $commentedStmt->fetchColumn() ? true : false;
-            } else {
-                $postLiked = false;
-                $commented = false;
-            }
-
-            //Post timestamp data
-            $timestamp = date('g:iA j/n/y', strtotime($post['post_created']));
-            $post_timestamp = !empty($post['post_edited']) ? $timestamp . ' (edited)' : $timestamp;
-
-            // Display each post in HTML
-            // Users Profile Picture & Full Name
-            echo('<div class="post-container py-4 px-4">
-                    <div class="d-flex align-items-start pt-1">
-                        <div>
-                            <a class="post-profile-link" href="profile.php?user_id='.htmlspecialchars($post['user_id']).'">
-                            <img class="me-3 rounded-pill post-profile-picture" src="'.htmlspecialchars($profile_picture). '" alt="Post Image">
-                        </div>
-                        <div class="w-auto">         
-                            <h5 class="break-text">'.$user_name.'</a></h5>
-                        </div>');
-                        
-                        // Display a dropdown on each post if the user is logged in and the post is their own
-                        if (isset($_SESSION['user_id']) && $_SESSION['user_id'] == $post['user_id']) {
-                            echo('<div id="post-dropdown-'.htmlspecialchars($post['post_id']).'" class="dropdown ms-auto h-100 d-flex align-items-start">
-                                <span id="post-options-'.htmlspecialchars($post['post_id']).'" data-bs-toggle="dropdown" aria-expanded="false" role="button" style="height: auto; cursor: pointer;">
-                                    <i class="bi bi-three-dots-vertical" style="color:grey; font-size:20px;"></i>
-                                </span>
-                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="post-options-'.htmlspecialchars($post['post_id']).'">
-                                    <li><button class="dropdown-item edit-post-btn edit-post-dropdown-item" type="button" data-post-id="'.htmlspecialchars($post['post_id']).'" style="border: none; background: none; cursor: pointer;">Edit</button></li>
-                                    <li>
-                                        <form id="post-options-form-'.htmlspecialchars($post['post_id']).'" method="POST">
-                                            <input type="hidden" name="delete_post" value="true">
-                                            <input type="hidden" name="post_id" value="'.htmlspecialchars($post['post_id']).'">
-                                            <button type="submit" class="dropdown-item edit-post-dropdown-item text-danger" style="border: none; cursor: pointer;">Delete</button>
-                                        </form>
-                                    </li>
-                                </ul>
-                                </div>'); 
-                        }
-                    echo('</div>
-                    <form id="edit-post-form-' . htmlspecialchars($post['post_id']) .'" method="POST">');
-                        // Display any pictures added to the post
-                        echo('<div>
-                                <img id="post-picture-' . htmlentities($post['post_id']) . '" class="post-picture mt-3" src="' . (!empty($post['post_picture']) ? htmlspecialchars($post['post_picture']) : "") . '" alt="Post Image"' . (empty($post['post_picture']) ? 'style="display:none;"' : '') .'>
-                            </div>
-                            <div>
-                                <input type="file" name="post-image-upload" id="post-image-upload-' . htmlentities($post['post_id']).'" class="post-image-upload" accept="image/*" hidden>
-                                <button type="button" class="btn btn-sml btn-light mt-3" id="post-image-upload-btn-' . htmlentities($post['post_id']) . '" onclick="document.getElementById(\'post-image-upload-' . htmlentities($post['post_id']) . '\').click()" style="border:none; display:none;">
-                                    <i class="bi bi-card-image" style="font-size: 16px !important;"></i>
-                                </button>
-                            </div>');
-                        // Display the post text and DAT the post was created
-                        echo('<div class="mt-3">
-                                <div class="post-like-container mb-2" data-post-id="' . htmlentities($post['post_id']) . '">
-                                    <button id="post-like-btn-'.htmlentities($post["post_id"]).'" type="button" class="post-like-btn btn btn-outline-primary btn-sm">
-                                        <i class="bi bi-hand-thumbs-up' . ($postLiked ? "-fill" : "") . '"></i>
-                                        <span class="post-like-count">' . htmlspecialchars($postLikeCount) . '</span>
-                                    </button>
-                                    <button id="post-comment-btn-'.htmlentities($post["post_id"]).'" type="button" class="post-like-btn btn btn-outline-primary btn-sm">
-                                        <i class="bi bi-chat' . ($commented ? "-fill" : "") . '"></i>
-                                        <span class="post-comment-count">' . htmlspecialchars($commentLikeCount) . '</span>
-                                    </button>
-                                </div>
-                                <p id="post-description-' . htmlentities($post['post_id']).'" class="break-text mb-2">' .htmlentities($post['post_text']) . '</p>
-                                <textarea id="post-textarea-' . htmlentities($post['post_id']).'" class="form-control post-textarea rounded mb-1 responsive-textarea" name="post_textarea" rows="1" maxlength="250" hidden required disabled>'.htmlentities($post['post_text']).'</textarea>      
-                                <div class="d-flex">
-                                    <p class="mb-0" style="color:grey;">'.htmlentities($post_timestamp).'</p>
-                                    <div id="edit-post-btn-group-' . htmlentities($post['post_id']).'" class="ms-auto edit-post-btn-group mt-1">
-                                        <input type="hidden" name="post_id" value="'.htmlspecialchars($post['post_id']).'">
-                                        <button class="btn btn-sm btn-secondary ms-1 edit-post-cancel-btn" type="button" data-post-id="'.htmlspecialchars($post['post_id']).'" name="edit-cancel-post">Cancel</button>
-                                        <button id="edit-post-submit-btn" class="btn btn-sm btn-primary ms-1" type="submit">Post</button>
-                                    </div>
-                                </div>    
-                            </div>
-                    </form>');
-
-
-            // Add a comment section
-            echo renderAddComment($pdo, $post['post_id']);
-            
-            // Add any comments on the post
-            $stmt = $pdo->prepare("
-                SELECT c.comment_id, c.comment_text, c.comment_created, comment_edited, u.user_id, u.first_name, u.last_name, p.profile_picture 
-                FROM comments c 
-                INNER JOIN users u ON c.user_id = u.user_id 
-                INNER JOIN profiles p ON c.user_id = p.user_id 
-                WHERE c.post_id = :pid
-            ");
-
-            $stmt->bindParam(':pid', $post['post_id'], PDO::PARAM_INT);
-            $stmt->execute();
-            $comments = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-            if ($comments) {
-                foreach ($comments as $comment) {
-                    echo renderComment($pdo, $comment);
-                }
-            }
-            
-
-            
-            echo('</div><br><br>'); // CLOSE PARENT (POST) DIV 
-            */
         }
     } else {
         echo('<p class="text-center">No Posts Available</p>');
