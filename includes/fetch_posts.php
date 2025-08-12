@@ -166,7 +166,7 @@ function renderPost(PDO $pdo, array $post): string {
     $postTimestamp = !empty($post['post_edited']) ? "$timestamp (edited)" : $timestamp;
 
     ob_start(); ?>
-    <div class="post-container py-4 px-4">
+    <div class="post-container">
         <div class="d-flex align-items-start pt-1">
             <div>
                 <a class="post-profile-link" href="profile.php?user_id=<?= htmlspecialchars($userId) ?>">
@@ -266,7 +266,7 @@ function renderPost(PDO $pdo, array $post): string {
                 <button id="view-more-comments-btn-<?= $postId ?>" class="btn btn-secondary view-more-comments-btn" data-post-id="<?= $postId ?>">View more comments</button>
             </div>
         </div>
-    </div><br><br>
+    </div><br>
     <?php
     return ob_get_clean();
 }

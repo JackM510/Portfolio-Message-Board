@@ -1,7 +1,9 @@
 /* Default styles for XS devices */
 
 .post-container {
-    border: #DEE2E6 solid 2px;
+    border-top: #DEE2E6 solid 2px;
+    border-bottom: #DEE2E6 solid 2px;
+    padding: 16px;
     overflow: hidden;
 }
 
@@ -95,7 +97,11 @@
 }
 
 /* Tablets (small screens) */
-@media (min-width: 600px) {
+@media (min-width: 576px) {
+    .post-container {
+        border: #DEE2E6 solid 2px;
+        padding: 24px;
+    }
 }
 
 /* Larger tablets & small laptops */

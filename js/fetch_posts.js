@@ -10,7 +10,6 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     });    
   
-      
     // Add an event listener to each posts dropdown edit button
     document.querySelectorAll(".edit-post-btn").forEach(button => {
         const postId = button.getAttribute("data-post-id"); // Get post ID from button
@@ -200,7 +199,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     // Show all comments
                     comments.forEach(comment => comment.style.display = "block");
     
-                    // Hide view more button
+                    // Hide view more wrapper & view more button
                     if (viewMoreWrapper) {
                         viewMoreWrapper.style.display = "none";
                     }
@@ -220,7 +219,6 @@ document.addEventListener("DOMContentLoaded", function() {
             sessionStorage.removeItem("scrollToNewComment");
         }
     });
-    
     
     // Event listner for view more comments buttons
     document.querySelectorAll(".view-more-comments-btn").forEach(btn => {
@@ -510,11 +508,6 @@ document.addEventListener("DOMContentLoaded", function() {
 
             const postId = this.getAttribute("data-post-id");
             const formData = new FormData(this);
-    
-            // Debugging - Log the values
-            for (let pair of formData.entries()) {
-                console.log(pair[0] + ": " + pair[1]);
-            }
     
             fetch("actions/delete_comment.php", {
                 method: "POST",

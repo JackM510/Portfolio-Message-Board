@@ -9,6 +9,7 @@
     <?php require_once "head.php"; ?>
     <!-- Index styles -->
     <link href="css/index.css" rel="stylesheet">
+    <link href="css/styles.css" rel="stylesheet">
     <!-- CSS & JS to create posts if user logged in -->
     <link href="css/create_post.css" rel="stylesheet">
     <script type="module" src="js/create_post.js"></script>

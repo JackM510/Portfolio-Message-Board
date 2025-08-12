@@ -1,5 +1,12 @@
 #index-container {
     width: 100%;
+    padding: 0 !important;
+}
+
+@media (min-width: 576px) {
+    #index-container {
+        padding: auto;
+    }
 }
 
 /* Larger tablets & small laptops */
@@ -22,8 +29,3 @@
         width: 40%;
     }
 }
-
-/* Extra large screens (4K monitors) */
-/*@media (min-width: 1600px) {
-   
-}*/
