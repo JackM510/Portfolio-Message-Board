@@ -18,7 +18,7 @@
     word-wrap: break-word;       /* legacy support */
     overflow-wrap: break-word;   /* modern standard */
     word-break: break-word;      /* optional for aggressive breaking */
-  }
+}
 
 
 .post-picture {

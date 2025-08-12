@@ -20,7 +20,6 @@
 <html lang="en">
 <head>
     <?php require_once "head.php"; ?>
-    <link href="css/index.css" rel="stylesheet">
     <link href="css/admin.css" rel="stylesheet">
     <script src="js/admin.js"></script>
     <title>Admin Panel</title>

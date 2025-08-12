@@ -19,6 +19,7 @@
 <head>
     <?php require_once "head.php"; ?>
     <link href="css/login.css" rel="stylesheet">
+    <link href="css/styles.css" rel="stylesheet">
     <script type="module" src="js/login.js"></script>
     <title>Messageboard - Login</title>
 </head>
