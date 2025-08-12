@@ -60,13 +60,7 @@ function renderComment(PDO $pdo, array $comment, int $postId): string {
 
         <div class="mt-2">
             <form id="edit-comment-form-<?= $commentId ?>" data-post-id="<?= $postIdEscaped ?>" class="w-100" method="POST">
-                <div class="comment-like-container mb-2" data-post-id="<?= $commentId ?>">
-                    <button id="comment-like-btn-<?= $commentId ?>" type="button" class="comment-like-btn btn btn-outline-primary btn-sm">
-                        <i class="bi bi-hand-thumbs-up<?= $liked ? '-fill' : '' ?>"></i>
-                        <span class="comment-like-count"><?= htmlspecialchars($likeCount) ?></span>
-                    </button>
-                </div>
-
+                
                 <p id="comment-description-<?= $commentId ?>" class="break-text mb-2"><?= $commentText ?></p>
                 <textarea id="comment-textarea-<?= $commentId ?>" class="form-control comment-textarea rounded mb-1 responsive-textarea" name="edit_comment" data-post-id="<?= $commentId ?>" maxlength="250" rows="1" hidden required disabled><?= $commentText ?></textarea>
                 <input type="hidden" name="comment_id" value="<?= $commentId ?>">
@@ -77,6 +71,13 @@ function renderComment(PDO $pdo, array $comment, int $postId): string {
                         <button class="btn btn-sm btn-secondary edit-cancel-btn" type="button" data-post-id="<?= $commentId ?>">Cancel</button>
                         <button class="btn btn-sm btn-primary ms-1" type="submit">Comment</button>
                     </div>
+                </div>
+
+                <div class="comment-like-container mb-2" data-post-id="<?= $commentId ?>">
+                    <button id="comment-like-btn-<?= $commentId ?>" type="button" class="comment-like-btn btn btn-outline-primary btn-sm">
+                        <i class="bi bi-hand-thumbs-up<?= $liked ? '-fill' : '' ?>"></i>
+                        <span class="comment-like-count"><?= htmlspecialchars($likeCount) ?></span>
+                    </button>
                 </div>
             </form>
         </div>
@@ -263,7 +264,7 @@ function renderPost(PDO $pdo, array $post): string {
             }
             ?>
             <div id="view-more-comments-wrapper-<?= $postId ?>" class="justify-content-center view-more-comments-wrapper mt-3" style="display: none;">
-                <button id="view-more-comments-btn-<?= $postId ?>" class="btn btn-secondary view-more-comments-btn" data-post-id="<?= $postId ?>">View more comments</button>
+                <button id="view-more-comments-btn-<?= $postId ?>" class="btn btn-sm btn-secondary view-more-comments-btn" data-post-id="<?= $postId ?>">View more comments</button>
             </div>
         </div>
     </div><br>
