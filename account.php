@@ -40,7 +40,7 @@
 
     <div class="container">
         <!-- BS5 Accordian -->
-        <div id="accordian" class="accordian w-75 mx-auto">
+        <div id="accordian" class="accordian mx-auto">
             <!-- Update email container-->
             <div class="card">
                 <div class="card-header text-center">
