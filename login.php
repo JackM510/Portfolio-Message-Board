@@ -19,7 +19,6 @@
 <head>
     <?php require_once "head.php"; ?>
     <link href="css/login.css" rel="stylesheet">
-    <link href="css/styles.css" rel="stylesheet">
     <script type="module" src="js/login.js"></script>
     <title>Messageboard - Login</title>
 </head>
@@ -32,7 +31,7 @@
             <h1 class="display-5">Login</h1>
         </div>
         <div class="d-flex justify-content-center">
-            <form action="actions/login_user.php" method="POST" class="w-50">
+            <form id="login-form" action="actions/login_user.php" method="POST">
                 <div class="row">
                     <div class="col-12 mb-3">
                     <?php if (isset($_SESSION['login-email-error'])) { echo "<p class='error-flash'>".$_SESSION['login-email-error']."</p>"; unset($_SESSION['login-email-error']); } ?>
@@ -49,7 +48,7 @@
                         <input type="checkbox" name="remember_me" <?= !empty($email) ? "checked" : "" ?>> Remember Me
                     </label>
                     </div>
-                    <div class="col-12 d-flex justify-content-center">
+                    <div class="col-12 d-flex justify-content-center mt-2">
                         <button class="btn btn btn-primary" type="submit" name="login">Login</button>
                     </div>
                 </div>   
@@ -64,7 +63,7 @@
             <h1 class="display-5">Sign Up</h1>
         </div>
         <div class="d-flex justify-content-center">
-            <form id="signup-form" action="actions/add_user.php" method="POST" class="w-50">
+            <form id="signup-form" action="actions/add_user.php" method="POST">
                 <div id="signup-form-container" class="row">
                     <div class="col-12 mb-3">
                         <label class="pb-1" for="first_name">First Name</label>
@@ -75,14 +74,14 @@
                         <input class="form-control" type="text" maxlength="20" name="last_name" required>
                     </div>
                     <div class="col-12 mb-3">
-                    <?php if (isset($_SESSION['signup-age-error'])) { echo "<p class='error-flash'>".$_SESSION['signup-age-error']."</p>"; unset($_SESSION['signup-age-error']); } ?>
-                        <label class="pb-1" for="date_of_birth">Date of Birth</label>
-                        <input class="form-control" type="date" name="date_of_birth" required>
-                    </div>
-                    <div class="col-12 mb-3">
                     <?php if (isset($_SESSION['signup-email-error'])) { echo "<p class='error-flash'>".$_SESSION['signup-email-error']."</p>"; unset($_SESSION['signup-email-error']); } ?>
                         <label class="pb-1" for="email">Email</label>
                         <input class="form-control" type="email" name="email" required>
+                    </div>
+                    <div class="col-12 mb-3">
+                    <?php if (isset($_SESSION['signup-age-error'])) { echo "<p class='error-flash'>".$_SESSION['signup-age-error']."</p>"; unset($_SESSION['signup-age-error']); } ?>
+                        <label class="pb-1" for="date_of_birth">Date of Birth</label>
+                        <input class="form-control" type="date" name="date_of_birth" required>
                     </div>
                     <div class="col-12 mb-3">
                     <?php if (isset($_SESSION['signup-password-error'])) { echo "<p class='error-flash'>".$_SESSION['signup-password-error']."</p>"; unset($_SESSION['signup-password-error']); } ?>
@@ -108,13 +107,13 @@
             <h1 class="display-5">Complete Profile</h1>
         </div>
         <div class="d-flex justify-content-center">
-            <form id="profile-form" method="POST" action="actions/add_profile.php" class="w-50">
+            <form id="profile-form" method="POST" action="actions/add_profile.php">
                 <div class="row">
                     <!-- Profile Picture -->
                     <div class="col-12 mb-4">
                         <input id="profile-picture-input" type="file" name="profile_picture" accept="image/*" disabled hidden>
                         <label id="profile-picture-label" for="profile-image-upload" class="d-flex flex-column justify-content-center align-items-center mb-2">
-                            <div class="d-flex flex-column justify-content-center w-50 h-100 mb-2">
+                            <div class="d-flex flex-column justify-content-center w-25 h-100 mb-2">
                                 <img id="profile-picture-img" class="mb-2 rounded-pill" src="<?php echo !empty($profile_picture) ? htmlentities($profile_picture) : "uploads/default/profile_picture.png"; ?>" alt="Profile Picture">
                                 <button id="profile-picture-btn" type="button" class="btn btn-sm btn-light mx-auto" title="Upload Profile Picture">
                                     <i class="bi bi-card-image" style="font-size: 18px;"></i>

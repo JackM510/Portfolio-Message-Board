@@ -1,0 +1,13 @@
+#login-form,
+#signup-form,
+#profile-form {
+    width: 75%;
+}
+
+@media (min-width: 768px) {
+    #login-form,
+    #signup-form,
+    #profile-form {
+        width: 50%;
+    }
+}
