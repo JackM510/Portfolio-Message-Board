@@ -1,6 +1,6 @@
 <?php
     session_start();
-    require_once('utilities.php');
+    require_once('includes/utils/utilities.php');
     if (isLoggedIn() === false && !isset($_SESSION['role'])) {
         header("Location: login.php");
     }

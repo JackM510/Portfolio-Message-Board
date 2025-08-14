@@ -1,7 +1,7 @@
 <?php
     session_start();
     require_once('includes/db_connection.php');
-    require_once('utilities.php');
+    require_once('includes/utils/utilities.php');
 ?>
 <!DOCTYPE html>
 <html lang="en">

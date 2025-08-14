@@ -1,7 +1,7 @@
 <?php
     session_start();
     require_once('includes/db_connection.php');
-    require_once('utilities.php');
+    require_once('includes/utils/utilities.php');
 
     // If user not logged in; redirect to login.php to login/signup
     if (isLoggedIn() === false) {
