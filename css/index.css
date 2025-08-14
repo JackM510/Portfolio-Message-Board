@@ -3,9 +3,16 @@
     padding: 0 !important;
 }
 
+#index-all-posts {   
+    margin-top: 24px;   
+}
+
 @media (min-width: 576px) {
     #index-container {
         padding: auto;
+    }
+    #index-all-posts {   
+        margin-top: 48px;   
     }
 }
 

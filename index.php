@@ -28,7 +28,7 @@
                 // Logic for heading above create post
                 $heading_text = isset($_SESSION['first_name']) 
                     ? 'Hi ' . htmlspecialchars($_SESSION['first_name']) . ', share on Message Board!'
-                    : '<a href="login.php" class="nav-link" style="display: inline-block">Sign-in to post and comment!</a><hr class="mt-5">';
+                    : '<a href="login.php" class="nav-link" style="display: inline-block">Sign-in to post and comment!</a>';
                     
                 echo '<div class="text-center">
                         <h1 class="display-5">'. $heading_text .'</h1>
@@ -40,7 +40,7 @@
                 }
             ?>    
         </div>
-        <div id="index-all-posts" class="mt-5">
+        <div id="index-all-posts">
             <?php
                 include 'includes/fetch_posts.php';
                 getPosts($pdo); //Fetch ALL posts in mysql

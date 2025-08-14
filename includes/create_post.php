@@ -1,6 +1,6 @@
 <?php 
 if (isLoggedIn() === true): ?>
-    <div id="new-post-container" class="mt-5">
+    <div id="new-post-container">
         <form id="new-post-form" class="d-flex flex-column justify-content-center m-auto p-4" method="POST" enctype="multipart/form-data">
             <div class="d-flex flex-column">
                 <img id="new-post-img" class="mb-2" src="">
@@ -19,6 +19,5 @@ if (isLoggedIn() === true): ?>
                 </div>
             </div>
         </form>
-        <hr class="mt-5 mb-5">
     </div>
 <?php endif; ?>  
