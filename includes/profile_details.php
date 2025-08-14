@@ -50,7 +50,7 @@
             </div>
 
             <!-- Bio -->
-            <div class="col-12">
+            <div class="col-12 col-lg-6">
                 <p id="profile-bio" ><strong>Bio: </strong><?php echo !empty($bio) ? htmlentities($bio) : "N/A"; ?></p>
             </div>
 
@@ -109,4 +109,4 @@
             </div>
         </form>
 </div>
-<hr class="mt-5">
+<hr class="mt-3">

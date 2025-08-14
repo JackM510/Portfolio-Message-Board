@@ -54,6 +54,10 @@
     word-break: break-all;
 }
 
+#profile-details .row .col-12 {
+    padding: 0;
+}
+
 #edit-icon {
     font-size: 16px;
     cursor: pointer;
@@ -87,7 +91,7 @@
 
 
 /* Tablets (small screens) */
-@media (min-width: 600px) {
+@media (min-width: 576px) {
     
     #profile-picture-container {
         display: block;
@@ -99,6 +103,10 @@
     #profile-picture {
         width: 250px;
         height: 250px;
+    }
+
+    #profile-details .row .col-12 {
+        padding: 0 12px;
     }
 
 }
