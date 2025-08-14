@@ -1,6 +1,10 @@
 body {
     scroll-behavior: smooth;
 }
+textarea {
+    resize: none !important;
+}
+
 h5 {
     font-size: 18px !important;
 }

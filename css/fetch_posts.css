@@ -43,7 +43,6 @@
 .post-textarea, 
 .comment-textarea {
     width: 100%;
-    resize: none !important;
     color: #212529;
     padding: 5px;
     border-color: #DEE2E6;
@@ -68,7 +67,6 @@
 .add-comment-textarea {
     border-color: #DEE2E6;
     padding: 5px;
-    resize: none;
     transition: height 0.2s ease;
 }
 

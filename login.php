@@ -135,7 +135,7 @@
                     <!-- Bio -->
                     <div class="col-12 mb-4">
                         <label class="pb-1" for="bio">Bio</label>
-                        <textarea id="bio-textarea" class="form-control responsive-textarea" name="bio" maxlength="250" rows="1" style="resize:none;" required></textarea>
+                        <textarea id="bio-textarea" class="form-control responsive-textarea" name="bio" maxlength="250" rows="1" required></textarea>
                     </div>
                     <!-- Complete profile btn -->
                     <div class="col-12 d-flex justify-content-center">
