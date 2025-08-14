@@ -3,12 +3,13 @@ import { predictLines } from "./utils/textarea.js";
 document.addEventListener("DOMContentLoaded", function () {  
     
     // New post functionality
-    const container = document.getElementById("new-post-form");
+    const newPostForm = document.getElementById("new-post-form");
     const textarea = document.getElementById("new-post-textarea");
     const postImg = document.getElementById("new-post-img");
     const imgUpload = document.getElementById("image-upload");
     const imgUploadBtn = document.getElementById("image-upload-btn");
     const buttonGroup = document.getElementById("new-post-btn-group");
+    const cancelPostBtn = document.getElementById("cancel-post-btn");
 
     // New post buttons visible
     if (textarea) {
@@ -16,27 +17,58 @@ document.addEventListener("DOMContentLoaded", function () {
             imgUploadBtn.style.display ="block";
             buttonGroup.style.display = "flex";
         });
-    }
 
-    if (imgUpload) {
-        imgUpload.addEventListener("change", function () {
-            if (this.files.length > 0) { // Check if a file was uploaded
-                postImg.style.display = "block";
-
-                buttonGroup.style.display = "flex";
-            }
+        // Textarea height event listener
+        textarea.addEventListener("input", () => {
+            const lines = predictLines(textarea);
+            textarea.setAttribute("rows", lines);     
         });
     }
 
-    // Textarea height event listener
-    textarea.addEventListener("input", () => {
-        const lines = predictLines(textarea);
-        textarea.setAttribute("rows", lines);     
-    });
-    
+    if (imgUpload) {
+        // Check if a file was uploaded by the user
+        if (imgUpload) {
+            imgUpload.addEventListener("change", function (event) {
+                if (event.target.files.length > 0) {
+                    const file = event.target.files[0];
+                    const reader = new FileReader();
+        
+                    reader.onload = function(e) {
+                        postImg.src = e.target.result;
+                        postImg.style.display = "block";
+                    };
+        
+                    reader.readAsDataURL(file);
+                    buttonGroup.style.display = "flex";
+                } else {
+                    postImg.src = "";
+                    postImg.style.display = "none";
+                }
+            });
+        }
+        
+    }
+
+    if (cancelPostBtn) {
+        // New post cancel button
+        cancelPostBtn.addEventListener("click", function () {
+            postImg.src = "";
+            postImg.style.display = "none";
+            imgUpload.value = "";  
+
+            textarea.value = "";
+            const lines = predictLines(textarea);
+            textarea.setAttribute("rows", lines);
+
+            imgUploadBtn.style.display = "none";
+            buttonGroup.style.display = "none";
+            document.getElementById("new-post-form").reset();
+        });
+    }
+
     // Hide new post components when clicked outside of new post layout
     document.addEventListener("click", function (event) {
-        if (!container.contains(event.target)) {
+        if (!newPostForm.contains(event.target)) {
             postImg.src = "";
             postImg.style.display = "none";
             imgUpload.value = "";
@@ -51,45 +83,12 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
-    // New post cancel button
-    document.getElementById("cancel-post-btn").addEventListener("click", function () {
-        postImg.src = "";
-        postImg.style.display = "none";
-        imgUpload.value = "";  
-
-        textarea.value = "";
-        const lines = predictLines(textarea);
-        textarea.setAttribute("rows", lines);
-
-        imgUploadBtn.style.display = "none";
-        buttonGroup.style.display = "none";
-        document.getElementById("new-post-form").reset();
-    });
-
-    // Set img-upload as the image uploaded by the user
-    document.getElementById("image-upload").addEventListener("change", function(event) {
-        const file = event.target.files[0]; // Get the selected file
-        if (file) {
-            const reader = new FileReader(); // Create a FileReader object
-            reader.onload = function(e) {
-                document.getElementById("new-post-img").src = e.target.result; // Set the image source to the selected file
-            };
-            reader.readAsDataURL(file); // Convert the file into a Data URL
-        } else {
-            document.getElementById("new-post-img").src = e.target.result; 
-        }
-    });
-
     // Add a post AJAX for add_post.php
-    document.getElementById("new-post-form").addEventListener("submit", function(event) {
+    if (newPostForm) {
+        newPostForm.addEventListener("submit", function(event) {
             event.preventDefault(); // Stop default form submission
 
             const formData = new FormData(this);
-    
-            // Debugging - Log the values
-            for (let pair of formData.entries()) {
-                console.log(pair[0] + ": " + pair[1]);
-            }
 
             fetch("actions/add_post.php", {
                 method: "POST",
@@ -106,6 +105,6 @@ document.addEventListener("DOMContentLoaded", function () {
             })
             .catch(error => console.error("Fetch Error:", error));
             
-    });
-    
+        });
+    }
 });
