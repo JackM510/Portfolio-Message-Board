@@ -61,6 +61,7 @@
         <!-- View a users profile -->
         <div id="view-profile" style="display:none;">
         
+    
             <div class="view-profile-wrapper">
                 <div class="position-relative d-flex justify-content-center align-items-center text-center mt-5 mb-5">
                     <!-- Return btn -->
@@ -241,9 +242,10 @@
 
           
     </div>
+                        
+    
 
-
-    <section></br>
+    </section></br>
 
 </body>
 </html>
