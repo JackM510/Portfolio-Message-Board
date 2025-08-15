@@ -7,11 +7,11 @@
     <!-- Profile details -->
     <div id="profile-details-container">
         <!-- Full Name -->
-        <div class="d-flex align-items-center justify-content-between">
-            <h1 id="profile-fullname" class="display-5 mt-3 mb-0"><?php echo !empty($full_name) ? htmlentities($full_name) : 'Enter your name'; ?></h1>
+        <div class="d-flex align-items-center justify-content-between mt-3">
+            <h1 id="profile-fullname" class="display-5 mb-0"><?php echo !empty($full_name) ? htmlentities($full_name) : 'Enter your name'; ?></h1>
             <!-- Edit icon -->
             <?php if ($user_id == $_SESSION['user_id']): ?> 
-                <span id="edit-icon">
+                <span id="edit-icon" class="align-self-start">
                     <i class="bi bi-pencil" style="color:grey;"></i>
                 </span>
             <?php endif; ?>   
@@ -19,38 +19,38 @@
 
         <div class="row">
             <?php if ($isAdmin): ?>
-                <!-- Location -->
-                <div class="col-12 col-lg-7"> 
+                <!-- Email -->
+                <div class="col-12 order-0 col-lg-6 order-lg-0"> 
                     <p id="profile-email" ><strong>Email: </strong><?php echo !empty($email) ? htmlentities($email) : 'N/A'; ?></p>
                 </div>
                 
-                <!-- Joined Date -->
-                <div class="col-12 col-lg-5">  
+                <!-- Profile -->
+                <div class="col-12 order-1 offset-lg-1 col-lg-5 order-lg-1">  
                     <p id="profile-id"><strong>Profile ID: </strong><?php echo !empty($profile_id) ? htmlentities($profile_id) : 'N/A'; ?></p>
                 </div>
             <?php endif; ?>
             <!-- Location -->
-            <div class="col-12 col-lg-7"> 
+            <div class="col-12 order-4 col-lg-6 order-lg-2"> 
                 <p id="profile-location" ><strong>Location: </strong><?php echo !empty($location) ? htmlentities($location) : 'N/A'; ?></p>
             </div>
             
             <!-- Joined Date -->
-            <div class="col-12 col-lg-5">  
+            <div class="col-12 order-2 offset-lg-1 col-lg-5 order-lg-3">  
                 <p id="profile-joined-date"><strong>Joined On: </strong><?php echo !empty($joined) ? htmlentities($joined) : 'N/A'; ?></p>
             </div>
 
             <!-- Occupation -->
-            <div class="col-12 col-lg-7">
+            <div class="col-12 order-5 col-lg-6 order-lg-4">
                 <p id="profile-occupation"><strong>Occupation: </strong><?php echo !empty($occupation) ? htmlentities($occupation) : 'N/A'; ?></p>
             </div>
             
             <!-- Age -->
-            <div class="col-12 col-lg-5">
+            <div class="col-12 order-3 offset-lg-1 col-lg-5 order-lg-5">
                 <p id="profile-age"><strong>Age: </strong><?php echo !empty($age) ? htmlentities($age) : 'N/A'; ?></p>
             </div>
 
             <!-- Bio -->
-            <div class="col-12 col-lg-6">
+            <div class="col-12 order-last col-lg-9 order-lg-last">
                 <p id="profile-bio" ><strong>Bio: </strong><?php echo !empty($bio) ? htmlentities($bio) : "N/A"; ?></p>
             </div>
 
@@ -61,7 +61,7 @@
 <!-- Update profile container -->
 <div id="update-profile" class="container" style="display:none; ">
     <h1 class="display-5 text-center mb-5">Update Profile</h1>
-    <form id="profile-form" class="w-50 mx-auto" action="profile.php" method="POST" enctype="multipart/form-data" style="background-color: #FAFAFA;">
+    <form id="profile-form" class="mx-auto" action="profile.php" method="POST" enctype="multipart/form-data" style="background-color: #FAFAFA;">
             <div class="row">
                 <!-- Profile Picture -->
                 <div class="col-12 mb-4">

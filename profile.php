@@ -74,7 +74,7 @@
     <?php require_once "nav.php"; ?>
     <section>
         <!-- Profile details section -->
-        <div class="container-fluid pt-5" style="background-color: #FAFAFA;">
+        <div id="profile-container" class="container-fluid pt-5" style="background-color: #FAFAFA;">
             <?php
                 // Display profile_details.php
                 include 'includes/profile_details.php';
@@ -88,7 +88,7 @@
                     include 'includes/create_post.php';
                 ?>    
             </div>   
-            <div id="profile-users-posts" class="d-flex flex-column justify-content-center mt-5">
+            <div id="profile-users-posts" class="d-flex flex-column justify-content-center">
                 <?php 
                     // Display all posts from the user
                     include 'includes/fetch_posts.php';

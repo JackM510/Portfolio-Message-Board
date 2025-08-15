@@ -1,18 +1,21 @@
+#profile-container {
+    padding: 0;
+}
+
 /* Profile Details */
 #profile-details {
     display: flex;
     flex-direction: column;
     max-width: 90%;
     justify-content: center;
-    margin: auto;
 }
 
 #profile-picture-container {
     display: flex;
     justify-content: center; /* Centers horizontally */
     align-items: center; /* Centers vertically */
-    width: 75%; /* Ensures it takes up full space */
-    height: 75%; /* Adjust as needed */
+    width: 50%; /* Ensures it takes up full space */
+    height: 50%; /* Adjust as needed */
     margin: 0 auto;
 }
 
@@ -54,10 +57,6 @@
     word-break: break-all;
 }
 
-#profile-details .row .col-12 {
-    padding: 0;
-}
-
 #edit-icon {
     font-size: 16px;
     cursor: pointer;
@@ -66,6 +65,7 @@
 /* Update Profile */
 #profile-form {
     background-color: rgb(255, 255, 255);
+    width: 100%;
 }
 
 #profile-picture-label {
@@ -87,17 +87,24 @@
 /* Profile posts (new posts and existing posts) */
 #profile-posts-container {
     width: 100%;
+    padding: 0px;
+}
+
+/* All users posts container */
+#profile-users-posts {
+    margin-top: 24px;
 }
 
 
 /* Tablets (small screens) */
 @media (min-width: 576px) {
+    #profile-container {
+        padding: auto;
+    }
     
-    #profile-picture-container {
-        display: block;
-        width: auto;
-        height: auto;
-        padding-right: 3rem;
+    #profile-details-container {
+        width:80%;
+        margin: 0 auto;
     }
 
     #profile-picture {
@@ -105,27 +112,45 @@
         height: 250px;
     }
 
-    #profile-details .row .col-12 {
-        padding: 0 12px;
+    #profile-form {
+        width: 75%;
+    }
+
+    #profile-posts-container {
+        padding: auto;
+    }
+
+    #profile-users-posts {
+        margin-top: 48px;
     }
 
 }
 
 /* Larger tablets & small laptops */
 @media (min-width: 768px) {
+    #profile-form, 
     #profile-posts-container {
         width: 75%;
     }
 }
 
 /* Standard laptops & desktops */
-@media (min-width: 1024px) {
+@media (min-width: 992px) {
     #profile-details {
         width: 90%;
+        flex-direction: row;
+        margin: 0;
     }
 
-    #profile-details {
-        flex-direction: row;
+    #profile-picture-container {
+        display: block;
+        width: auto;
+        height: auto;
+        padding-right: 3rem;
+    }
+
+    #profile-form {
+        width: 50%;
     }
 
     #profile-posts-container {

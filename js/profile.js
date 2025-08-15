@@ -5,6 +5,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // Profile container elements
     const form = document.getElementById("update-profile");
     const details = document.getElementById("profile-details");
+    //const editIcon = document.getElementById("edit-icon");
 
     // Profile form elements
     let profilePictureInput = document.getElementById("profile-picture-input");
@@ -15,9 +16,38 @@ document.addEventListener("DOMContentLoaded", function () {
     let bioTextarea = document.getElementById("bio-textarea");
     let originalValues = {};
 
-    // Profile details edit icon
-    document.getElementById("edit-icon").addEventListener("click", function () {
+    function cancelEdit() {
+         // Add disabled attribute to form elements
+         firstNameInput.setAttribute("disabled", "true");
+         lastNameInput.setAttribute("disabled", "true");
+         occupationInput.setAttribute("disabled", "true");
+         locationInput.setAttribute("disabled", "true");
+         bioTextarea.setAttribute("disabled", "true");
+ 
+         firstNameInput.value = originalValues.first;
+         lastNameInput.value = originalValues.last;
+         occupationInput.value = originalValues.occupation;
+         locationInput.value = originalValues.location;
+         bioTextarea.value = originalValues.bio;
+ 
+         details.style.display = 'block'; // Display profile details
+         details.classList.add("d-flex");
+         form.style.display = 'none'; // Hide 'Update Profile' form
+         form.classList.remove("d-flex", "flex-column", "justify-content-center");
+    }
+    
+    function editOutsideClick(e) {
+        // If click target is NOT inside the form or the edit icon...
+        if (!form.contains(e.target)) {
+            cancelEdit();
+        }
+    }
+    
 
+    // Profile details edit icon
+    document.getElementById("edit-icon").addEventListener("click", function (e) {
+        e.stopPropagation();
+        
         // Get original values of inputs
         originalValues = {
             first: firstNameInput.value,
@@ -43,31 +73,14 @@ document.addEventListener("DOMContentLoaded", function () {
         // Textarea height
         const lines = predictLines(bioTextarea);
         bioTextarea.setAttribute("rows", lines);
-    });
 
-   
+        // Listen for clicks outside of the profile form area to hide the layout
+        document.addEventListener("click", editOutsideClick);
+        
+    });
 
     // Cancel button when editing profile details
-    document.getElementById("profile-cancel-btn").addEventListener("click", function () {
-
-        // Add disabled attribute to form elements
-        firstNameInput.setAttribute("disabled", "true");
-        lastNameInput.setAttribute("disabled", "true");
-        occupationInput.setAttribute("disabled", "true");
-        locationInput.setAttribute("disabled", "true");
-        bioTextarea.setAttribute("disabled", "true");
-
-        firstNameInput.value = originalValues.first;
-        lastNameInput.value = originalValues.last;
-        occupationInput.value = originalValues.occupation;
-        locationInput.value = originalValues.location;
-        bioTextarea.value = originalValues.bio;
-
-        details.style.display = 'block'; // Display profile details
-        details.classList.add("d-flex");
-        form.style.display = 'none'; // Hide 'Update Profile' form
-        form.classList.remove("d-flex", "flex-column", "justify-content-center");
-    });
+    document.getElementById("profile-cancel-btn").addEventListener("click", cancelEdit);
 
     // Event listener for profile picture image btn
     document.getElementById('profile-picture-btn').addEventListener('click', function () {
