@@ -3,6 +3,10 @@
     padding: 0 !important;
 }
 
+#welcome-msg {
+    padding: 0 16px;
+}
+
 #index-all-posts {   
     margin-top: 24px;   
 }
@@ -10,6 +14,9 @@
 @media (min-width: 576px) {
     #index-container {
         padding: auto;
+    }
+    #welcome-msg {
+        padding: 0;
     }
     #index-all-posts {   
         margin-top: 48px;   

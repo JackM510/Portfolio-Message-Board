@@ -19,7 +19,7 @@
     }
 }
 
-@media (min-width: 996px) {
+@media (min-width: 992px) {
     #update-email-body,
     #update-pw-body,
     #delete-account-body {

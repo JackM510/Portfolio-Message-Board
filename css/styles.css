@@ -1,6 +1,14 @@
 body {
     scroll-behavior: smooth;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
 }
+
+/* Triggered by JS after load */
+body.fade-in {
+    opacity: 1;
+}
+  
 textarea {
     resize: none !important;
 }
@@ -16,4 +24,10 @@ h5 {
 .success-flash {
     font-size: 16px;
     color: green;
+}
+
+@media (min-width: 576px) {
+    h5 {
+        font-size: 20px !important;
+    }
 }

@@ -1,7 +1,6 @@
 import { predictLines } from "./utils/textarea.js";
 
 document.addEventListener("DOMContentLoaded", function() {
-
     // TA responsive height testing
     document.querySelectorAll(".responsive-textarea").forEach(textarea => {
         textarea.addEventListener("input", () => {
@@ -376,7 +375,7 @@ document.addEventListener("DOMContentLoaded", function() {
             .then(data => {
                 console.log("Server Response:", data); // Log server response
                 if (data.trim() === "success") {
-                    location.reload();
+                   location.reload();
                 } else {
                     alert("Error editing post: " + data);
                 }
@@ -390,11 +389,6 @@ document.addEventListener("DOMContentLoaded", function() {
         form.addEventListener("submit", function(event) {
             event.preventDefault(); // Stop default form submission
             const formData = new FormData(this);
-    
-            // Debugging - Log the values
-            for (let pair of formData.entries()) {
-                console.log(pair[0] + ": " + pair[1]);
-            }
     
             fetch("actions/delete_post.php", {
                 method: "POST",

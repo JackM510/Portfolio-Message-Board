@@ -5,8 +5,9 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 <!-- Bootstrap Icons -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
-<!-- Custom CSS used on all pages -->
+<!-- Custom CSS and JS used on all pages -->
 <link href="css/styles.css" rel="stylesheet">
 <link href="css/nav.css" rel="stylesheet">
+<script src="js/utils/page-transitions.js" defer></script>
 <!-- Icon -->
 <link rel="icon" href="icon/forum2.png">
