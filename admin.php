@@ -31,7 +31,7 @@
     <section class="container d-flex flex-column justify-content-center">
         
         <!-- View a list of all users -->
-        <div id="user-search" class="mx-auto ">
+        <div id="user-search">
             <div class="mt-5 mb-5 text-center">
                 <h1 class="display-5">Admin Control Panel</h1>
             </div>
@@ -61,7 +61,7 @@
         <!-- View a users profile -->
         <div id="view-profile" style="display:none;">
         
-            <div class="view-profile-wrapper w-75 mx-auto">
+            <div class="view-profile-wrapper">
                 <div class="position-relative d-flex justify-content-center align-items-center text-center mt-5 mb-5">
                     <!-- Return btn -->
                     <span class="position-absolute" style="top: 50%; transform: translateY(-50%); left:0;">
