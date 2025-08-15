@@ -68,8 +68,10 @@
 /* Small devices (phones in landscape, ≥576px) */
 @media (min-width: 576px) {
  
-  #user-search {
+  #user-search,
+  #view-profile {
     width: 75%;
+    margin: 0 auto;
   }
 
   #update-email-body,
@@ -78,7 +80,5 @@
       width: 50%;
       max-width: 50%;
   }
-
 }
 
-  
