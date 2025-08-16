@@ -31,14 +31,15 @@ function renderComment(PDO $pdo, array $comment, int $postId): string {
     <div class="comment comment-<?= $postId ?>">
     <hr>
         <div class="d-flex align-items-start">
-            <div>
-                <a class="post-profile-link" href="profile.php?user_id=<?= $userId ?>">
-                    <img class="me-3 rounded-pill comment-profile-picture" src="<?= $commentorPic ?>" alt="Profile Picture">
-                </a>
-            </div>
-            <div class="w-auto">
+            <a class="post-profile-link d-flex" href="profile.php?user_id=<?= $userId ?>">
+                <img class="me-2 rounded-pill comment-profile-picture" 
+                    src="<?= $commentorPic ?>" alt="Profile Picture">
                 <p class="break-text mb-2"><strong><?= $commentorName ?></strong></p>
-            </div>
+            </a>
+            
+            
+                
+            
             <?php if (isset($_SESSION['user_id']) && $_SESSION['user_id'] == $userId): ?>
                 <div id="comment-dropdown-<?= $commentId ?>" class="dropdown ms-auto" style="height:20px;">
                     <span id="comment-options-<?= $commentId ?>" data-bs-toggle="dropdown" aria-expanded="false" role="button" style="cursor: pointer;">
@@ -169,14 +170,11 @@ function renderPost(PDO $pdo, array $post): string {
     ob_start(); ?>
     <div class="post-container">
         <div class="d-flex align-items-start pt-1">
-            <div>
-                <a class="post-profile-link" href="profile.php?user_id=<?= htmlspecialchars($userId) ?>">
-                    <img class="me-3 rounded-pill post-profile-picture" src="<?= $profilePic ?>" alt="Post Image">
-                </a>
-            </div>
-            <div class="w-auto">
-                <h5 class="break-text"><?= $userName ?></h5>
-            </div>
+            <a class="post-profile-link d-flex" href="profile.php?user_id=<?= htmlspecialchars($userId) ?>">
+                <img class="me-2 rounded-pill post-profile-picture"
+                    src="<?= $profilePic ?>" alt="Post Image">
+                <h5 class="break-text mb-0"><?= $userName ?></h5>
+            </a>
 
             <?php if (isset($_SESSION['user_id']) && $_SESSION['user_id'] == $userId): ?>
             <div id="post-dropdown-<?= $postId ?>" class="dropdown ms-auto h-100 d-flex align-items-start">
