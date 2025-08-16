@@ -1,3 +1,14 @@
+#user-search,
+#view-profile {
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out;
+}
+
+#user-search.fade-in,
+#view-profile.fade-in {
+  opacity: 1;
+}
+
 .scrollbox-wrapper {
     max-height: 500px;
     border: 1px solid #ccc;

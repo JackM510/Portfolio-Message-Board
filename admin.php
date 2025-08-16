@@ -21,7 +21,7 @@
 <head>
     <?php require_once "head.php"; ?>
     <link href="css/admin.css" rel="stylesheet">
-    <script src="js/admin.js"></script>
+    <script src="js/admin.js" type="module"></script>
     <title>Admin Panel</title>
 </head>
 <body>
@@ -31,7 +31,7 @@
     <section class="container d-flex flex-column justify-content-center">
         
         <!-- View a list of all users -->
-        <div id="user-search">
+        <div id="user-search" class="fade-in">
             <div class="mt-5 mb-5 text-center">
                 <h1 class="display-5">Admin Control Panel</h1>
             </div>
@@ -59,7 +59,7 @@
         </div>
 
         <!-- View a users profile -->
-        <div id="view-profile" style="display:none;">
+        <div id="view-profile" class="fade-in" style="display:none;">
         
     
             <div class="view-profile-wrapper">

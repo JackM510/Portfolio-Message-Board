@@ -1,6 +1,8 @@
+import { fadeEl } from './utils/page-transitions.js';
+
+// Ensure all checkboxes are marked when deleting a user
 function validateCheckboxes(deleteBtn, checkboxes) {
     const allChecked = Array.from(checkboxes).every(cb => cb.checked);
-    
     if (allChecked) {
         deleteBtn.classList.remove("disabled");
     } else {
@@ -8,11 +10,13 @@ function validateCheckboxes(deleteBtn, checkboxes) {
     }
 }
 
+// Hide any echo flashes 
 function hideEchoFlash() {
     document.querySelectorAll('.success-flash').forEach(el => el.style.display = 'none');
     document.querySelectorAll('.error-flash').forEach(el => el.style.display = 'none');
 }
 
+// Hide all accordian panels
 function closeAllPanels() {
     document.querySelectorAll('.collapse').forEach(panel => {
         if (panel.classList.contains('show')) {
@@ -21,12 +25,32 @@ function closeAllPanels() {
     });
 }
 
-
-
 document.addEventListener("DOMContentLoaded", () => {
     const profileSearch = document.getElementById("user-search");
     const profileView = document.getElementById("view-profile");
-   
+
+   // Keep track of any open accordian cards
+   document.addEventListener("DOMContentLoaded", () => {
+    const id = sessionStorage.getItem("openPanel");
+    if (!id) return;
+    const el = document.getElementById(id);
+    if (!el) return;
+
+     profileSearch.style.display = "none";
+            profileView.style.display = "block";
+
+    // Give the container a tick to re‑render after display:block
+    requestAnimationFrame(() => {
+        new bootstrap.Collapse(el, { toggle: true });
+
+        el.addEventListener("shown.bs.collapse", () => {
+        el.scrollIntoView({ behavior: "smooth", block: "center" });
+        sessionStorage.removeItem("openPanel");
+        }, { once: true });
+    });
+    });
+
+
     // search bar event listener
     document.getElementById("user-search-input").addEventListener("input", function() {
         const searchTerm = this.value.toLowerCase();
@@ -75,6 +99,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 // Update view
                 profileSearch.style.display = "none";
                 profileView.style.display = "block";
+                fadeEl(profileView);
+
                 hideEchoFlash();
                 closeAllPanels();
 
@@ -96,21 +122,21 @@ document.addEventListener("DOMContentLoaded", () => {
         .then(res => res.json())
         .then(data => {
             if (data.success) {
-            const u = data.user;
-            // Repopulate view-profile fields
-            document.getElementById("profile-picture-img").src = u.profile_picture;
-            document.querySelector("#first-name-input").value = u.first_name;
-            document.querySelector("#last-name-input").value = u.last_name;
-            document.querySelector("#profileid-input").value = u.profile_id;
-            document.querySelector("#email-input").value = u.email;
-            document.querySelector("#role-input").value = u.role;
-            document.querySelector("#joined-date-input").value = u.created_at;
-            document.querySelector("#hidden-email-input").value = u.profile_id;
-            document.querySelector("#hidden-pw-input").value = u.profile_id;
-            document.querySelector("#hidden-delete-input").value = u.profile_id;
+                const u = data.user;
+                // Repopulate view-profile fields
+                document.getElementById("profile-picture-img").src = u.profile_picture;
+                document.querySelector("#first-name-input").value = u.first_name;
+                document.querySelector("#last-name-input").value = u.last_name;
+                document.querySelector("#profileid-input").value = u.profile_id;
+                document.querySelector("#email-input").value = u.email;
+                document.querySelector("#role-input").value = u.role;
+                document.querySelector("#joined-date-input").value = u.created_at;
+                document.querySelector("#hidden-email-input").value = u.profile_id;
+                document.querySelector("#hidden-pw-input").value = u.profile_id;
+                document.querySelector("#hidden-delete-input").value = u.profile_id;
 
-            profileSearch.style.display = "none";
-            profileView.style.display = "block";
+                profileSearch.style.display = "none";
+                profileView.style.display = "block";
             }
             // Optional: clear sessionStorage after use
             sessionStorage.removeItem("selectedProfileId");
@@ -119,33 +145,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Return btn to user_search
     document.getElementById("return-btn").addEventListener("click", () => {
-        profileSearch.style.display = "block";
         profileView.style.display = "none";
+        profileSearch.style.display = "block";
+        fadeEl(profileSearch);
     });
 
-    // Keep track of any open accordian cards
-    window.addEventListener("DOMContentLoaded", () => {
-        const id = sessionStorage.getItem("openPanel");
-        if (id) {
-          const el = document.getElementById(id);
-          if (el) {
-            new bootstrap.Collapse(el, {
-              toggle: true
-            });
-            
-            // Wait briefly for it to expand, then scroll into view
-            setTimeout(() => {
-                el.scrollIntoView({ behavior: "smooth", block: "start" });
-            }, 300); // Delay allows accordion animation to complete
-          }
-          sessionStorage.removeItem("openPanel");
-        }
-    });
-
+    
     // Ajax for updating a users email address
     document.getElementById("reset-email-form").addEventListener("submit", function(event) {
         event.preventDefault(); // Stop default form submission
-
         const formData = new FormData(this);
 
         fetch("actions/update_email.php", {
@@ -161,9 +169,8 @@ document.addEventListener("DOMContentLoaded", () => {
             
             location.reload();
 
-            profileSearch.style.display = "none";
-            profileView.style.display = "block";
-            sessionStorage.setItem("openPanel", "collapse-email"); // if needed
+           
+            sessionStorage.setItem("openPanel", "collapse-email");
         })
         .catch(error => console.error("Fetch Error:", error));
     });
@@ -172,7 +179,6 @@ document.addEventListener("DOMContentLoaded", () => {
     // Ajax for reseting a users password
     document.getElementById("reset-pw-form").addEventListener("submit", function(event) {
         event.preventDefault(); // Stop default form submission
-
         const formData = new FormData(this);
 
         fetch("actions/update_password.php", {
@@ -185,8 +191,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
             const profileId = document.getElementById("hidden-pw-input").value;
             sessionStorage.setItem("selectedProfileId", profileId);
-            sessionStorage.setItem("openPanel", "collapse-pw"); // if needed
+            
             location.reload();
+            sessionStorage.setItem("openPanel", "collapse-pw");
         })
         .catch(error => console.error("Fetch Error:", error));
     });
@@ -194,7 +201,6 @@ document.addEventListener("DOMContentLoaded", () => {
     // Ajax for deleting a users account
     document.getElementById("delete-user-form").addEventListener("submit", function(event) {
         event.preventDefault(); // Stop default form submission
-
         const formData = new FormData(this);
 
         fetch("actions/delete_user.php", {
