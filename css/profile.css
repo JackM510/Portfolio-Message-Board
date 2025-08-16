@@ -2,6 +2,18 @@
     padding: 0;
 }
 
+/* transitions */
+#profile-details, 
+#update-profile {
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out
+}
+
+#profile-details.fade-in, 
+#update-profile.fade-in {
+    opacity: 1;
+}
+
 /* Profile Details */
 #profile-details {
     display: flex;

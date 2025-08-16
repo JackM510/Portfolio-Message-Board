@@ -1,10 +1,11 @@
+import { fadeEl } from "./utils/page-transitions.js";
 import { predictLines } from "./utils/textarea.js";
 
 document.addEventListener("DOMContentLoaded", function () {
 
     // Profile container elements
-    const form = document.getElementById("update-profile");
     const details = document.getElementById("profile-details");
+    const form = document.getElementById("update-profile");
     //const editIcon = document.getElementById("edit-icon");
 
     // Profile form elements
@@ -30,8 +31,11 @@ document.addEventListener("DOMContentLoaded", function () {
          locationInput.value = originalValues.location;
          bioTextarea.value = originalValues.bio;
  
-         details.style.display = 'block'; // Display profile details
-         details.classList.add("d-flex");
+        details.style.display = 'block'; // Display profile details
+        details.classList.add("d-flex");
+        
+        fadeEl(details);
+
          form.style.display = 'none'; // Hide 'Update Profile' form
          form.classList.remove("d-flex", "flex-column", "justify-content-center");
     }
@@ -43,7 +47,6 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
     
-
     // Profile details edit icon
     document.getElementById("edit-icon").addEventListener("click", function (e) {
         e.stopPropagation();
@@ -70,6 +73,9 @@ document.addEventListener("DOMContentLoaded", function () {
         // Show the 'update profile' form and hide the profile details div
         form.style.display = 'block'; // Display 'Update Profile' form
         form.classList.add("d-flex", "flex-column", "justify-content-center");
+
+        fadeEl(form);
+
         // Textarea height
         const lines = predictLines(bioTextarea);
         bioTextarea.setAttribute("rows", lines);

@@ -1,5 +1,5 @@
 <!-- Profile details container -->
-<div id="profile-details" class="m-auto">
+<div id="profile-details" class="m-auto fade-in">
     <!-- Profile picture -->
     <div id="profile-picture-container">
         <img id="profile-picture" class="rounded-pill" src="<?php echo htmlentities($profile_picture); ?>" alt="Profile Picture">
