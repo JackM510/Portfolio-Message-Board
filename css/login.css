@@ -4,6 +4,17 @@
     width: 75%;
 }
 
+#login-container,
+#signup-container {
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+}
+
+#login-container.fade-in,
+#signup-container.fade-in {
+    opacity: 1;
+}
+
 @media (min-width: 768px) {
     #login-form,
     #signup-form,

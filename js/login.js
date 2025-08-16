@@ -1,24 +1,32 @@
+import { fadeEl } from './utils/page-transitions.js';
 import { predictLines } from "./utils/textarea.js";
 
+
 document.addEventListener("DOMContentLoaded", function() {
-    
+    const signup = document.getElementById("signup-container");
+    const login = document.getElementById("login-container");
     let signupTab = document.getElementById("signup-tab");
     let profilePictureInput = document.getElementById("profile-picture-input");
     let profilePictureBtn = document.getElementById("profile-picture-btn");
     
     // Show signup tab
     signupTab.addEventListener("click", () => {
-        document.getElementById("login-form").style.display = "none";
+        login.style.display = "none";
         document.getElementById("profile-container").style.display = "none";
-        document.getElementById("signup-container").style.display = "block";
+        
+        signup.style.display = "block";
+        fadeEl(signup);
     });
 
     // Show login tab
     document.querySelectorAll(".login-tab").forEach(tab => {
         tab.addEventListener("click", () => {
-            document.getElementById("login-form").style.display = "block";
-            document.getElementById("signup-container").style.display = "none";
+            signup.style.display = "none";
             document.getElementById("profile-container").style.display = "none";
+            login.style.display = "block";
+            
+            login.style.display = "block";
+            fadeEl(login);
         });
     });
     

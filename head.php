@@ -8,6 +8,6 @@
 <!-- Custom CSS and JS used on all pages -->
 <link href="css/styles.css" rel="stylesheet">
 <link href="css/nav.css" rel="stylesheet">
-<script src="js/utils/page-transitions.js" defer></script>
+<script src="js/utils/page-transitions.js" type="module" defer></script>
 <!-- Icon -->
 <link rel="icon" href="icon/forum2.png">

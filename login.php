@@ -26,7 +26,7 @@
     <!-- Navbar -->
     <?php require_once "nav.php"; ?>
     <!-- Login form -->
-    <div class="container mt-5" id="login-form" style="<?= $displayForm === 'login' ? 'display:block;' : 'display:none;' ?>">
+    <div class="container mt-5 fade-in" id="login-container" style="<?= $displayForm === 'login' ? 'display:block;' : 'display:none;' ?>">
         <div class="d-flex justify-content-center mt-5 mb-3">
             <h1 class="display-5">Login</h1>
         </div>
