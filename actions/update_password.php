@@ -65,7 +65,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['form_type'])) {
     } 
 
     // Reset a users password as an admin from admin.php
-    else if ($_POST['form_type'] === 'admin_update_pw' && isset($_POST['profile_id']) && isset($_SESSION['role']) && $_SESSION['role'] === 'admin') {
+    else if ($_POST['form_type'] === 'admin_update_pw' && isset($_POST['user_id']) && isset($_SESSION['role']) && $_SESSION['role'] === 'admin') {
         
         // Stay on the view_profile view after the POST form submission
         $_SESSION['display_form'] = "view_profile"; 
@@ -73,25 +73,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['form_type'])) {
         // Get password & profile_id values
         $newPW = $_POST['new_pw'];
         $confirmPW = $_POST['confirm_pw'];
-        $profile_id = $_POST['profile_id'];
+        $user_id = $_POST['user_id'];
         
-        // Get user_id from profile_id
-        $stmt = $pdo->prepare("SELECT user_id FROM profiles WHERE profile_id = ?");
-        $stmt->execute([$profile_id]);
-        $user_id = $stmt->fetchColumn();
-
-        if (!$user_id) {
-            echo "User not found.";
-            exit();
-        }
         // Check the new passwords are the same
-        else if ($newPW !== $confirmPW) {
+        if ($newPW !== $confirmPW) {
             $_SESSION['update-password-error'] = "New passwords don't match";
             exit();
         } 
 
         if (updateUserPassword($pdo, $user_id, $newPW)) {
-            $_SESSION['pw-success'] = "User password has been updated";
+            $_SESSION['pw-success'] = "Password updated";
             echo "success";
         } else {
             echo $_SESSION['update-password-error'] ?? "Error updating password.";

@@ -8,9 +8,14 @@
     require_once('includes/db_connection.php');
     
     // Retrieve all users from mysql - FOR SEARCH -------TEMPORARY STATEMENT FOR UI DESIGN---------------------
-    $sql = "SELECT u.user_id, u.email, u.role, p.profile_id 
-    FROM users u
-    INNER JOIN profiles p ON u.user_id = p.user_id";
+    $sql = "SELECT
+        u.user_id,
+        u.email,
+        u.role,
+        p.profile_id
+        FROM users AS u
+        LEFT JOIN profiles AS p
+        ON p.user_id = u.user_id;";
     $stmt = $pdo->prepare($sql);
     $stmt->execute();
     $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -41,15 +46,17 @@
                 <!-- Search Input -->
                 <input type="text" id="user-search-input" class="form-control rounded-0" placeholder="Search users by profile id or email">
                 <div class="scrollbox-header d-flex">
-                    <div class="header-id">Profile ID</div>
+                    <div class="header-uid">User ID</div>
+                    <div class="header-pid">Profile ID</div>
                     <div class="header-email">Email</div>
                     <div class="header-role">Role</div>
                 </div>
 
                 <div class="scrollbox-container">
                     <?php foreach ($users as $user): ?>
-                    <div class="user-row" data-user-id="<?= $user['profile_id'] ?>">
-                        <div class="user-id"><?= htmlspecialchars($user['profile_id']) ?></div>
+                    <div class="user-row" data-user-id="<?= $user['user_id'] ?>">
+                        <div class="user-id"><?= htmlspecialchars($user['user_id']) ?></div>
+                        <div class="profile-id"><?= htmlspecialchars($user['profile_id']) ?></div>
                         <div class="user-email"><?= htmlspecialchars($user['email']) ?></div>
                         <div class="user-role"><?= htmlspecialchars($user['role']) ?></div>
                     </div>
@@ -60,8 +67,7 @@
 
         <!-- View a users profile -->
         <div id="view-profile" class="fade-in" style="display:none;">
-        
-    
+
             <div class="view-profile-wrapper">
                 <div class="position-relative d-flex justify-content-center align-items-center text-center mt-5 mb-5">
                     <!-- Return btn -->
@@ -76,47 +82,37 @@
                 </div>
             
                 <div class="row">
-                    <!-- Profile Picture -->
-                    <div class="col-12 mb-4">
-                        <div class="d-flex flex-column justify-content-center align-items-center w-75 mx-auto">
-                            <div class="d-flex flex-column justify-content-center w-25 h-100 mb-4">
-                                <img id="profile-picture-img" class="mb-2" src="" alt="Profile Picture">
-                            </div> 
-                        </div>
-                    </div>
                     <!-- First Name -->
-                    <div class="col-12 col-lg-6 mb-3">
+                    <div class="col-12 col-md-6 col-lg-4 mb-3">
                         <label class="pb-1" for="last_name"><strong>First Name</strong></label>
                         <input id="first-name-input" class="form-control" type="text" name="" maxlength="20" disabled required>
                     </div>
                     <!-- Last Name -->
-                    <div class="col-12 col-lg-6 mb-3">
+                    <div class="col-12 col-md-6 col-lg-4 mb-3">
                         <label class="pb-1" for=""><strong>Last Name</strong></label>
                         <input id="last-name-input" class="form-control" type="text" name="" maxlength="20" disabled required>
                     </div>
+                    <!-- Email -->
+                    <div class="col-12 col-md-6 col-lg-4 mb-3">
+                        <label class="pb-1" for=""><strong>Email</strong></label>
+                        <input id="email-input" class="form-control" type="text" name="" maxlength="50" disabled required>
+                    </div>
+                    <!-- User ID -->
+                    <div class="col-12 col-md-6 col-lg-4 mb-3">
+                        <label class="pb-1" for=""><strong>User ID</strong></label>
+                        <input id="userid-input" class="form-control" type="text" name="" maxlength="50" disabled required>
+                    </div>
                     <!-- Profile ID -->
-                    <div class="col-12 col-lg-6 mb-3">
+                    <div class="col-12 col-md-6 col-lg-4 mb-3">
                         <label class="pb-1" for=""><strong>Profile ID</strong></label>
                         <input id="profileid-input" class="form-control" type="text" name="" maxlength="50" disabled required>
                     </div>
                     <!-- Joined Date -->
-                    <div class="col-12 col-lg-6 mb-3">
+                    <div class="col-12 col-md-6 col-lg-4 mb-3">
                         <label class="pb-1" for=""><strong>Joined Date:</strong></label>
                         <input id="joined-date-input" class="form-control" type="text" name="" maxlength="50" disabled required>
                     </div>
-                    <!-- Email -->
-                    <div class="col-12 col-lg-6 mb-3">
-                        <label class="pb-1" for=""><strong>Email</strong></label>
-                        <input id="email-input" class="form-control" type="text" name="" maxlength="50" disabled required>
-                    </div>
-                    <!-- Role -->
-                    <div class="col-12 col-lg-6 mb-3">
-                        <label class="pb-1" for=""><strong>Role</strong></label>
-                        <input id="role-input" class="form-control" type="text" name="" maxlength="50" disabled required>
-                    </div>
                 </div>
-        
-                   
         
                 <!-- BS5 Accordian --> 
                 <div id="accordian" class="mt-4 mb-2 accordian">
@@ -137,7 +133,7 @@
                                         <row>
                                             <!-- Hidden inputs -->
                                             <input type="hidden" name="form_type" value="admin_update_email" hidden>
-                                            <input type="hidden" id="hidden-email-input" name="profile_id" value="" hidden>
+                                            <input type="hidden" id="hidden-email-input" name="user_id" value="" hidden>
                                             <!-- New email -->
                                             <div class="col-12 mb-3">
                                                 <?php if (isset($_SESSION['new-email-error'])) { echo "<p class='error-flash'>".$_SESSION['new-email-error']."</p>"; unset($_SESSION['new-email-error']); } ?>
@@ -178,7 +174,7 @@
                                         <div class="row">
                                             <!-- Hidden inputs -->
                                             <input type="hidden" name="form_type" value="admin_update_pw" hidden>
-                                            <input type="number" id="hidden-pw-input" name="profile_id" value="" hidden>
+                                            <input type="number" id="hidden-pw-input" name="user_id" value="" hidden>
                                             <!-- New password -->
                                             <div class="col-12 mb-3">
                                             <?php if (isset($_SESSION['update-password-error'])) { echo "<p class='error-flash'>".$_SESSION['update-password-error']."</p>"; unset($_SESSION['update-password-error']); } ?>
@@ -217,7 +213,7 @@
                                     <form id="delete-user-form" method="POST" action="actions/delete_user.php">
                                         <!-- Hidden inputs -->
                                         <input type="hidden" name="form_type" value="admin_delete_user" hidden>
-                                        <input type="number" id="hidden-delete-input" name="profile_id" value="" hidden>
+                                        <input type="number" id="hidden-delete-input" name="user_id" value="" hidden>
                                         <!-- Checkbox 1-->
                                         <div class="d-flex justify-content-center form-check mb-3">
                                             <input class="form-check-input required-checkbox me-2" type="checkbox" name="delete_checkbox_1">

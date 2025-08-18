@@ -60,12 +60,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['form_type'])) {
 
     } 
     // Update another users email as an admin from admin.php 
-    else if ($_POST['form_type'] === 'admin_update_email' && isset($_POST['profile_id']) && isset($_SESSION['role']) && $_SESSION['role'] === 'admin') {
+    else if ($_POST['form_type'] === 'admin_update_email' && isset($_POST['user_id']) && isset($_SESSION['role']) && $_SESSION['role'] === 'admin') {
         
         // Stay on the view_profile view after the POST form submission
         $_SESSION['display_form'] = "view_profile"; 
         
-        $profile_id = $_POST['profile_id'];
+        $user_id = $_POST['user_id'];
         $newEmail = $_POST['new_email'];
         $confirmEmail = $_POST['confirm_email'];
         $isMatch = ($newEmail === $confirmEmail); //Check that the new email addresses match
@@ -84,13 +84,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['form_type'])) {
             }
 
             $stmt = $pdo->prepare("
-                UPDATE users u
-                JOIN profiles p ON u.user_id = p.user_id
-                SET u.email = :new_email
-                WHERE p.profile_id = :profile_id
+                UPDATE users SET email = :new_email WHERE user_id = :uid
             ");
             $stmt->bindParam(':new_email', $newEmail, PDO::PARAM_STR);
-            $stmt->bindParam(':profile_id', $profile_id, PDO::PARAM_INT);
+            $stmt->bindParam(':uid', $user_id, PDO::PARAM_INT);
             $stmt->execute();
 
         } else {

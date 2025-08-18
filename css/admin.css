@@ -53,22 +53,15 @@
   }
   
   /* Responsive flex layout */
-  .user-id, .user-email, .user-role,
-  .header-id, .header-email, .header-role {
-    flex: 1 1 33%;
+  .user-id, .profile-id, .user-email, .user-role,
+  .header-uid, .header-pid, .header-email, .header-role {
+    flex: 1 1 25%;
     font-size: 0.95rem;
   }
 
-  #profile-picture-img {
-    object-position: center;
-    object-fit: cover;
-    aspect-ratio: 1 / 1;
-    border-radius: 50%;
-    width: 100%;
-}
-
 #first-name-input,
 #last-name-input,
+#userid-input,
 #profileid-input,
 #joined-date-input,
 #email-input,

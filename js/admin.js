@@ -1,5 +1,14 @@
 import { fadeEl } from './utils/page-transitions.js';
 
+// Add checkbox and delete button event listener
+function attachEvents() {
+    const checkboxes = document.querySelectorAll('.required-checkbox');
+    const deleteBtn = document.getElementById('delete-btn');
+    checkboxes.forEach(cb => {
+        cb.addEventListener('change', () => validateCheckboxes(deleteBtn, checkboxes));
+        });
+}
+
 // Ensure all checkboxes are marked when deleting a user
 function validateCheckboxes(deleteBtn, checkboxes) {
     const allChecked = Array.from(checkboxes).every(cb => cb.checked);
@@ -30,25 +39,20 @@ document.addEventListener("DOMContentLoaded", () => {
     const profileView = document.getElementById("view-profile");
 
    // Keep track of any open accordian cards
-   document.addEventListener("DOMContentLoaded", () => {
-    const id = sessionStorage.getItem("openPanel");
-    if (!id) return;
-    const el = document.getElementById(id);
-    if (!el) return;
+   window.addEventListener("DOMContentLoaded", () => {
+        const id = sessionStorage.getItem("openPanel");
+        if (!id) return;
+        const el = document.getElementById(id);
+        if (!el) return;
 
-     profileSearch.style.display = "none";
-            profileView.style.display = "block";
-
-    // Give the container a tick to re‑render after display:block
-    requestAnimationFrame(() => {
         new bootstrap.Collapse(el, { toggle: true });
 
         el.addEventListener("shown.bs.collapse", () => {
-        el.scrollIntoView({ behavior: "smooth", block: "center" });
-        sessionStorage.removeItem("openPanel");
+            el.scrollIntoView({ behavior: "smooth", block: "center" });
+            sessionStorage.removeItem("openPanel");
         }, { once: true });
     });
-    });
+
 
 
     // search bar event listener
@@ -63,39 +67,33 @@ document.addEventListener("DOMContentLoaded", () => {
     // Ajax for returning a users profile information 
     document.querySelectorAll(".user-row").forEach(row => {
         row.addEventListener("click", () => {
-        const profileId = row.dataset.userId;
+        const userId = row.dataset.userId;
     
         fetch("actions/get_profile.php", {
             method: "POST",
             headers: { "Content-Type": "application/x-www-form-urlencoded" },
-            body: new URLSearchParams({ profile_id: profileId })
+            body: new URLSearchParams({ user_id: userId })
         })
         .then(res => res.json())
         .then(data => {
             if (data.success) {
                 const u = data.user;
                 // Set users details
-                document.getElementById("profile-picture-img").src = u.profile_picture;
                 document.querySelector("#first-name-input").value = u.first_name;
                 document.querySelector("#last-name-input").value = u.last_name;
+                document.querySelector("#userid-input").value = u.user_id;
                 document.querySelector("#profileid-input").value = u.profile_id;
                 document.querySelector("#email-input").value = u.email;
-                document.querySelector("#role-input").value = u.role;
                 document.querySelector("#joined-date-input").value = u.created_at;
 
                 // Pass the users profile_id to each form
-                document.querySelector("#hidden-email-input").value = u.profile_id;
-                document.querySelector("#hidden-pw-input").value = u.profile_id;
-                document.querySelector("#hidden-delete-input").value = u.profile_id;
+                document.querySelector("#hidden-email-input").value = u.user_id;
+                document.querySelector("#hidden-pw-input").value = u.user_id;
+                document.querySelector("#hidden-delete-input").value = u.user_id;
 
                 // Event Listeners for delete account checkboxes
-                const checkboxes = document.querySelectorAll('.required-checkbox');
-                const deleteBtn = document.getElementById('delete-btn');
-                checkboxes.forEach(cb => {
-                    cb.addEventListener('change', () => validateCheckboxes(deleteBtn, checkboxes));
-                  });
+                attachEvents();
                   
-   
                 // Update view
                 profileSearch.style.display = "none";
                 profileView.style.display = "block";
@@ -105,35 +103,37 @@ document.addEventListener("DOMContentLoaded", () => {
                 closeAllPanels();
 
             } else {
-            alert("User not found.");
+                alert("User not found.");
             }
         });
         });
     });
 
     // AJAX for returning a users profile information after their profile_id is stored in session data
-    const storedProfileId = sessionStorage.getItem("selectedProfileId");
-    if (storedProfileId) {
+    const storedId = sessionStorage.getItem("selectedProfileId");
+    if (storedId) {
         fetch("actions/get_profile.php", {
             method: "POST",
             headers: { "Content-Type": "application/x-www-form-urlencoded" },
-            body: new URLSearchParams({ profile_id: storedProfileId })
+            body: new URLSearchParams({ user_id: storedId })
         })
         .then(res => res.json())
         .then(data => {
             if (data.success) {
                 const u = data.user;
                 // Repopulate view-profile fields
-                document.getElementById("profile-picture-img").src = u.profile_picture;
                 document.querySelector("#first-name-input").value = u.first_name;
                 document.querySelector("#last-name-input").value = u.last_name;
-                document.querySelector("#profileid-input").value = u.profile_id;
                 document.querySelector("#email-input").value = u.email;
-                document.querySelector("#role-input").value = u.role;
+                document.querySelector("#userid-input").value = u.user_id;                
+                document.querySelector("#profileid-input").value = u.profile_id;               
                 document.querySelector("#joined-date-input").value = u.created_at;
-                document.querySelector("#hidden-email-input").value = u.profile_id;
-                document.querySelector("#hidden-pw-input").value = u.profile_id;
-                document.querySelector("#hidden-delete-input").value = u.profile_id;
+                document.querySelector("#hidden-email-input").value = u.user_id;
+                document.querySelector("#hidden-pw-input").value = u.user_id;
+                document.querySelector("#hidden-delete-input").value = u.user_id;
+
+                // Event Listeners for delete account checkboxes
+                attachEvents();
 
                 profileSearch.style.display = "none";
                 profileView.style.display = "block";
@@ -164,12 +164,10 @@ document.addEventListener("DOMContentLoaded", () => {
         .then(data => {
             console.log("Server Response:", data); // Log server response
 
-            const profileId = document.getElementById("hidden-email-input").value;
-            sessionStorage.setItem("selectedProfileId", profileId);
+            const userId = document.getElementById("hidden-email-input").value;
+            sessionStorage.setItem("selectedProfileId", userId);
             
             location.reload();
-
-           
             sessionStorage.setItem("openPanel", "collapse-email");
         })
         .catch(error => console.error("Fetch Error:", error));

@@ -18,8 +18,6 @@ function deleteUserDirectory($userID) {
     rmdir($userDir);
 }
 
-
-
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['form_type'])) {
     
     // Delete your account from account.php
@@ -36,19 +34,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['form_type'])) {
     } 
     
     // Delete another users account as an admin from admin.php
-    else if ($_POST['form_type'] === 'admin_delete_user' && $_POST['profile_id'] && isset($_SESSION['role']) && $_SESSION['role'] === 'admin' && !empty($_POST['delete_checkbox_1'])) {
+    else if ($_POST['form_type'] === 'admin_delete_user' && isset($_POST['user_id']) && isset($_SESSION['role']) && $_SESSION['role'] === 'admin' && !empty($_POST['delete_checkbox_1'])) {
         
-        $profileId = (int) $_POST['profile_id'];
-        // Fetch user_id from profile_id
-        $userStmt = $pdo->prepare("SELECT user_id FROM profiles WHERE profile_id = ?");
-        $userStmt->execute([$profileId]);
-        $user_id = $userStmt->fetchColumn();
-    
-        if (!$user_id) {
-            echo "User not found.";
-            exit;
-        }
-    
+        $user_id = (int) $_POST['user_id'];
+        
         // Delete user from DB
         $stmt = $pdo->prepare("DELETE FROM users WHERE user_id = ?");
         $stmt->execute([$user_id]);
