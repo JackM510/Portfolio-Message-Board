@@ -53,8 +53,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }, { once: true });
     });
 
-
-
     // search bar event listener
     document.getElementById("user-search-input").addEventListener("input", function() {
         const searchTerm = this.value.toLowerCase();

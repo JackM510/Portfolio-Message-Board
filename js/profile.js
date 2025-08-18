@@ -6,9 +6,16 @@ document.addEventListener("DOMContentLoaded", function () {
     // Profile container elements
     const details = document.getElementById("profile-details");
     const form = document.getElementById("update-profile");
-    //const editIcon = document.getElementById("edit-icon");
-
+    // Profile Details elements
+    let editIcon = document.getElementById("edit-icon");
+    
     // Profile form elements
+    let cancelBtn = document.getElementById("profile-cancel-btn");
+    let profilePicBtn = document.getElementById("profile-picture-btn");
+    let profilePicInput = document.getElementById("profile-picture-input");
+    let profileForm = document.getElementById("profile-form");
+
+    // Profile form input elements
     let profilePictureInput = document.getElementById("profile-picture-input");
     let firstNameInput = document.getElementById("first-name-input");
     let lastNameInput = document.getElementById("last-name-input");
@@ -48,68 +55,75 @@ document.addEventListener("DOMContentLoaded", function () {
     }
     
     // Profile details edit icon
-    document.getElementById("edit-icon").addEventListener("click", function (e) {
-        e.stopPropagation();
-        
-        // Get original values of inputs
-        originalValues = {
-            first: firstNameInput.value,
-            last: lastNameInput.value,
-            occupation: occupationInput.value,
-            location: locationInput.value,
-            bio: bioTextarea.value
-        };
+    if (editIcon) {
+        editIcon.addEventListener("click", function (e) {
+            e.stopPropagation();
+            
+            // Get original values of inputs
+            originalValues = {
+                first: firstNameInput.value,
+                last: lastNameInput.value,
+                occupation: occupationInput.value,
+                location: locationInput.value,
+                bio: bioTextarea.value
+            };
 
-        //Remove disabled attribute from form elements
-        firstNameInput.removeAttribute("disabled");
-        lastNameInput.removeAttribute("disabled");
-        occupationInput.removeAttribute("disabled");
-        locationInput.removeAttribute("disabled");
-        bioTextarea.removeAttribute("disabled");
+            //Remove disabled attribute from form elements
+            firstNameInput.removeAttribute("disabled");
+            lastNameInput.removeAttribute("disabled");
+            occupationInput.removeAttribute("disabled");
+            locationInput.removeAttribute("disabled");
+            bioTextarea.removeAttribute("disabled");
 
-        // Hide profile details
-        details.style.display = 'none';
-        details.classList.remove("d-flex");
-        // Show the 'update profile' form and hide the profile details div
-        form.style.display = 'block'; // Display 'Update Profile' form
-        form.classList.add("d-flex", "flex-column", "justify-content-center");
+            // Hide profile details
+            details.style.display = 'none';
+            details.classList.remove("d-flex");
+            // Show the 'update profile' form and hide the profile details div
+            form.style.display = 'block'; // Display 'Update Profile' form
+            form.classList.add("d-flex", "flex-column", "justify-content-center");
 
-        fadeEl(form);
+            fadeEl(form);
 
-        // Textarea height
-        const lines = predictLines(bioTextarea);
-        bioTextarea.setAttribute("rows", lines);
+            // Textarea height
+            const lines = predictLines(bioTextarea);
+            bioTextarea.setAttribute("rows", lines);
 
-        // Listen for clicks outside of the profile form area to hide the layout
-        document.addEventListener("click", editOutsideClick);
-        
-    });
+            // Listen for clicks outside of the profile form area to hide the layout
+            document.addEventListener("click", editOutsideClick);
+        });
+    }
 
     // Cancel button when editing profile details
-    document.getElementById("profile-cancel-btn").addEventListener("click", cancelEdit);
-
+    if (cancelBtn) {
+        cancelBtn.addEventListener("click", cancelEdit);
+    }    
+    
     // Event listener for profile picture image btn
-    document.getElementById('profile-picture-btn').addEventListener('click', function () {
-        // Make the input active and call click()
-        profilePictureInput.removeAttribute("disabled");
-        profilePictureInput.click();
-      });
-      
+    if (profilePicBtn) {
+        profilePicBtn.addEventListener('click', function () {
+            profilePictureInput.removeAttribute("disabled");
+            profilePictureInput.click();
+        });
+    }
+    
     // Event listener for profile picture file input
-    document.getElementById("profile-picture-input").addEventListener("change", function(event) {
-        const file = event.target.files[0];
+    if (profilePicInput) {
+        document.getElementById("profile-picture-input").addEventListener("change", function(event) {
+            const file = event.target.files[0];
 
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                document.getElementById("profile-picture-img").src = e.target.result; // Update image preview
-            };
-            reader.readAsDataURL(file);
-        }
-    });
-
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById("profile-picture-img").src = e.target.result; // Update image preview
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    }
+    
     // Edit profile AJAX for edit_profile.php
-    document.getElementById("profile-form").addEventListener("submit", function(event) {
+    if (profileForm) {
+        document.getElementById("profile-form").addEventListener("submit", function(event) {
             event.preventDefault(); // Stop default form submission
 
             const formData = new FormData(this);
@@ -133,5 +147,5 @@ document.addEventListener("DOMContentLoaded", function () {
             })
             .catch(error => console.error("Fetch Error:", error));
     });
-
+    }
 });
