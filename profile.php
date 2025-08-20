@@ -8,19 +8,31 @@
         header("Location: login.php");
     }
 
-    $user_id = isset($_GET['user_id']) ? $_GET['user_id'] : $_SESSION['user_id'];
+    $profile_id = isset($_GET['profile_id'])
+        ? (int)$_GET['profile_id']
+        : (int)$_SESSION['profile_id'];
 
     // Set Profile details - get users full name and profile information
-    $sql = "SELECT u.first_name, u.last_name, u.created_at, u.date_of_birth, p.location, p.occupation, p.bio, p.profile_picture
-        FROM users u
-        JOIN profiles p ON u.user_id = p.user_id
-        WHERE u.user_id = :user_id";
+    $sql = "SELECT 
+            u.first_name,
+            u.last_name,
+            u.created_at,
+            u.date_of_birth,
+            p.location,
+            p.occupation,
+            p.bio,
+            p.profile_picture
+        FROM users AS u
+        JOIN profiles AS p 
+            ON u.user_id = p.user_id
+        WHERE p.profile_id = :profile_id
+        ";
 
     $stmt = $pdo->prepare($sql);
-    $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+    $stmt->bindParam(':profile_id', $profile_id, PDO::PARAM_INT);
     $stmt->execute();
     $data = $stmt->fetch(PDO::FETCH_ASSOC);
-
+    
     // Full name
     $first_name = $data['first_name'];
     $last_name = $data['last_name'];
@@ -42,16 +54,17 @@
     // Admin specific data - get if signed in:
     if ($isAdmin) {
         $sql = "SELECT u.email, p.profile_id
-            FROM users u
-            JOIN profiles p ON u.user_id = p.user_id
-            WHERE u.user_id = :user_id";
+            FROM users AS u
+            JOIN profiles AS p 
+                ON u.user_id = p.user_id
+            WHERE p.profile_id = :profile_id";
             $stmt = $pdo->prepare($sql);
-            $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+            $stmt->bindParam(':profile_id', $profile_id, PDO::PARAM_INT);
             $stmt->execute();
             $adminData = $stmt->fetch(PDO::FETCH_ASSOC);
 
         $email = $adminData['email'];
-        $profile_id = $adminData['profile_id'];
+        $profileId = $adminData['profile_id'];
     }
 ?>
 <!DOCTYPE html>
@@ -92,7 +105,7 @@
                 <?php 
                     // Display all posts from the user
                     include 'includes/fetch_posts.php';
-                    getPosts($pdo, $user_id); //Fetch ALL posts in mysql   
+                    getPosts($pdo, $profile_id); //Fetch ALL posts in mysql   
                 ?>
             </div>
         </div> 

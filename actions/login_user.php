@@ -41,6 +41,7 @@ require_once('../includes/db_connection.php');
                         $_SESSION['avatar'] = $profile['profile_picture'];
                         // Successful login - set $_SESSION variables
                         $_SESSION['user_id'] = $user['user_id'];
+                        $_SESSION['profile_id'] = $profile['profile_id'];
                         $_SESSION['email'] = $user['email'];
                         $_SESSION['first_name'] = $user['first_name'];
                         $_SESSION['role'] = $user['role'];

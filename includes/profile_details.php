@@ -10,7 +10,7 @@
         <div class="d-flex align-items-center justify-content-between mt-3">
             <h1 id="profile-fullname" class="display-5 mb-0"><?php echo !empty($full_name) ? htmlentities($full_name) : 'Enter your name'; ?></h1>
             <!-- Edit icon -->
-            <?php if ($user_id == $_SESSION['user_id']): ?> 
+            <?php if ($profile_id == $_SESSION['profile_id']): ?> 
                 <span id="edit-icon" class="align-self-start">
                     <i class="bi bi-pencil" style="color:grey;"></i>
                 </span>
@@ -26,7 +26,7 @@
                 
                 <!-- Profile -->
                 <div class="col-12 order-1 offset-lg-1 col-lg-5 order-lg-1">  
-                    <p id="profile-id"><strong>Profile ID: </strong><?php echo !empty($profile_id) ? htmlentities($profile_id) : 'N/A'; ?></p>
+                    <p id="profile-id"><strong>Profile ID: </strong><?php echo !empty($profile_id) ? htmlentities($profileId) : 'N/A'; ?></p>
                 </div>
             <?php endif; ?>
             <!-- Location -->

@@ -8,6 +8,7 @@ function renderComment(PDO $pdo, array $comment, int $postId): string {
     $commentText = htmlspecialchars($comment['comment_text']);
     $postIdEscaped = htmlspecialchars($postId);
     $userId = $comment['user_id'];
+    $profileId = $comment['profile_id'];
 
     // Like count
     $likeStmt = $pdo->prepare("SELECT COUNT(*) FROM comment_likes WHERE comment_id = ?");
@@ -31,14 +32,11 @@ function renderComment(PDO $pdo, array $comment, int $postId): string {
     <div class="comment comment-<?= $postId ?>">
     <hr>
         <div class="d-flex align-items-start">
-            <a class="post-profile-link d-flex" href="profile.php?user_id=<?= $userId ?>">
+            <a class="post-profile-link d-flex" href="profile.php?profile_id=<?= $profileId ?>">
                 <img class="me-2 rounded-pill comment-profile-picture" 
                     src="<?= $commentorPic ?>" alt="Profile Picture">
                 <p class="break-text mb-2"><strong><?= $commentorName ?></strong></p>
             </a>
-            
-            
-                
             
             <?php if (isset($_SESSION['user_id']) && $_SESSION['user_id'] == $userId): ?>
                 <div id="comment-dropdown-<?= $commentId ?>" class="dropdown ms-auto" style="height:20px;">
@@ -129,14 +127,17 @@ function renderPost(PDO $pdo, array $post): string {
 
     // Get post author info
     $stmt = $pdo->prepare("
-        SELECT u.first_name, u.last_name, p.profile_picture 
+        SELECT u.first_name, u.last_name, p.profile_id, p.profile_picture 
         FROM users u 
         JOIN profiles p ON u.user_id = p.user_id 
         WHERE u.user_id = :user_id
     ");
+
     $stmt->bindParam(':user_id', $userId, PDO::PARAM_INT);
     $stmt->execute();
     $userData = $stmt->fetch(PDO::FETCH_ASSOC);
+
+     $profileId = $userData['profile_id'];
 
     $userName = htmlspecialchars($userData['first_name'] . ' ' . $userData['last_name']);
     $profilePic = htmlspecialchars($userData['profile_picture']);
@@ -170,7 +171,7 @@ function renderPost(PDO $pdo, array $post): string {
     ob_start(); ?>
     <div class="post-container">
         <div class="d-flex align-items-start pt-1">
-            <a class="post-profile-link d-flex" href="profile.php?user_id=<?= htmlspecialchars($userId) ?>">
+            <a class="post-profile-link d-flex" href="profile.php?profile_id=<?= htmlspecialchars($profileId) ?>">
                 <img class="me-2 rounded-pill post-profile-picture"
                     src="<?= $profilePic ?>" alt="Post Image">
                 <h5 class="break-text mb-0"><?= $userName ?></h5>
@@ -194,16 +195,14 @@ function renderPost(PDO $pdo, array $post): string {
             </div>
             <?php endif; ?>
         </div>
-
         <form id="edit-post-form-<?= $postId ?>" method="POST">
-        <div>
-            <img id="post-picture-<?= $postId ?>"
-                class="post-picture mt-3"
-                src="<?= !empty($post['post_picture']) ? htmlspecialchars($post['post_picture']) : '' ?>"
-                alt="Post Image"
-                style="<?= empty($post['post_picture']) ? 'display:none;' : '' ?>">
-        </div>
-
+            <div>
+                <img id="post-picture-<?= $postId ?>"
+                    class="post-picture mt-3"
+                    src="<?= !empty($post['post_picture']) ? htmlspecialchars($post['post_picture']) : '' ?>"
+                    alt="Post Image"
+                    style="<?= empty($post['post_picture']) ? 'display:none;' : '' ?>">
+            </div>
 
             <div>
                 <input type="file" name="post-image-upload" id="post-image-upload-<?= $postId ?>" class="post-image-upload" accept="image/*" hidden>
@@ -245,7 +244,7 @@ function renderPost(PDO $pdo, array $post): string {
             <?php
             // Fetch comments for this post
             $stmt = $pdo->prepare("
-                SELECT c.comment_id, c.comment_text, c.comment_created, comment_edited, u.user_id, u.first_name, u.last_name, p.profile_picture 
+                SELECT c.comment_id, c.comment_text, c.comment_created, comment_edited, u.user_id, u.first_name, u.last_name, p.profile_id, p.profile_picture 
                 FROM comments c 
                 INNER JOIN users u ON c.user_id = u.user_id 
                 INNER JOIN profiles p ON c.user_id = p.user_id 
@@ -270,12 +269,17 @@ function renderPost(PDO $pdo, array $post): string {
     return ob_get_clean();
 }
 
-
 // If user_id is not provided fetch ALL posts, else fetch only posts made by the specified user
-function getPosts($pdo, $user_id = null) {
-    if ($user_id) {
-        $stmt = $pdo->prepare("SELECT * FROM posts WHERE user_id = :user_id ORDER BY post_created DESC");
-        $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+function getPosts($pdo, $profile_id = null) {
+    if ($profile_id) {
+        $stmt = $pdo->prepare("
+            SELECT p.*, pr.profile_id
+            FROM posts AS p
+            INNER JOIN profiles AS pr ON pr.user_id = p.user_id
+            WHERE pr.profile_id = :profile_id
+            ORDER BY p.post_created DESC
+        ");
+        $stmt->bindParam(':profile_id', $profile_id, PDO::PARAM_INT);
     } else {
         $stmt = $pdo->prepare("SELECT * FROM posts ORDER BY post_created DESC");
     }

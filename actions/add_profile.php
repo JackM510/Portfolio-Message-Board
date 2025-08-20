@@ -5,7 +5,6 @@ require_once('../includes/db_connection.php');
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
-
     $user_id = $_SESSION['id_token'];
     $location = $_POST['location'];
     $occupation = $_POST['occupation'];
@@ -38,7 +37,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
            
             if ($stmt->execute()) {
        
-                $stmt = $pdo->prepare(" SELECT users.email, users.first_name, users.role, profiles.profile_picture
+                $stmt = $pdo->prepare(" SELECT users.email, users.first_name, users.role, profiles.profile_id, profiles.profile_picture
                     FROM users
                     JOIN profiles ON users.user_id = profiles.user_id
                     WHERE users.user_id = :uid");
@@ -48,6 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 $_SESSION["user_id"] = $_SESSION["id_token"];
                 unset($_SESSION["id_token"]);
+                $_SESSION["profile_id"] = $data['profile_id'];
                 $_SESSION["first_name"] = $data['first_name'];
                 $_SESSION["email"] = $data['email'];
                 $_SESSION["role"] = $data['role'];
