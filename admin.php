@@ -206,14 +206,14 @@
                         </div>
                         <div id="collapse-delete-account" class="collapse" data-bs-parent="#accordian">
                             <div class="card-body">
-                                
                                 <!-- Delete account -->
                                 <div id="delete-account-body" class="mt-5 mx-auto d-flex flex-column">
                                     <h1 class="display-5 text-center mb-4">Delete Account</h1>
+                                    <?php if (isset($_SESSION['delete-error'])) { echo "<p class='error-flash'>".$_SESSION['delete-error']."</p>"; unset($_SESSION['delete-error']); } ?>
                                     <form id="delete-user-form" method="POST" action="actions/delete_user.php">
                                         <!-- Hidden inputs -->
                                         <input type="hidden" name="form_type" value="admin_delete_user" hidden>
-                                        <input type="number" id="hidden-delete-input" name="user_id" value="" hidden>
+                                        <input type="number" id="hidden-delete-input" name="profile_id" value="" hidden>
                                         <!-- Checkbox 1-->
                                         <div class="d-flex justify-content-center form-check mb-3">
                                             <input class="form-check-input required-checkbox me-2" type="checkbox" name="delete_checkbox_1">
@@ -224,8 +224,7 @@
                                             <button id="delete-btn" class="btn btn-sm btn-danger mx-auto disabled" type="submit">Delete Account</button>
                                         </div> 
                                     </form>
-                                </div>
-                                
+                                </div> 
                             </div>
                         </div>
                     </div>

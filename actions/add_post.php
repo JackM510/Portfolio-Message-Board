@@ -20,7 +20,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["post_content"])) {
     if (!empty($_FILES["image"]["name"])) {
 
         $user_id = $_SESSION['user_id']; // Get the user's ID
-        $userDir = "../uploads/profiles/" . $user_id . "/"; // Define user-specific directory from project root directory
+        $profile_id = $_SESSION['profile_id'];
+        
+        $userDir = "../uploads/profiles/" . $profile_id . "/"; // Define user-specific directory from project root directory
 
         // Check if the user's directory exists, if not, create it
         if (!file_exists($userDir)) {

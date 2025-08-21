@@ -4,12 +4,13 @@ require_once('../includes/db_connection.php');
 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_SESSION['user_id']) && isset($_POST['post_id'])) {
     $user_id = $_SESSION['user_id'];
+    $profile_id = $_SESSION['profile_id'];
     $post_id = $_POST['post_id'];
     $edited_text = $_POST['post_textarea']; // Retrieve edited text
     $edited_timestamp = date('Y-m-d H:i:s');
 
     // Define the correct directory structure
-    $uploadDir = "../uploads/profiles/{$user_id}/posts/{$post_id}/";
+    $uploadDir = "../uploads/profiles/{$profile_id}/posts/{$post_id}/";
 
     // Get current image path before updating (to delete it if needed)
     $stmt = $pdo->prepare("SELECT post_picture FROM posts WHERE post_id = :post_id");

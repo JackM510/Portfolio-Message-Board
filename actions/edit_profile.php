@@ -30,9 +30,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_SESSION['user_id'])) {
     if (isset($_FILES["profile_picture"]) && !empty($_FILES["profile_picture"]["name"])) {
 
         $user_id = $_SESSION['user_id'];
+        $profile_id = $_SESSION['profile_id'];
 
         // Define the correct directory structure
-        $uploadDir = "../uploads/profiles/{$user_id}/profile_picture/";
+        $uploadDir = "../uploads/profiles/{$profile_id}/profile_picture/";
 
         // Retrieve existing profile picture path from db
         $stmt = $pdo->prepare("SELECT profile_picture FROM profiles WHERE user_id = :user_id");

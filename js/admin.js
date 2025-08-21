@@ -87,7 +87,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 // Pass the users profile_id to each form
                 document.querySelector("#hidden-email-input").value = u.user_id;
                 document.querySelector("#hidden-pw-input").value = u.user_id;
-                document.querySelector("#hidden-delete-input").value = u.user_id;
+                document.querySelector("#hidden-delete-input").value = u.profile_id;
 
                 // Event Listeners for delete account checkboxes
                 attachEvents();
@@ -126,9 +126,10 @@ document.addEventListener("DOMContentLoaded", () => {
                 document.querySelector("#userid-input").value = u.user_id;                
                 document.querySelector("#profileid-input").value = u.profile_id;               
                 document.querySelector("#joined-date-input").value = u.created_at;
+
                 document.querySelector("#hidden-email-input").value = u.user_id;
                 document.querySelector("#hidden-pw-input").value = u.user_id;
-                document.querySelector("#hidden-delete-input").value = u.user_id;
+                document.querySelector("#hidden-delete-input").value = u.profile_id;
 
                 // Event Listeners for delete account checkboxes
                 attachEvents();
@@ -203,10 +204,16 @@ document.addEventListener("DOMContentLoaded", () => {
             method: "POST",
             body: formData
         })
-        .then(response => response.text())
-        .then(data => {
-            console.log("Server Response:", data); // Log server response
-            location.reload();
+        .then(response => response.json())
+        .then(result => {
+            // Redirect to user search if delete successful
+            if (result.success) {
+                location.reload();
+            } else {
+                // Stay on page and show the message to the admin
+                sessionStorage.setItem("openPanel", "collapse-delete-account");
+                location.reload();
+            }
         })
         .catch(error => console.error("Fetch Error:", error));
     });
