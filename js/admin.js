@@ -87,7 +87,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 // Pass the users profile_id to each form
                 document.querySelector("#hidden-email-input").value = u.user_id;
                 document.querySelector("#hidden-pw-input").value = u.user_id;
-                document.querySelector("#hidden-delete-input").value = u.profile_id;
+                document.querySelector("#hidden-delete-input-user").value = u.user_id;
+                document.querySelector("#hidden-delete-input-profile").value = u.profile_id;
 
                 // Event Listeners for delete account checkboxes
                 attachEvents();
@@ -129,7 +130,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 document.querySelector("#hidden-email-input").value = u.user_id;
                 document.querySelector("#hidden-pw-input").value = u.user_id;
-                document.querySelector("#hidden-delete-input").value = u.profile_id;
+                document.querySelector("#hidden-delete-input-user").value = u.user_id;
+                document.querySelector("#hidden-delete-input-profile").value = u.profile_id;
 
                 // Event Listeners for delete account checkboxes
                 attachEvents();
@@ -210,9 +212,11 @@ document.addEventListener("DOMContentLoaded", () => {
             if (result.success) {
                 location.reload();
             } else {
+                const userId = document.getElementById("hidden-delete-input-user").value;
+                sessionStorage.setItem("selectedProfileId", userId);
                 // Stay on page and show the message to the admin
-                sessionStorage.setItem("openPanel", "collapse-delete-account");
                 location.reload();
+                sessionStorage.setItem("openPanel", "collapse-delete-account");
             }
         })
         .catch(error => console.error("Fetch Error:", error));

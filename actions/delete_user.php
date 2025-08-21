@@ -35,13 +35,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['form_type'])) {
     } 
     
     // Delete another users account as an admin from admin.php
-    else if ($_POST['form_type'] === 'admin_delete_user' && isset($_POST['profile_id']) && isset($_SESSION['role']) && $_SESSION['role'] === 'admin' && !empty($_POST['delete_checkbox_1'])) {
-        
+    else if ($_POST['form_type'] === 'admin_delete_user' && isset($_POST['user_id']) && isset($_POST['profile_id']) && isset($_SESSION['role']) && $_SESSION['role'] === 'admin' && !empty($_POST['delete_checkbox_1'])) {
         $profile_id = (int) $_POST['profile_id'];
 
         // Prevent admin from deleting their own account
         if ($profile_id === (int)$_SESSION['profile_id']) {
-            $_SESSION['delete-error'] = "You cannot delete your own admin account.";
+            $_SESSION['delete-error'] = "You cannot delete your own admin account";
             echo json_encode([
                 "success" => false,
                 "message" => "Admins cannot delete their own account"
@@ -58,12 +57,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['form_type'])) {
         ");
         $stmt->execute([$profile_id]);
 
-    
         // Delete user's profile directory
         deleteUserDirectory($profile_id);
         // Go back to user_search after user deleted
         $_SESSION['display_form'] = "user_search";
-        $_SESSION['delete-success'] ="User deleted".$profile_id;
+        $_SESSION['delete-success'] ="User deleted";
 
         echo json_encode(["success" => true, "message" => "User deleted"]);
     } 
