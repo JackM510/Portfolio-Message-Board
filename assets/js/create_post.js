@@ -90,7 +90,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
             const formData = new FormData(this);
 
-            fetch("actions/add_post.php", {
+            fetch(API.addPost, {
                 method: "POST",
                 body: formData
             })

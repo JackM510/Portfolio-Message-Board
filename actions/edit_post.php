@@ -1,51 +1,55 @@
 <?php
+require_once __DIR__ . '/../config.php';
 session_start();
-require_once('../includes/db_connection.php');
+require_once(DB_INC);
 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_SESSION['user_id']) && isset($_POST['post_id'])) {
     $user_id = $_SESSION['user_id'];
     $profile_id = $_SESSION['profile_id'];
     $post_id = $_POST['post_id'];
-    $edited_text = $_POST['post_textarea']; // Retrieve edited text
+    $edited_text = $_POST['post_textarea'];
     $edited_timestamp = date('Y-m-d H:i:s');
 
-    // Define the correct directory structure
-    $uploadDir = "../uploads/profiles/{$profile_id}/posts/{$post_id}/";
+    // Filesystem directory for this post
+    $uploadDir = DIR_PROFILE_UPLOADS . "/{$profile_id}/posts/{$post_id}/";
 
-    // Get current image path before updating (to delete it if needed)
+    // Get current image URL from DB
     $stmt = $pdo->prepare("SELECT post_picture FROM posts WHERE post_id = :post_id");
     $stmt->bindParam(':post_id', $post_id, PDO::PARAM_INT);
     $stmt->execute();
     $post = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    $currentImagePath = $post['post_picture']; // Store current image path
+    $currentImageURL = $post['post_picture'];
 
-    // Check if a new image is uploaded
+    // If a new image is uploaded
     if (!empty($_FILES["post-image-upload"]["name"])) {
-        // Ensure the directory exists
         if (!is_dir($uploadDir)) {
-            mkdir($uploadDir, 0777, true); // Create directories recursively
+            mkdir($uploadDir, 0777, true);
         }
 
         // Generate unique filename
         $newImageName = uniqid() . "_" . basename($_FILES["post-image-upload"]["name"]);
         $newImagePath = $uploadDir . $newImageName;
 
-        // Delete previous image if it exists
-        if (!empty($currentImagePath) && file_exists("../" . $currentImagePath)) {
-            unlink("../" . $currentImagePath);
+        if (!empty($currentImageURL)) {
+            // Convert web URL to filesystem path
+            $oldImagePath = str_replace(URL_PROFILE_UPLOADS, DIR_PROFILE_UPLOADS, $currentImageURL);
+
+            if (file_exists($oldImagePath)) {
+                unlink($oldImagePath);
+            }
         }
 
-        // Move the uploaded file to the correct directory
+
         if (move_uploaded_file($_FILES["post-image-upload"]["tmp_name"], $newImagePath)) {
-            $imageForDB = str_replace("../", "", $newImagePath); // Store relative path in DB
+            $imageForDB = URL_PROFILE_UPLOADS . "/{$profile_id}/posts/{$post_id}/{$newImageName}";
         } else {
             echo "Error uploading image.";
             exit();
         }
     } else {
         // Keep the current image if no new one is uploaded
-        $imageForDB = $currentImagePath;
+        $imageForDB = $currentImageURL;
     }
 
     // Update post details in the database

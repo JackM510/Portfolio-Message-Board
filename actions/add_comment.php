@@ -1,6 +1,7 @@
 <?php
+require_once __DIR__ . '/../config.php';
 session_start();
-require_once('../includes/db_connection.php');
+require_once(DB_INC);
 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_SESSION['user_id']) && isset($_POST['comment_text'])) {
     $post_id = $_POST['post_id'];

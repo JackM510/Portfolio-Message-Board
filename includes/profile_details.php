@@ -2,7 +2,7 @@
 <div id="profile-details" class="m-auto fade-in">
     <!-- Profile picture -->
     <div id="profile-picture-container">
-        <img id="profile-picture" class="rounded-pill" src="<?php echo htmlentities($profile_picture); ?>" alt="Profile Picture">
+        <img id="profile-picture" class="rounded-pill" src="<?= APP_BASE_PATH . "/" . htmlentities($profile_picture); ?>" alt="Profile Picture">
     </div>
     <!-- Profile details -->
     <div id="profile-details-container">
@@ -61,14 +61,14 @@
 <!-- Update profile container -->
 <div id="update-profile" class="container" style="display:none; ">
     <h1 class="display-5 text-center mb-5">Update Profile</h1>
-    <form id="profile-form" class="mx-auto" action="profile.php" method="POST" enctype="multipart/form-data" style="background-color: #FAFAFA;">
+    <form id="profile-form" class="mx-auto" action="<?= ACTION_EDIT_PROFILE ?>" method="POST" enctype="multipart/form-data" style="background-color: #FAFAFA;">
             <div class="row">
                 <!-- Profile Picture -->
                 <div class="col-12 mb-4">
                     <input id="profile-picture-input" type="file" name="profile_picture" accept="image/*" disabled hidden>
                     <label id="profile-picture-label" for="profile-image-upload" class="mb-2">
                         <div class="d-flex flex-column justify-content-center w-25 h-100 mb-2">
-                            <img id="profile-picture-img" class="mb-2" src="<?php echo htmlentities($profile_picture); ?>" alt="Profile Picture">
+                            <img id="profile-picture-img" class="mb-2" src="<?= APP_BASE_PATH . "/" . htmlentities($profile_picture); ?>" alt="Profile Picture">
                             <button id="profile-picture-btn" type="button" class="btn btn-sm btn-light mx-auto" title="Upload Profile Picture">
                                 <i class="bi bi-card-image" style="font-size: 18px;"></i>
                             </button>

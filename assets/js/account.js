@@ -34,14 +34,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
     checkboxes.forEach(cb => cb.addEventListener('change', validateCheckboxes));
 
-
     // AJAX request for updating email address
     document.getElementById("update-email-form").addEventListener("submit", function(event) {
         event.preventDefault(); // Stop default form submission
 
         const formData = new FormData(this);
 
-        fetch("actions/update_email.php", {
+        fetch(API.updateEmail, {
             method: "POST",
             body: formData
         })
@@ -54,15 +53,13 @@ document.addEventListener("DOMContentLoaded", function () {
         .catch(error => console.error("Fetch Error:", error));
     });
 
-
-
     // AJAX request for updating password
     document.getElementById("update-pw-form").addEventListener("submit", function(event) {
         event.preventDefault(); // Stop default form submission
 
         const formData = new FormData(this);
 
-        fetch("actions/update_password.php", {
+        fetch(API.updatePassword, {
             method: "POST",
             body: formData
         })
@@ -73,12 +70,5 @@ document.addEventListener("DOMContentLoaded", function () {
             sessionStorage.setItem("openPanel", "collapse-pw"); // or "collapse-pw", etc.
         })
         .catch(error => console.error("Fetch Error:", error));
-});
-
-
-
-
-
-
-
+    });
 });

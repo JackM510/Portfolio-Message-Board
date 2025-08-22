@@ -1,10 +1,11 @@
 <?php
+require_once __DIR__ . '/../config.php';
 session_start();
-require_once('../includes/db_connection.php');
+require_once(DB_INC);
 
 // Function to delete entire user DIR recursively
 function deleteUserDirectory($profile_id) {
-    $userDir = "../uploads/profiles/{$profile_id}/";
+    $userDir = DIR_PROFILE_UPLOADS . "/{$profile_id}/";
     if (!is_dir($userDir)) return;
 
     $files = new RecursiveIteratorIterator(
@@ -20,7 +21,7 @@ function deleteUserDirectory($profile_id) {
 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['form_type'])) {
     
-    // Delete your account from account.php
+    // Self delete from account.php
     if ($_POST['form_type'] === 'self_delete_user' && isset($_SESSION['user_id']) && !empty($_POST['delete_checkbox_1']) && !empty($_POST['delete_checkbox_2'])) {
         $user_id = $_SESSION['user_id'];
         $profile_id = $_SESSION['profile_id'];
@@ -31,7 +32,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['form_type'])) {
         $stmt->execute();
     
         deleteUserDirectory($profile_id); // Delete users DIR
-        header("Location: ../actions/logout_user.php"); // log the user out
+        header("Location: " . ACTION_LOGOUT_USER); // log the user out
+        exit();
     } 
     
     // Delete another users account as an admin from admin.php

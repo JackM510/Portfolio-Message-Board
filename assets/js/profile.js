@@ -1,4 +1,4 @@
-import { fadeEl } from "./utils/page-transitions.js";
+import { fadeEl } from "./utils/page_transitions.js";
 import { predictLines } from "./utils/textarea.js";
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -128,7 +128,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
             const formData = new FormData(this);
 
-            fetch("actions/edit_profile.php", {
+            fetch(API.editProfile, {
                 method: "POST",
                 body: formData
             })

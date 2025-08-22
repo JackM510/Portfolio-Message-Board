@@ -1,4 +1,4 @@
-import { fadeEl } from './utils/page-transitions.js';
+import { fadeEl } from './utils/page_transitions.js';
 
 // Add checkbox and delete button event listener
 function attachEvents() {
@@ -67,7 +67,7 @@ document.addEventListener("DOMContentLoaded", () => {
         row.addEventListener("click", () => {
         const userId = row.dataset.userId;
     
-        fetch("actions/get_profile.php", {
+        fetch(API.getProfile, {
             method: "POST",
             headers: { "Content-Type": "application/x-www-form-urlencoded" },
             body: new URLSearchParams({ user_id: userId })
@@ -111,7 +111,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // AJAX for returning a users profile information after their profile_id is stored in session data
     const storedId = sessionStorage.getItem("selectedProfileId");
     if (storedId) {
-        fetch("actions/get_profile.php", {
+        fetch(API.getProfile, {
             method: "POST",
             headers: { "Content-Type": "application/x-www-form-urlencoded" },
             body: new URLSearchParams({ user_id: storedId })
@@ -157,7 +157,7 @@ document.addEventListener("DOMContentLoaded", () => {
         event.preventDefault(); // Stop default form submission
         const formData = new FormData(this);
 
-        fetch("actions/update_email.php", {
+        fetch(API.updateEmail, {
             method: "POST",
             body: formData
         })
@@ -180,7 +180,7 @@ document.addEventListener("DOMContentLoaded", () => {
         event.preventDefault(); // Stop default form submission
         const formData = new FormData(this);
 
-        fetch("actions/update_password.php", {
+        fetch(API.updatePassword, {
             method: "POST",
             body: formData
         })
@@ -202,7 +202,7 @@ document.addEventListener("DOMContentLoaded", () => {
         event.preventDefault(); // Stop default form submission
         const formData = new FormData(this);
 
-        fetch("actions/delete_user.php", {
+        fetch(API.deleteUser, {
             method: "POST",
             body: formData
         })

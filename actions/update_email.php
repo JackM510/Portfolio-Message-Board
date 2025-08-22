@@ -1,7 +1,7 @@
 <?php
+require_once __DIR__ . '/../config.php';
 session_start();
-require_once('../includes/db_connection.php');
-
+require_once(DB_INC);
 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['form_type'])) {
     // Update email from account.php 
@@ -22,7 +22,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['form_type'])) {
             $_SESSION['invalid-email-error'] = "Invalid current email";
             exit();
         }
-    
     
         //Check that the new email addresses match
         $isMatch = ($newEmail === $confirmEmail);
@@ -69,8 +68,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['form_type'])) {
         $newEmail = $_POST['new_email'];
         $confirmEmail = $_POST['confirm_email'];
         $isMatch = ($newEmail === $confirmEmail); //Check that the new email addresses match
-
-
 
         if ($isMatch) {
             // Check that the email doesn't already exist in the DB

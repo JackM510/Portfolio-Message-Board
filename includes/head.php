@@ -6,8 +6,8 @@
 <!-- Bootstrap Icons -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
 <!-- Custom CSS and JS used on all pages -->
-<link href="css/styles.css" rel="stylesheet">
-<link href="css/nav.css" rel="stylesheet">
-<script src="js/utils/page-transitions.js" type="module" defer></script>
+<link href="<?= CSS_STYLES ?>" rel="stylesheet">
+<link href="<?= CSS_NAV ?>" rel="stylesheet">
+<script src="<?= JS_PAGE_TRANSITIONS ?>" type="module" defer></script>
 <!-- Icon -->
-<link rel="icon" href="icon/forum2.png">
+<link rel="icon" href="<?= ICON_HOME ?>">

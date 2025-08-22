@@ -1,11 +1,12 @@
 <?php
+    require_once __DIR__ . '/../config.php';
     session_start();
-    require_once('includes/db_connection.php');
-    require_once('includes/utils/utilities.php');
+    require_once(DB_INC);
+    require_once(UTIL_INC);
 
     // If user not logged in; redirect to login.php to login/signup
     if (isLoggedIn() === false) {
-        header("Location: login.php");
+        header("Location: /login.php");
     }
 
     $profile_id = isset($_GET['profile_id'])
@@ -70,27 +71,40 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <?php require_once "head.php"; ?>
-    <link href="css/profile.css" rel="stylesheet">
-    <script type="module"src="js/profile.js"></script>
+    <?php require_once (HEAD_INC); ?>
+    <link href="<?= CSS_PROFILE ?>" rel="stylesheet">
+    <script>
+        window.API = {
+            editProfile: "<?= ACTION_EDIT_PROFILE ?>",
+            addPost: "<?= ACTION_ADD_POST ?>",
+            addComment: "<?= ACTION_ADD_COMMENT ?>",
+            editPost: "<?= ACTION_EDIT_POST ?>",
+            editComment: "<?= ACTION_EDIT_COMMENT?>",
+            deletePost: "<?= ACTION_DELETE_POST ?>",
+            deleteComment: "<?= ACTION_DELETE_COMMENT ?>",
+            likePost: "<?= ACTION_LIKE_POST ?>",
+            likeComment: "<?= ACTION_LIKE_COMMENT ?>",
+        };
+    </script>
+    <script type="module" src="<?= JS_PROFILE ?>"></script>
     <!-- CSS & JS to create posts if user logged in -->
-    <link href="css/create_post.css" rel="stylesheet">
-    <script type="module" src="js/create_post.js"></script>
+    <link href="<?= CSS_CREATE_POST ?>" rel="stylesheet">
+    <script type="module" src="<?= JS_CREATE_POST ?>"></script>
     <!-- CSS & JS to fetch posts from mysql for a specified user -->
-    <link href="css/fetch_posts.css" rel="stylesheet">
-    <script type="module" src="js/fetch_posts.js"></script>
+    <link href="<?= CSS_FETCH_POSTS ?>" rel="stylesheet">
+    <script type="module" src="<?= JS_FETCH_POSTS ?>"></script>
    
     <title>Profile</title>
 </head>
 <body>
     <!-- Navbar -->
-    <?php require_once "nav.php"; ?>
+    <?php require_once (NAV_INC); ?>
     <section>
         <!-- Profile details section -->
         <div id="profile-container" class="container-fluid pt-5" style="background-color: #FAFAFA;">
             <?php
                 // Display profile_details.php
-                include 'includes/profile_details.php';
+                include (PROFILE_DETAILS_INC);
             ?>
         </div>
         <!-- Section posts -->
@@ -98,13 +112,13 @@
             <div id="profile-new-post">
                 <?php 
                     // Display create_post.php if user logged in
-                    include 'includes/create_post.php';
+                    include (CREATE_POST_INC);
                 ?>    
             </div>   
             <div id="profile-users-posts" class="d-flex flex-column justify-content-center">
                 <?php 
                     // Display all posts from the user
-                    include 'includes/fetch_posts.php';
+                    include (FETCH_POSTS_INC);
                     getPosts($pdo, $profile_id); //Fetch ALL posts in mysql   
                 ?>
             </div>

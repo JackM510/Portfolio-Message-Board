@@ -1,9 +1,10 @@
 <?php
+    // Temp til all adjustments made
+    require_once __DIR__ . '/../config.php';
+
     $isLoggedIn = isset($_SESSION['user_id']) && isset($_SESSION['email']); // Check login status
     $isAdmin = isset($_SESSION['role']) && $_SESSION['role'] === 'admin';
-
-    $navIcon = isset($_SESSION['avatar']) ? $_SESSION['avatar'] : "icon/profile.png";
-
+    $navIcon = isset($_SESSION['avatar']) ? APP_BASE_PATH . "/" . $_SESSION['avatar'] : ICON_PROFILE;
 ?>
 
 <nav class="navbar navbar-expand-lg sticky-top bg-light shadow-lg">
@@ -11,8 +12,8 @@
         <div class="d-flex">
             <ul class="navbar-nav mx-auto">
                 <li id="home-container" class="nav-item">
-                    <a id="home-link" class="nav-link" href="index.php">
-                        <img id="home-icon" src="icon/forum2.png" alt="Home icon">Message Board
+                    <a id="home-link" class="nav-link" href="<?= INDEX_URL; ?>">
+                        <img id="home-icon" src="<?= ICON_HOME; ?>" alt="Home icon">Message Board
                     </a>
                 </li>
             </ul>
@@ -26,18 +27,18 @@
                     <img id="avatar-icon" src="<?php echo htmlentities($navIcon) ?>" alt="Profile icon">
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="avatarDropdown">
-                    <li><a class="dropdown-item nav-dropdown-item" href="profile.php">View Profile</a></li>
+                    <li><a class="dropdown-item nav-dropdown-item" href="<?= PROFILE_URL; ?>">View Profile</a></li>
                     <?php if ($isAdmin): ?>
-                        <li><a class="dropdown-item nav-dropdown-item" href="admin.php">Admin Panel<a></li>
+                        <li><a class="dropdown-item nav-dropdown-item" href="<?= ADMIN_URL; ?>">Admin Panel</a></li>
                     <?php endif; ?>
-                    <li><a class="dropdown-item nav-dropdown-item" href="account.php">Account Settings</a></li>
-                    <li><a class="dropdown-item nav-dropdown-item text-danger" href="actions/logout_user.php">Logout</a></li>
+                    <li><a class="dropdown-item nav-dropdown-item" href="<?= ACCOUNT_URL; ?>">Account Settings</a></li>
+                    <li><a class="dropdown-item nav-dropdown-item text-danger" href="<?= LOGOUT_URL; ?>">Logout</a></li>
                 </ul>
             </div>
         <?php else: ?>
             <!-- Link to login.php for guests -->
-            <a class="navbar-brand nav-profile m-0 float-end" href="login.php">
-                <img src="icon/profile.png" alt="Profile icon" style="width:40px;">
+            <a class="navbar-brand nav-profile m-0 float-end" href="<?= LOGIN_URL; ?>">
+                <img src="<?= ICON_PROFILE; ?>" alt="Profile icon" style="width:40px;">
             </a>
         <?php endif; ?>
     </div>

@@ -1,7 +1,7 @@
 <?php
-
+require_once __DIR__ . '/../config.php';
 session_start();
-require_once('../includes/db_connection.php');
+require_once(DB_INC);
 
 // Validate user login credentials
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
@@ -32,7 +32,7 @@ require_once('../includes/db_connection.php');
                         // Redirect to dashboard after successful login
                         $_SESSION['display_form'] = "profile";
                         $_SESSION['id_token'] = $user['user_id'];
-                        header("Location: ../login.php");
+                        header("Location: " . LOGIN_URL);
                         exit();
                     } else {
                         // Unset form session variable
@@ -54,17 +54,17 @@ require_once('../includes/db_connection.php');
                         }
 
                         // Redirect to dashboard after successful login
-                        header("Location: ../index.php");
+                        header("Location: " . LOGIN_URL);
                         exit();
                     }
                 } else {
                     $_SESSION['login-password-error'] = "Invalid Password"; // Password doesn't match
-                    header("Location: ../login.php");
+                    header("Location: " . LOGIN_URL);
                     exit();
                 }
             } else {
                 $_SESSION['login-email-error'] = "Invalid Email Address"; // A user doesn't exist with the specifed email
-                header("Location: ../login.php");
+                header("Location: " . LOGIN_URL);
                 exit();
             }
         } catch (PDOException $e) {

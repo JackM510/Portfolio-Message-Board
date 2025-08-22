@@ -34,7 +34,7 @@ function renderComment(PDO $pdo, array $comment, int $postId): string {
         <div class="d-flex align-items-start">
             <a class="post-profile-link d-flex" href="profile.php?profile_id=<?= $profileId ?>">
                 <img class="me-2 rounded-pill comment-profile-picture" 
-                    src="<?= $commentorPic ?>" alt="Profile Picture">
+                    src="<?= APP_BASE_PATH . "/" . $commentorPic ?>" alt="Profile Picture">
                 <p class="break-text mb-2"><strong><?= $commentorName ?></strong></p>
             </a>
             
@@ -105,7 +105,7 @@ function renderAddComment(PDO $pdo, int $postId): string {
     <hr>
     <div class="add-comment d-flex pt-3">
         <div>
-            <img class="me-3 rounded-pill comment-profile-picture" src="<?= $profilePic ?>" alt="Post Image">
+            <img class="me-3 rounded-pill comment-profile-picture" src="<?= APP_BASE_PATH . "/" . $profilePic ?>" alt="Post Image">
         </div>
         <form id="add-comment-form-<?= $postIdEscaped ?>" data-post-id="<?= $postIdEscaped ?>" method="POST" class="w-100">
             <textarea id="add-comment-textarea-<?= $postIdEscaped ?>" class="form-control w-100 add-comment-textarea rounded responsive-textarea mb-2" name="comment_text" placeholder="Add a comment..." rows="1" maxlength="250"></textarea>
@@ -137,7 +137,7 @@ function renderPost(PDO $pdo, array $post): string {
     $stmt->execute();
     $userData = $stmt->fetch(PDO::FETCH_ASSOC);
 
-     $profileId = $userData['profile_id'];
+    $profileId = $userData['profile_id'];
 
     $userName = htmlspecialchars($userData['first_name'] . ' ' . $userData['last_name']);
     $profilePic = htmlspecialchars($userData['profile_picture']);
@@ -171,9 +171,9 @@ function renderPost(PDO $pdo, array $post): string {
     ob_start(); ?>
     <div class="post-container">
         <div class="d-flex align-items-start pt-1">
-            <a class="post-profile-link d-flex" href="profile.php?profile_id=<?= htmlspecialchars($profileId) ?>">
+            <a class="post-profile-link d-flex" href="<?= PROFILE_URL . '?profile_id=' . urlencode($profileId) ?>">
                 <img class="me-2 rounded-pill post-profile-picture"
-                    src="<?= $profilePic ?>" alt="Post Image">
+                    src="<?= APP_BASE_PATH . "/" . $profilePic ?>" alt="Post Image">
                 <h5 class="break-text mb-0"><?= $userName ?></h5>
             </a>
 
@@ -199,7 +199,7 @@ function renderPost(PDO $pdo, array $post): string {
             <div>
                 <img id="post-picture-<?= $postId ?>"
                     class="post-picture mt-3"
-                    src="<?= !empty($post['post_picture']) ? htmlspecialchars($post['post_picture']) : '' ?>"
+                    src="<?= !empty($post['post_picture']) ? APP_BASE_PATH . "/" . htmlspecialchars($post['post_picture']) : '' ?>"
                     alt="Post Image"
                     style="<?= empty($post['post_picture']) ? 'display:none;' : '' ?>">
             </div>

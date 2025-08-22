@@ -367,7 +367,7 @@ document.addEventListener("DOMContentLoaded", function() {
             event.preventDefault(); // Stop default form submission
             const formData = new FormData(this);
     
-            fetch("actions/edit_post.php", {
+            fetch(API.editPost, {
                 method: "POST",
                 body: formData
             })
@@ -390,7 +390,7 @@ document.addEventListener("DOMContentLoaded", function() {
             event.preventDefault(); // Stop default form submission
             const formData = new FormData(this);
     
-            fetch("actions/delete_post.php", {
+            fetch(API.deletePost, {
                 method: "POST",
                 body: formData
             })
@@ -413,7 +413,7 @@ document.addEventListener("DOMContentLoaded", function() {
           const container = button.closest(".post-like-container");
           const postId = container.dataset.postId;
       
-          fetch("actions/like_post.php", {
+          fetch(API.likePost, {
             method: "POST",
             headers: {
               "Content-Type": "application/x-www-form-urlencoded"
@@ -450,7 +450,7 @@ document.addEventListener("DOMContentLoaded", function() {
             const postId = this.getAttribute("data-post-id");
             const formData = new FormData(this);
   
-            fetch("actions/add_comment.php", {
+            fetch(API.addComment, {
                 method: "POST",
                 body: formData
             })
@@ -477,7 +477,7 @@ document.addEventListener("DOMContentLoaded", function() {
             const postId = this.getAttribute("data-post-id");
             const formData = new FormData(this);
     
-            fetch("actions/edit_comment.php", {
+            fetch(API.editComment, {
                 method: "POST",
                 body: formData
             })
@@ -503,7 +503,7 @@ document.addEventListener("DOMContentLoaded", function() {
             const postId = this.getAttribute("data-post-id");
             const formData = new FormData(this);
     
-            fetch("actions/delete_comment.php", {
+            fetch(API.deleteComment, {
                 method: "POST",
                 body: formData
             })
@@ -527,7 +527,7 @@ document.addEventListener("DOMContentLoaded", function() {
           const container = button.closest(".comment-like-container");
           const commentId = container.dataset.postId;
       
-          fetch("actions/like_comment.php", {
+          fetch(API.likeComment, {
             method: "POST",
             headers: {
               "Content-Type": "application/x-www-form-urlencoded"

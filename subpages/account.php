@@ -1,11 +1,12 @@
 <?php
+    require_once __DIR__ . '/../config.php';
     session_start();
-    require_once('includes/utils/utilities.php');
+    require_once(UTIL_INC);
     if (isLoggedIn() === false) {
-        header("Location: login.php");
+        header("Location:". LOGIN_URL);
     }
 
-    require_once('includes/db_connection.php');
+    require_once(DB_INC);
 
     // Delete a user
     if (isset($_POST['delete_user_id'])) {
@@ -24,14 +25,21 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <?php require_once "head.php"; ?>
-    <link href="css/account.css" rel="stylesheet">
-    <script src="js/account.js"></script>
+    <?php require_once (HEAD_INC); ?>
+    <link href="<?= CSS_ACCOUNT ?>" rel="stylesheet">
+    <script>
+        window.API = {
+            updateEmail: "<?= ACTION_UPDATE_EMAIL ?>",
+            updatePassword: "<?= ACTION_UPDATE_PASSWORD ?>",
+            deleteUser: "<?= ACTION_DELETE_USER ?>",
+        };
+    </script>
+    <script src="<?= JS_ACCOUNT ?>" defer></script>
     <title>Account Management</title>
 </head>
 <body>
     <!-- Navbar -->
-    <?php require_once "nav.php"; ?>
+    <?php require_once (NAV_INC); ?>
     <div class="mt-5 text-center mb-5">
         <h1 class="display-5">Account Management</h1>
     </div>
@@ -51,7 +59,7 @@
                         <div id="update-email-body" class="mt-3 mx-auto">
                             <h1 class="display-5 text-center mb-4">Update Email Address</h1>
                             <?php if (isset($_SESSION['email-success'])) { echo "<p class='success-flash'>".$_SESSION['email-success']."</p>"; unset($_SESSION['email-success']); } ?>
-                            <form id="update-email-form" method="POST" action="actions/update_email.php">
+                            <form id="update-email-form" method="POST" action="<?= ACTION_UPDATE_EMAIL ?>">
                                 <row>
                                     <!-- Hidden inputs -->
                                     <input type="hidden" name="form_type" value="self_update_email" hidden>
@@ -98,7 +106,7 @@
                         <div id="update-pw-body" class="mt-3 mx-auto">
                             <h1 class="display-5 text-center mb-4">Update Password</h1>
                             <?php if (isset($_SESSION['pw-success'])) { echo "<p class='success-flash'>".$_SESSION['pw-success']."</p>"; unset($_SESSION['pw-success']); } ?>
-                            <form id="update-pw-form" method="POST" action="actions/update_password.php">
+                            <form id="update-pw-form" method="POST" action="<?= ACTION_UPDATE_PASSWORD ?>">
                                 <div class="row">
                                     <!-- Hidden inputs -->
                                     <input type="hidden" name="form_type" value="self_update_pw" hidden>
@@ -143,7 +151,7 @@
                         <!-- Delete account -->
                         <div id="delete-account-body" class="mt-5 mx-auto d-flex flex-column">
                             <h1 class="display-5 text-center mb-4">Delete Account</h1>
-                            <form method="POST" action="actions/delete_user.php">
+                            <form method="POST" action="<?= ACTION_DELETE_USER ?>">
                                 <!-- Hidden inputs -->
                                 <input type="hidden" name="form_type" value="self_delete_user" hidden>
                                 <!-- Checkbox 1 -->
@@ -162,11 +170,9 @@
                                 </div> 
                             </form>
                         </div>
-                        
                     </div>
                 </div>
             </div>
-
         </div>
     </div>
 </body>

@@ -1,11 +1,12 @@
 <?php
+    require_once __DIR__ . '/../config.php';
     session_start();
-    require_once('includes/utils/utilities.php');
+    require_once(UTIL_INC);
     if (isLoggedIn() === false && !isset($_SESSION['role'])) {
-        header("Location: login.php");
+        header("Location: ".LOGIN_URL);
     }
 
-    require_once('includes/db_connection.php');
+    require_once(DB_INC);
     
     // Retrieve all users from mysql - FOR SEARCH -------TEMPORARY STATEMENT FOR UI DESIGN---------------------
     $sql = "SELECT
@@ -24,14 +25,22 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <?php require_once "head.php"; ?>
-    <link href="css/admin.css" rel="stylesheet">
-    <script src="js/admin.js" type="module"></script>
+    <?php require_once (HEAD_INC); ?>
+    <link href="<?= CSS_ADMIN ?>" rel="stylesheet">
+    <script>
+        window.API = {
+            getProfile: "<?= ACTION_GET_PROFILE ?>",
+            updateEmail: "<?= ACTION_UPDATE_EMAIL ?>",
+            updatePassword: "<?= ACTION_UPDATE_PASSWORD ?>",
+            deleteUser: "<?= ACTION_DELETE_USER ?>",
+        };
+    </script>
+    <script src="<?= JS_ADMIN ?>" type="module"></script>
     <title>Admin Panel</title>
 </head>
 <body>
     <!-- Navbar -->
-    <?php require_once "nav.php"; ?>
+    <?php require_once (NAV_INC); ?>
     
     <section class="container d-flex flex-column justify-content-center">
         
@@ -129,7 +138,7 @@
                                 <div id="update-email-body" class="mt-3 mx-auto">
                                     <h1 class="display-5 text-center mb-4">Update Email Address</h1>
                                     <?php if (isset($_SESSION['email-success'])) { echo "<p class='success-flash'>".$_SESSION['email-success']."</p>"; unset($_SESSION['email-success']); } ?>
-                                    <form id="reset-email-form" method="POST" action="actions/update_email.php">
+                                    <form id="reset-email-form" method="POST" action="<?= ACTION_UPDATE_EMAIL ?>">
                                         <row>
                                             <!-- Hidden inputs -->
                                             <input type="hidden" name="form_type" value="admin_update_email" hidden>
@@ -170,7 +179,7 @@
                                 <div id="update-pw-body" class="mt-3 mx-auto">
                                     <h1 class="display-5 text-center mb-4">Update Password</h1>
                                     <?php if (isset($_SESSION['pw-success'])) { echo "<p class='success-flash'>".$_SESSION['pw-success']."</p>"; unset($_SESSION['pw-success']); } ?>
-                                    <form id="reset-pw-form" method="POST" action="actions/update_password.php">
+                                    <form id="reset-pw-form" method="POST" action="<?= ACTION_UPDATE_PASSWORD ?>">
                                         <div class="row">
                                             <!-- Hidden inputs -->
                                             <input type="hidden" name="form_type" value="admin_update_pw" hidden>
@@ -210,7 +219,7 @@
                                 <div id="delete-account-body" class="mt-5 mx-auto d-flex flex-column">
                                     <h1 class="display-5 text-center mb-4">Delete Account</h1>
                                     <?php if (isset($_SESSION['delete-error'])) { echo "<p class='text-center error-flash'>".$_SESSION['delete-error']."</p>"; unset($_SESSION['delete-error']); } ?>
-                                    <form id="delete-user-form" method="POST" action="actions/delete_user.php">
+                                    <form id="delete-user-form" method="POST" action="<?= ACTION_DELETE_USER ?>">
                                         <!-- Hidden inputs -->
                                         <input type="hidden" name="form_type" value="admin_delete_user" hidden>
                                         <input type="number" id="hidden-delete-input-user" name="user_id" value="" hidden>
@@ -233,14 +242,10 @@
                 </div>
             </div>
         </div>
-        
     </div>        
-
-          
+   
     </div>
                         
-    
-
     </section></br>
 
 </body>

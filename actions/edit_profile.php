@@ -1,6 +1,7 @@
 <?php
+require_once __DIR__ . '/../config.php';
 session_start();
-require_once('../includes/db_connection.php');
+require_once(DB_INC);
 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_SESSION['user_id'])) {
 
@@ -26,39 +27,46 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_SESSION['user_id'])) {
     $stmt->bindParam(':uid', $_SESSION['user_id'], PDO::PARAM_STR);
     $stmt->execute();
 
-    // Check is a new image is uploaded
+    // If a new image is uploaded
     if (isset($_FILES["profile_picture"]) && !empty($_FILES["profile_picture"]["name"])) {
 
         $user_id = $_SESSION['user_id'];
         $profile_id = $_SESSION['profile_id'];
 
-        // Define the correct directory structure
-        $uploadDir = "../uploads/profiles/{$profile_id}/profile_picture/";
+        // Filesystem directory for profile picture
+        $uploadDir = DIR_PROFILE_UPLOADS . "/{$profile_id}/profile_picture/";
+
+        // Ensure directory exists before saving
+        if (!is_dir($uploadDir)) {
+            mkdir($uploadDir, 0777, true);
+        }
 
         // Retrieve existing profile picture path from db
         $stmt = $pdo->prepare("SELECT profile_picture FROM profiles WHERE user_id = :user_id");
         $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
         $stmt->execute();
         $data = $stmt->fetch(PDO::FETCH_ASSOC);
+        $currentImageURL = $data['profile_picture'];
         
-        $currentImagePath = $data['profile_picture']; // Store current image path
-        
-        // Ensure the directory exists
-        if (!is_dir($uploadDir)) {
-            mkdir($uploadDir, 0777, true);
+        // Delete old image if it exists and isn't the default
+        if (!empty($currentImageURL) && $currentImageURL !== DEFAULT_PROFILE_PIC) {
+            // Normalise and map URL to filesystem path
+            $oldImagePath = str_replace(
+                URL_PROFILE_UPLOADS,
+                DIR_PROFILE_UPLOADS,
+                '/' . ltrim($currentImageURL, '/')
+            );
+            if (is_file($oldImagePath)) {
+                unlink($oldImagePath);
+            }
         }
 
-        // Generate unique filename
+        // Save new image
         $newImageName = uniqid() . "_" . basename($_FILES["profile_picture"]["name"]);
         $newImagePath = $uploadDir . $newImageName;
 
-        // Delete previous image if it exists
-        if (!empty($currentImagePath) && file_exists("../" . $currentImagePath)) {
-            unlink("../" . $currentImagePath);
-        }
-
         if (move_uploaded_file($_FILES["profile_picture"]["tmp_name"], $newImagePath)) {
-            $imageForDB = str_replace("../", "", $newImagePath); // Store relative path in DB
+            $imageForDB = URL_PROFILE_UPLOADS . "/{$profile_id}/profile_picture/{$newImageName}";
             // Update database with new profile picture URL
             $stmt = $pdo->prepare("UPDATE profiles SET profile_picture = :profile_picture WHERE user_id = :user_id");
             $stmt->bindParam(':profile_picture', $imageForDB, PDO::PARAM_STR);

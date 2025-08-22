@@ -1,7 +1,7 @@
 <?php
-
+require_once __DIR__ . '/../config.php';
 session_start();
-require_once('../includes/db_connection.php');
+require_once(DB_INC);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_FILES["profile_picture"]["name"])) {
     $user_id = $_SESSION['id_token']; // Store temp user token
@@ -10,7 +10,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_FILES["profile_picture"]["
     $occupation = $_POST['occupation'];
     $bio = $_POST['bio'];
 
-    // Insert all profile data except profile picture to generate a profile_id 
+    // Insert all text
     if ($location && $occupation && $bio) { 
         $stmt = $pdo->prepare("INSERT INTO profiles (user_id, location, occupation, bio) VALUES (:user_id, :location, :occupation, :bio)");
         $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
@@ -31,20 +31,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_FILES["profile_picture"]["
             exit();
         }
 
-        // Define user-specific directory
-        $userDir = "../uploads/profiles/{$profile_id}/profile_picture/";
-        // Check if the user's profile_picture directory exists, if not, create it
-        if (!file_exists($userDir)) {
+       // Filesystem directory for profile picture
+        $userDir = DIR_PROFILE_UPLOADS . "/{$profile_id}/profile_picture/";
+        if (!is_dir($userDir)) {
             mkdir($userDir, 0777, true);
         }
 
-        // Generate a unique filename for the profile_picture
+        // Unique filename
         $newImageName = uniqid() . "_" . basename($_FILES["profile_picture"]["name"]);
         $newImagePath = $userDir . $newImageName;
 
         // Move the profile_picture to the newly created profile directory
         if (move_uploaded_file($_FILES["profile_picture"]["tmp_name"], $newImagePath)) {
-            $imageForDB = str_replace("../", "", $newImagePath); // Store a relative pathway for the profile_picture in mysql
+           // Web URL for DB
+            $imageForDB = URL_PROFILE_UPLOADS . "/{$profile_id}/profile_picture/{$newImageName}";
 
             // Insert the profile_picture into the users profile
             $stmt = $pdo->prepare("

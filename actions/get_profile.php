@@ -1,6 +1,7 @@
 <?php
-require_once('../includes/db_connection.php');
+require_once __DIR__ . '/../config.php';
 session_start();
+require_once(DB_INC);
 
 if (!isset($_POST['user_id'])) {
   echo json_encode(['success' => false, 'error' => 'Missing user ID']);
