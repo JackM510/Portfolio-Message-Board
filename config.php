@@ -10,7 +10,7 @@ define('UTIL_INC', APP_ROOT . '/includes/utils/utilities.php');
 define('PROFILE_DETAILS_INC', APP_ROOT . '/includes/profile_details.php');
 define('CREATE_POST_INC', APP_ROOT . '/includes/create_post.php');
 define('FETCH_POSTS_INC', APP_ROOT . '/includes/fetch_posts.php');
-/* Pages */
+// Pages
 define('LOGIN_URL', APP_BASE_PATH . '/subpages/login.php');
 define('INDEX_URL', APP_BASE_PATH . '/index.php');
 define('PROFILE_URL', APP_BASE_PATH . '/subpages/profile.php');
@@ -35,8 +35,8 @@ define('ACTION_LOGIN_USER', APP_BASE_PATH . '/actions/login_user.php');
 define('ACTION_LOGOUT_USER', APP_BASE_PATH . '/actions/logout_user.php');
 define('ACTION_UPDATE_EMAIL', APP_BASE_PATH . '/actions/update_email.php');
 define('ACTION_UPDATE_PASSWORD', APP_BASE_PATH . '/actions/update_password.php');
-/* Icons */
-define('ICON_HOME', APP_BASE_PATH . '/assets/icon/forum2.png');
+// Icons
+define('ICON_HOME', APP_BASE_PATH . '/assets/icon/forum.png');
 define('ICON_PROFILE', APP_BASE_PATH . '/assets/icon/profile.png');
 // CSS
 define('CSS_ACCOUNT', APP_BASE_PATH . '/assets/CSS/account.css');
