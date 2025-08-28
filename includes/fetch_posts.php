@@ -32,7 +32,7 @@ function renderComment(PDO $pdo, array $comment, int $postId): string {
     <div class="comment comment-<?= $postId ?>">
     <hr>
         <div class="d-flex align-items-start">
-            <a class="post-profile-link d-flex" href="profile.php?profile_id=<?= $profileId ?>">
+            <a class="post-profile-link d-flex" href="<?= PROFILE_URL . '?profile_id=' . urlencode($profileId) ?>">
                 <img class="me-2 rounded-pill comment-profile-picture" 
                     src="<?= APP_BASE_PATH . "/" . $commentorPic ?>" alt="Profile Picture">
                 <p class="break-text mb-2"><strong><?= $commentorName ?></strong></p>

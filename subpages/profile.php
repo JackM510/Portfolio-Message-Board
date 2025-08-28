@@ -6,7 +6,7 @@
 
     // If user not logged in; redirect to login.php to login/signup
     if (isLoggedIn() === false) {
-        header("Location: /login.php");
+        header("Location: " . LOGIN_URL);
     }
 
     $profile_id = isset($_GET['profile_id'])

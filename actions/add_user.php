@@ -22,32 +22,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $age = date_diff(date_create($_POST['date_of_birth']), date_create('today'))->y;
     if ($age < 18) {
         $_SESSION['signup-age-error'] = "You must be 18 or older to create an account";
-        header("Location: ../login.php");
+        header("Location: " . LOGIN_URL);
         exit();
     }
 
     // Flash an error message if the email already exists
     if ($stmt->rowCount() > 0) {
         $_SESSION['signup-email-error'] = "Email Address Already Exists";
-        header("Location: ../login.php");
+        header("Location: " . LOGIN_URL);
         exit();
     } 
     // Flash error message if password is < 8 characters
     else if (strlen($_POST['password']) < 8) {
         $_SESSION['signup-password-error'] = "Password must be at least 8 characters";
-        header("Location: ../login.php");
+        header("Location: " . LOGIN_URL);
         exit();
     }
     // Flash error message if password contains <1 number
     else if (!preg_match('/\d/', $_POST['password'])) {
         $_SESSION['signup-password-error'] = "Password must contain at least 1 number";
-        header("Location: ../login.php");
+        header("Location: " . LOGIN_URL);
         exit();
     }
     // Flash error message if password contains <1 number
     else if (!preg_match('/[A-Z]/', $_POST['password'])) {
         $_SESSION['signup-password-error'] = "Password must contain at least 1 capital letter";
-        header("Location: ../login.php");
+        header("Location: " . LOGIN_URL);
         exit();
     }  
 
@@ -82,7 +82,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         
     } else {
         $_SESSION['signup-password-error'] = "New passwords don't match";
-        //header("Location: ../login.php");
         exit();
     }
 }

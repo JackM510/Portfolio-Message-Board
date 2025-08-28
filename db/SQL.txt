@@ -18,9 +18,6 @@ CREATE TABLE users (
   PRIMARY KEY(user_id)
 ) ENGINE = InnoDB DEFAULT CHARSET=utf8;
 
-INSERT INTO `users` (`first_name`, `last_name`, `email`, `password`, `role`)
-VALUES ('Jack', 'Marshall', 'jackmarshall@example.com', '$2y$10$Y6ld32Af8dtZmTWb0nwOPOKz2LJMOK/Py3yPBQovEopqiO8lmsN.a', 'admin');
-
 -- Create 'profiles' table
 CREATE TABLE profiles (
   profile_id INTEGER NOT NULL AUTO_INCREMENT,
@@ -32,9 +29,6 @@ CREATE TABLE profiles (
   PRIMARY KEY(profile_id),
   FOREIGN KEY(user_id) REFERENCES users(user_id) ON DELETE CASCADE
 ) ENGINE = InnoDB DEFAULT CHARSET=utf8;
-
-INSERT INTO `profiles` (`user_id`, `age`, `bio`, `profile_picture`, `location`)
-VALUES (1, 28, 'Creator of the Message Board application', 'uploads/profiles/1/profile_picture/ph-3.png', 'VIC, Australia');
 
 -- Create 'posts' table
 CREATE TABLE posts (
@@ -71,9 +65,9 @@ CREATE TABLE post_likes (
     PRIMARY KEY (post_like_id),
     FOREIGN KEY (post_id) REFERENCES posts(post_id) ON DELETE CASCADE,
     FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
-);
+) ENGINE = InnoDB DEFAULT CHARSET=utf8;
 
--- Create 'post_likes' table
+-- Create 'comment_likes' table
 CREATE TABLE comment_likes (
     comment_like_id INT NOT NULL AUTO_INCREMENT,
     comment_id INT NOT NULL,
@@ -83,4 +77,4 @@ CREATE TABLE comment_likes (
     PRIMARY KEY (comment_like_id),
     FOREIGN KEY (comment_id) REFERENCES comments(comment_id) ON DELETE CASCADE,
     FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
-);
+) ENGINE = InnoDB DEFAULT CHARSET=utf8;
