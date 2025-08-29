@@ -2,6 +2,7 @@
     require_once __DIR__ . '/../config.php';
     session_start();
     require_once(DB_INC);
+    require_once(UTIL_INC);
 
     // If a user is already logged in
     if (isset($_SESSION['user_id']) && isset($_SESSION['first_name'])) {

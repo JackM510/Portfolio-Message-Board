@@ -1,27 +1,31 @@
-#home-container {
+#brand-container {
     background-color: #0D6EFD;
     border-radius: 2px;
 }
 
-#home-link {
+#brand-link {
     color: white;
     font-size: 16px;
     font-weight: bold;
     display: flex;
     align-items: center;
-    padding: 6px 6px;
+    padding: 6px;
 }
 
-#home-icon {
+#brand-icon {
     width: 20px;
     margin-right: 5px;
 }
 
-#avatar-icon {
+#profile-icon {
     width: 36px;
     height: 36px;
     object-fit: cover;
     border-radius: 50%;
+}
+
+#avatar-icon {
+    width: 40px;
 }
 
 .nav-dropdown-item:active {
@@ -32,19 +36,13 @@
     margin-left: 0px !important;
 }
 
-/* Tablets (small screens) */
-@media (min-width: 600px) {
-    .avatar-icon {
-        width: 36px;
-        height: 36px;
-        
-    }
-
-    #home-icon {
+/* Small devices */
+@media (min-width: 576px) {
+    #brand-icon {
         width: 22px;
     }
-
-    #home-link {
+    
+    #brand-link {
         font-size: 18px;
     }
 }

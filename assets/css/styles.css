@@ -8,23 +8,17 @@ body {
 body.fade-in {
     opacity: 1;
 }
-
-/* Generic version for re-use elsewhere */
-/*.fade-in {
-  opacity: 0;
-  transition: opacity 0.5s ease-in-out;
-}
-.fade-in.active {
-  opacity: 1;
-}*/
   
 textarea {
     resize: none !important;
 }
 
+/* font styles */
 h5 {
     font-size: 18px !important;
 }
+
+/* flash classes */
 .error-flash {
     font-size: 16px;
     color: red;
