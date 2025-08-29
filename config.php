@@ -7,7 +7,6 @@ define('HEAD_INC', APP_ROOT . '/includes/head.php');
 define('NAV_INC', APP_ROOT . '/includes/nav.php');
 define('DB_INC', APP_ROOT . '/includes/db_connection.php');
 define('UTIL_INC', APP_ROOT . '/includes/utils/utilities.php');
-define('PROFILE_DETAILS_INC', APP_ROOT . '/includes/profile_details.php');
 define('CREATE_POST_INC', APP_ROOT . '/includes/create_post.php');
 define('FETCH_POSTS_INC', APP_ROOT . '/includes/fetch_posts.php');
 // Pages
