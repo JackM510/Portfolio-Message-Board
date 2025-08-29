@@ -75,30 +75,30 @@
                 <div id="signup-form-container" class="row">
                     <div class="col-12 mb-3">
                         <label class="pb-1" for="first_name">First Name</label>
-                        <input class="form-control" type="text" maxlength="20" name="first_name" required>
+                        <input class="form-control" type="text" maxlength="25" name="first_name" required>
                     </div>
                     <div class="col-12 mb-3">
                         <label class="pb-1" for="last_name">Last Name</label>
-                        <input class="form-control" type="text" maxlength="20" name="last_name" required>
+                        <input class="form-control" type="text" maxlength="25" name="last_name" required>
                     </div>
                     <div class="col-12 mb-3">
                     <?php if (isset($_SESSION['signup-email-error'])) { echo "<p class='error-flash'>".$_SESSION['signup-email-error']."</p>"; unset($_SESSION['signup-email-error']); } ?>
                         <label class="pb-1" for="email">Email</label>
-                        <input class="form-control" type="email" name="email" required>
+                        <input class="form-control" type="email" maxlength="50" name="email" required>
                     </div>
                     <div class="col-12 mb-3">
-                    <?php if (isset($_SESSION['signup-age-error'])) { echo "<p class='error-flash'>".$_SESSION['signup-age-error']."</p>"; unset($_SESSION['signup-age-error']); } ?>
+                    <?php if (isset($_SESSION['signup-date-error'])) { echo "<p class='error-flash'>".$_SESSION['signup-date-error']."</p>"; unset($_SESSION['signup-date-error']); } ?>
                         <label class="pb-1" for="date_of_birth">Date of Birth</label>
-                        <input class="form-control" type="date" name="date_of_birth" required>
+                        <input class="form-control" type="date" name="date_of_birth" max="2099-12-31" required>
                     </div>
                     <div class="col-12 mb-3">
                     <?php if (isset($_SESSION['signup-password-error'])) { echo "<p class='error-flash'>".$_SESSION['signup-password-error']."</p>"; unset($_SESSION['signup-password-error']); } ?>
                         <label class="pb-1" for="password">New Password</label>    
-                        <input class="form-control" type="password" name="password" required>
+                        <input class="form-control" type="password" maxlength="25" name="password" required>
                     </div>
                     <div class="col-12 mb-3">
                         <label class="pb-1" for="confirm_password">Confirm Password</label>    
-                        <input class="form-control" type="password" name="confirm_password" required>
+                        <input class="form-control" type="password" maxlength="25" name="confirm_password" required>
                     </div>
                     <div class="col-12 d-flex justify-content-center">
                         <button id="signup-btn" class="btn btn-primary" type="submit" name="signup">Sign Up</button>

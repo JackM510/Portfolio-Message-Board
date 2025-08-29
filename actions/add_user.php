@@ -21,7 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Flash an error message if users age is not >=18
     $age = date_diff(date_create($_POST['date_of_birth']), date_create('today'))->y;
     if ($age < 18) {
-        $_SESSION['signup-age-error'] = "You must be 18 or older to create an account";
+        $_SESSION['signup-date-error'] = "You must be 18 or older to create an account";
         header("Location: " . LOGIN_URL);
         exit();
     }
