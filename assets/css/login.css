@@ -15,6 +15,14 @@
     opacity: 1;
 }
 
+#profile-picture-img {
+    object-position: center;
+    object-fit: cover;
+    aspect-ratio: 1 / 1;
+    border-radius: 50%;
+    width: 100%;
+}
+
 @media (min-width: 768px) {
     #login-form,
     #signup-form,
