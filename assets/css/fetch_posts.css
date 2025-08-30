@@ -1,5 +1,4 @@
 /* Default styles for XS devices */
-
 .post-container {
     border-top: #DEE2E6 solid 2px;
     border-bottom: #DEE2E6 solid 2px;
@@ -10,6 +9,8 @@
 .post-profile-picture,
 .comment-profile-picture {
     object-fit: cover;
+    aspect-ratio: 1 / 1;
+    flex-shrink: 0;
     height: 30px;
     width: 30px;
 }
@@ -19,7 +20,6 @@
     overflow-wrap: break-word;   /* modern standard */
     word-break: break-word;      /* optional for aggressive breaking */
 }
-
 
 .post-picture {
     object-position: center;
@@ -62,7 +62,6 @@
     display: none;
 }
 
-
 /* Add Comment styles */
 .add-comment-textarea {
     border-color: #DEE2E6;
@@ -79,12 +78,10 @@
     text-decoration: none;
     color: inherit;
     cursor: pointer;
-    word-wrap: break-word; /* Breaks long words */
     white-space: normal; /* Allows wrapping instead of one-line behavior */
 }
 
 /* Existing Comment & Edit comment styles */
-
 .edit-comment-dropdown-item:hover {
     background-color: #f8f9fa !important;
 }
@@ -112,18 +109,8 @@
 }
 
 /* Standard laptops & desktops */
-@media (min-width: 1024px) {
+@media (min-width: 992px) {
     .post-picture {
         aspect-ratio: 4 / 3;
     }
-}
-
-/* Large screens */
-@media (min-width: 1280px) {
-    
-}
-
-/* Extra large screens (4K monitors) */
-@media (min-width: 1600px) {
-    
 }
