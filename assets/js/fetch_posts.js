@@ -433,7 +433,7 @@ document.addEventListener("DOMContentLoaded", function() {
               icon.classList.toggle("bi-hand-thumbs-up-fill", data.liked);
               icon.classList.toggle("bi-hand-thumbs-up", !data.liked);
             } else if (data.unauthorized) {
-                window.location.href = "login.php";
+                window.location.href = API.loggedOutLike;
                 return;
             } else {
               alert("Something went wrong with liking.");
@@ -546,7 +546,7 @@ document.addEventListener("DOMContentLoaded", function() {
               icon.classList.toggle("bi-hand-thumbs-up-fill", data.liked);
               icon.classList.toggle("bi-hand-thumbs-up", !data.liked);
             } else if (data.unauthorized) {
-                window.location.href = "login.php";
+                window.location.href = API.loggedOutLike;
                 return;
             } else {
               alert("Something went wrong with liking this comment.");

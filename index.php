@@ -20,6 +20,7 @@
             deleteComment: "<?= ACTION_DELETE_COMMENT ?>",
             likePost: "<?= ACTION_LIKE_POST ?>",
             likeComment: "<?= ACTION_LIKE_COMMENT ?>",
+            loggedOutLike: "<?= LOGIN_URL ?>",
         };
     </script>
     <!-- CSS & JS to create posts if user logged in -->
