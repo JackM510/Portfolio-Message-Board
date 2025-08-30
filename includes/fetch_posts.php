@@ -61,7 +61,7 @@ function renderComment(PDO $pdo, array $comment, int $postId): string {
             <form id="edit-comment-form-<?= $commentId ?>" data-post-id="<?= $postIdEscaped ?>" class="w-100" method="POST">
                 
                 <p id="comment-description-<?= $commentId ?>" class="break-text mb-2"><?= $commentText ?></p>
-                <textarea id="comment-textarea-<?= $commentId ?>" class="form-control comment-textarea rounded mb-1 responsive-textarea" name="edit_comment" data-post-id="<?= $commentId ?>" maxlength="250" rows="1" hidden required disabled><?= $commentText ?></textarea>
+                <textarea id="comment-textarea-<?= $commentId ?>" class="form-control comment-textarea rounded mb-1 responsive-textarea" name="edit_comment" data-post-id="<?= $commentId ?>" maxlength="255" rows="1" hidden required disabled><?= $commentText ?></textarea>
                 <input type="hidden" name="comment_id" value="<?= $commentId ?>">
 
                 <div class="d-flex">
@@ -108,7 +108,7 @@ function renderAddComment(PDO $pdo, int $postId): string {
             <img class="me-3 rounded-pill comment-profile-picture" src="<?= APP_BASE_PATH . "/" . $profilePic ?>" alt="Post Image">
         </div>
         <form id="add-comment-form-<?= $postIdEscaped ?>" data-post-id="<?= $postIdEscaped ?>" method="POST" class="w-100">
-            <textarea id="add-comment-textarea-<?= $postIdEscaped ?>" class="form-control w-100 add-comment-textarea rounded responsive-textarea mb-2" name="comment_text" placeholder="Add a comment..." rows="1" maxlength="250"></textarea>
+            <textarea id="add-comment-textarea-<?= $postIdEscaped ?>" class="form-control w-100 add-comment-textarea rounded responsive-textarea mb-2" name="comment_text" placeholder="Add a comment..." rows="1" maxlength="255"></textarea>
             <input type="hidden" name="post_id" value="<?= $postIdEscaped ?>">
             <div id="add-comment-btns-<?= $postIdEscaped ?>" class="add-comment-btns">
                 <button class="btn btn-sm btn-secondary cancel-btn" type="button" data-post-id="<?= $postIdEscaped ?>">Cancel</button>
@@ -213,7 +213,7 @@ function renderPost(PDO $pdo, array $post): string {
 
             <div class="mt-3">           
                 <p id="post-description-<?= $postId ?>" class="break-text mb-2"><?= htmlspecialchars($post['post_text']) ?></p>
-                <textarea id="post-textarea-<?= $postId ?>" class="form-control post-textarea rounded mb-1 responsive-textarea" name="post_textarea" rows="1" maxlength="250" hidden required disabled><?= htmlspecialchars($post['post_text']) ?></textarea>
+                <textarea id="post-textarea-<?= $postId ?>" class="form-control post-textarea rounded mb-1 responsive-textarea" name="post_textarea" rows="1" maxlength="255" hidden required disabled><?= htmlspecialchars($post['post_text']) ?></textarea>
 
                 <div class="d-flex">
                     <p class="mb-1" style="color:grey;"><?= $postTimestamp ?></p>

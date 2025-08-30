@@ -67,19 +67,18 @@
                                     <div class="col-12 mb-3">
                                         <?php if (isset($_SESSION['invalid-email-error'])) { echo "<p class='error-flash'>".$_SESSION['invalid-email-error']."</p>"; unset($_SESSION['invalid-email-error']); } ?>
                                         <label class="pb-1" for="current_email">Current Email</label>
-                                        <input class="form-control" type="email" name="current_email" required>
+                                        <input class="form-control" type="email" name="current_email" maxlength="50" required>
                                     </div>
                                     <!-- New email -->
                                     <div class="col-12 mb-3">
                                         <?php if (isset($_SESSION['new-email-error'])) { echo "<p class='error-flash'>".$_SESSION['new-email-error']."</p>"; unset($_SESSION['new-email-error']); } ?>
-
                                         <label class="pb-1" for="new_email">New Email</label>
-                                        <input class="form-control" type="email" name="new_email" required>
+                                        <input class="form-control" type="email" name="new_email" maxlength="50" required>
                                     </div>
                                     <!-- Confirm email -->
                                     <div class="col-12 mb-4">
                                         <label class="pb-1" for="confirm_email">Confirm Email</label>
-                                        <input class="form-control" type="email" name="confirm_email" required>
+                                        <input class="form-control" type="email" name="confirm_email" maxlength="50" required>
                                     </div>
                                     <!-- Submit btn -->
                                     <div class="col-12 d-flex justify-content-center mb-2">
@@ -114,18 +113,18 @@
                                     <?php if (isset($_SESSION['invalid-password-error'])) { echo "<p class='error-flash'>".$_SESSION['invalid-password-error']."</p>"; unset($_SESSION['invalid-password-error']); } ?>
                                     <div class="col-12 mb-3">
                                         <label class="pb-1" for="current_pw">Current Password</label>
-                                        <input class="form-control" type="password" name="current_pw" required>
+                                        <input class="form-control" type="password" name="current_pw" maxlength="25" required>
                                     </div>
                                     <!-- New password -->
                                     <div class="col-12 mb-3">
                                     <?php if (isset($_SESSION['update-password-error'])) { echo "<p class='error-flash'>".$_SESSION['update-password-error']."</p>"; unset($_SESSION['update-password-error']); } ?>
                                         <label class="pb-1" for="new_pw">New Password</label> 
-                                        <input class="form-control" type="password" name="new_pw" required>
+                                        <input class="form-control" type="password" name="new_pw" maxlength="25" required>
                                     </div>
                                     <!-- Confirm password -->
                                     <div class="col-12 mb-4">
                                         <label class="pb-1" for="confirm_pw">Confirm Password</label>
-                                        <input class="form-control" type="password" name="confirm_pw" required>
+                                        <input class="form-control" type="password" name="confirm_pw" maxlength="25" required>
                                     </div>
                                     <!-- Submit btn -->
                                     <div class="col-12 d-flex justify-content-center">

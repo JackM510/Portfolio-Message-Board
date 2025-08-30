@@ -94,12 +94,12 @@
                     <!-- First Name -->
                     <div class="col-12 col-md-6 col-lg-4 mb-3">
                         <label class="pb-1" for="last_name"><strong>First Name</strong></label>
-                        <input id="first-name-input" class="form-control" type="text" name="" maxlength="20" disabled required>
+                        <input id="first-name-input" class="form-control" type="text" name="" maxlength="25" disabled required>
                     </div>
                     <!-- Last Name -->
                     <div class="col-12 col-md-6 col-lg-4 mb-3">
                         <label class="pb-1" for=""><strong>Last Name</strong></label>
-                        <input id="last-name-input" class="form-control" type="text" name="" maxlength="20" disabled required>
+                        <input id="last-name-input" class="form-control" type="text" name="" maxlength="25" disabled required>
                     </div>
                     <!-- Email -->
                     <div class="col-12 col-md-6 col-lg-4 mb-3">
@@ -109,17 +109,17 @@
                     <!-- User ID -->
                     <div class="col-12 col-md-6 col-lg-4 mb-3">
                         <label class="pb-1" for=""><strong>User ID</strong></label>
-                        <input id="userid-input" class="form-control" type="text" name="" maxlength="50" disabled required>
+                        <input id="userid-input" class="form-control" type="text" name="" disabled required>
                     </div>
                     <!-- Profile ID -->
                     <div class="col-12 col-md-6 col-lg-4 mb-3">
                         <label class="pb-1" for=""><strong>Profile ID</strong></label>
-                        <input id="profileid-input" class="form-control" type="text" name="" maxlength="50" disabled required>
+                        <input id="profileid-input" class="form-control" type="text" name="" disabled required>
                     </div>
                     <!-- Joined Date -->
                     <div class="col-12 col-md-6 col-lg-4 mb-3">
                         <label class="pb-1" for=""><strong>Joined Date:</strong></label>
-                        <input id="joined-date-input" class="form-control" type="text" name="" maxlength="50" disabled required>
+                        <input id="joined-date-input" class="form-control" type="text" name="" disabled required>
                     </div>
                 </div>
         
@@ -147,12 +147,12 @@
                                             <div class="col-12 mb-3">
                                                 <?php if (isset($_SESSION['new-email-error'])) { echo "<p class='error-flash'>".$_SESSION['new-email-error']."</p>"; unset($_SESSION['new-email-error']); } ?>
                                                 <label class="pb-1" for="new_email">New Email</label>
-                                                <input class="form-control" type="email" name="new_email" required>
+                                                <input class="form-control" type="email" name="new_email" maxlength="50" required>
                                             </div>
                                             <!-- Confirm email -->
                                             <div class="col-12 mb-4">
                                                 <label class="pb-1" for="confirm_email">Confirm Email</label>
-                                                <input class="form-control" type="email" name="confirm_email" required>
+                                                <input class="form-control" type="email" name="confirm_email" maxlength="50" required>
                                             </div>
                                             <!-- Submit btn -->
                                             <div class="col-12 d-flex justify-content-center mb-2"> 
@@ -188,12 +188,12 @@
                                             <div class="col-12 mb-3">
                                             <?php if (isset($_SESSION['update-password-error'])) { echo "<p class='error-flash'>".$_SESSION['update-password-error']."</p>"; unset($_SESSION['update-password-error']); } ?>
                                                 <label class="pb-1" for="new_pw">New Password</label> 
-                                                <input class="form-control" type="password" name="new_pw" required>
+                                                <input class="form-control" type="password" name="new_pw" maxlength="25" required>
                                             </div>
                                             <!-- Confirm password -->
                                             <div class="col-12 mb-4">
                                                 <label class="pb-1" for="confirm_pw">Confirm Password</label>
-                                                <input class="form-control" type="password" name="confirm_pw" required>
+                                                <input class="form-control" type="password" name="confirm_pw" maxlength="25" required>
                                             </div>
                                             <!-- Submit btn -->
                                             <div class="col-12 d-flex justify-content-center">

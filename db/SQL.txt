@@ -8,10 +8,10 @@ GRANT ALL ON messageboard.* TO 'jackm'@'localhost';
 -- Create 'users' table
 CREATE TABLE users (
   user_id INTEGER NOT NULL AUTO_INCREMENT,
-  first_name VARCHAR(50) NOT NULL,
-  last_name VARCHAR(50) NOT NULL,
+  first_name VARCHAR(25) NOT NULL,
+  last_name VARCHAR(25) NOT NULL,
   date_of_birth DATE NOT NULL,
-  email VARCHAR(254) UNIQUE NOT NULL,
+  email VARCHAR(50) UNIQUE NOT NULL,
   password VARCHAR(255) NOT NULL,
   role ENUM('admin', 'user') DEFAULT 'user' NOT NULL,
   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -22,8 +22,8 @@ CREATE TABLE users (
 CREATE TABLE profiles (
   profile_id INTEGER NOT NULL AUTO_INCREMENT,
   user_id INTEGER NOT NULL,
-  location VARCHAR(100),
-  occupation VARCHAR(100),
+  location VARCHAR(50),
+  occupation VARCHAR(50),
   bio VARCHAR(255),
   profile_picture VARCHAR(255),
   PRIMARY KEY(profile_id),

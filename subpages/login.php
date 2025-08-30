@@ -44,12 +44,12 @@
                     <div class="col-12 mb-3">
                     <?php if (isset($_SESSION['login-email-error'])) { echo "<p class='error-flash'>".$_SESSION['login-email-error']."</p>"; unset($_SESSION['login-email-error']); } ?>
                         <label class="pb-1" for="email">Email</label>
-                        <input class="form-control" type="email" name="email" value="<?= htmlspecialchars($email) ?>" required>
+                        <input class="form-control" type="email" name="email" value="<?= htmlspecialchars($email) ?>" maxlength="50" required>
                     </div>
                     <div class="col-12 mb-3">
                     <?php if (isset($_SESSION['login-password-error'])) { echo "<p class='error-flash'>".$_SESSION['login-password-error']."</p>"; unset($_SESSION['login-password-error']); } ?>
                         <label class="pb-1" for="password">Password</label>
-                        <input class="form-control" type="password" name="password" required>
+                        <input class="form-control" type="password" name="password" maxlength="25" required>
                     </div>
                     <div>
                     <label>
@@ -143,7 +143,7 @@
                     <!-- Bio -->
                     <div class="col-12 mb-4">
                         <label class="pb-1" for="bio">Bio</label>
-                        <textarea id="bio-textarea" class="form-control responsive-textarea" name="bio" maxlength="250" rows="1" required></textarea>
+                        <textarea id="bio-textarea" class="form-control responsive-textarea" name="bio" maxlength="255" rows="1" required></textarea>
                     </div>
                     <!-- Complete profile btn -->
                     <div class="col-12 d-flex justify-content-center">
