@@ -5,12 +5,14 @@
 
 #welcome-msg {
     padding: 0 16px;
+    text-align: center;
 }
 
 #index-all-posts {   
     margin-top: 24px;   
 }
 
+/* Small devices */
 @media (min-width: 576px) {
     #index-container {
         padding: auto;
@@ -23,21 +25,21 @@
     }
 }
 
-/* Larger tablets & small laptops */
+/* Medium devices */
 @media (min-width: 768px) {
     #index-container {
         width: 75%;
     }
 }
 
-/* Standard laptops & desktops */
-@media (min-width: 1024px) {
+/* Large devices */
+@media (min-width: 992px) {
     #index-container {
         width: 50%;
     }
 }
 
-/* Large screens */
+/* XL devices */
 @media (min-width: 1280px) {
     #index-container {
         width: 40%;

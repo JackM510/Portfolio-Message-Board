@@ -8,7 +8,6 @@
 <html lang="en">
 <head>
     <?php require_once (HEAD_INC); ?>
-    <!-- Index styles -->
     <link href="<?= CSS_INDEX ?>" rel="stylesheet">
     <script>
         window.API = {
@@ -34,32 +33,33 @@
 <body>
     <!-- Navbar -->
     <?php require_once (NAV_INC); ?>
-
-    <!-- New post & ALL posts section -->
-    <section id="index-container" class="container mx-auto mt-5">
+    <!-- Posts -->
+    <div id="index-container" class="container mx-auto mt-5">
+        <!-- New posts -->
         <div id="index-new-post">
             <?php 
-                // Logic for heading above create post
+                // Logic for welcome heading
                 $heading_text = isset($_SESSION['first_name']) 
                     ? 'Hi ' . htmlspecialchars($_SESSION['first_name']) . ', share on Message Board!'
-                    : '<a href="'.LOGIN_URL.'" class="nav-link" style="display: inline-block">Sign-in to post and comment!</a>';
+                    : '<a href="'.LOGIN_URL.'" class="nav-link">Sign-in to post and comment!</a>';
                     
-                echo '<div id="welcome-msg" class="text-center">
+                echo '<div id="welcome-msg">
                         <h1 class="display-5">'. $heading_text .'</h1>
                     </div>';
 
-                // Include the create post section
+                // Include create post section if logged in
                 if (isset($_SESSION['user_id'])) {
                     include (CREATE_POST_INC);
                 }
             ?>    
         </div>
+        <!-- All messageboard posts -->
         <div id="index-all-posts">
             <?php
                 include (FETCH_POSTS_INC);
-                getPosts($pdo); //Fetch ALL posts in mysql
+                getPosts($pdo); // Fetch ALL posts
             ?>    
         </div>
-    </section>
+    </div>
 </body>
 </html>
