@@ -1,26 +1,11 @@
 <?php
     require_once __DIR__ . '/../config.php';
     session_start();
+    require_once(DB_INC);
     require_once(UTIL_INC);
     if (isLoggedIn() === false) {
         header("Location:". LOGIN_URL);
     }
-
-    require_once(DB_INC);
-
-    // Delete a user
-    if (isset($_POST['delete_user_id'])) {
-        try {
-            $stmt = $pdo->prepare("DELETE FROM users WHERE user_id = :user_id");
-            $stmt->bindParam(':user_id', $_POST['delete_user_id'], PDO::PARAM_INT);
-            $stmt->execute();
-    
-            echo "User and associated data deleted successfully.";
-        } catch (PDOException $e) {
-            echo "Error deleting user: " . $e->getMessage();
-        }
-    }
-    
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -32,9 +17,12 @@
             updateEmail: "<?= ACTION_UPDATE_EMAIL ?>",
             updatePassword: "<?= ACTION_UPDATE_PASSWORD ?>",
             deleteUser: "<?= ACTION_DELETE_USER ?>",
+            jsCheckboxes: "<?= JS_VALIDATE_CHECKBOXES ?>", 
         };
     </script>
-    <script src="<?= JS_ACCOUNT ?>" defer></script>
+    <script src="<?= JS_ACCOUNT ?>" type="module" defer></script>
+    <script src="<?= JS_ACCORDIAN ?>" defer></script>
+
     <title>Account Management</title>
 </head>
 <body>

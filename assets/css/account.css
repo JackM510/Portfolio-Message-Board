@@ -9,7 +9,7 @@
     max-width: 100%;
 }
 
-/* Small devices (phones in landscape, ≥576px) */
+/* Small devices */
 @media (min-width: 576px) {
     #update-email-body,
     #update-pw-body,
@@ -19,6 +19,7 @@
     }
 }
 
+/* Large devices */
 @media (min-width: 992px) {
     #update-email-body,
     #update-pw-body,
@@ -28,22 +29,9 @@
     }
 }
 
+/* XL devices */
 @media (min-width: 1200px) {
     #accordian {
         width: 75%;
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-  
- 
-  

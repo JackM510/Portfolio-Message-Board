@@ -56,6 +56,8 @@ define('JS_LOGIN', APP_BASE_PATH . '/assets/JS/login.js');
 define('JS_PROFILE', APP_BASE_PATH . '/assets/JS/profile.js');
 define('JS_TEXTAREA', APP_BASE_PATH . '/assets/JS/utils/textarea.js');
 define('JS_PAGE_TRANSITIONS', APP_BASE_PATH . '/assets/JS/utils/page_transitions.js');
+define('JS_ACCORDIAN', APP_BASE_PATH . '/assets/JS/utils/accordian.js');
+define('JS_VALIDATE_CHECKBOXES', APP_BASE_PATH . '/assets/JS/utils/validate_checkboxes.js');
 // Default assets
 define('DEFAULT_PROFILE_PIC', APP_BASE_PATH . '/uploads/default/profile_picture.png');
 // User uploads
