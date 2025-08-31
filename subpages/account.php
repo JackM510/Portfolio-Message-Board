@@ -22,7 +22,6 @@
     </script>
     <script src="<?= JS_ACCOUNT ?>" type="module" defer></script>
     <script src="<?= JS_ACCORDIAN ?>" defer></script>
-
     <title>Account Management</title>
 </head>
 <body>
@@ -49,7 +48,7 @@
                             <?php if (isset($_SESSION['email-success'])) { echo "<p class='success-flash'>".$_SESSION['email-success']."</p>"; unset($_SESSION['email-success']); } ?>
                             <form id="update-email-form" method="POST" action="<?= ACTION_UPDATE_EMAIL ?>">
                                 <row>
-                                    <!-- Hidden inputs -->
+                                    <!-- Hidden input -->
                                     <input type="hidden" name="form_type" value="self_update_email" hidden>
                                     <!-- Current email -->
                                     <div class="col-12 mb-3">
@@ -88,14 +87,13 @@
                 </div>
                 <div id="collapse-pw" class="collapse" data-bs-parent="#accordian">
                     <div class="card-body">
-                        
                         <!-- Update password -->
                         <div id="update-pw-body" class="mt-3 mx-auto">
                             <h1 class="display-5 text-center mb-4">Update Password</h1>
                             <?php if (isset($_SESSION['pw-success'])) { echo "<p class='success-flash'>".$_SESSION['pw-success']."</p>"; unset($_SESSION['pw-success']); } ?>
                             <form id="update-pw-form" method="POST" action="<?= ACTION_UPDATE_PASSWORD ?>">
                                 <div class="row">
-                                    <!-- Hidden inputs -->
+                                    <!-- Hidden input -->
                                     <input type="hidden" name="form_type" value="self_update_pw" hidden>
                                     <!-- Current password -->
                                     <?php if (isset($_SESSION['invalid-password-error'])) { echo "<p class='error-flash'>".$_SESSION['invalid-password-error']."</p>"; unset($_SESSION['invalid-password-error']); } ?>
@@ -134,12 +132,11 @@
                 </div>
                 <div id="collapse-delete-account" class="collapse" data-bs-parent="#accordian">
                     <div class="card-body">
-                        
                         <!-- Delete account -->
                         <div id="delete-account-body" class="mt-5 mx-auto d-flex flex-column">
                             <h1 class="display-5 text-center mb-4">Delete Account</h1>
                             <form method="POST" action="<?= ACTION_DELETE_USER ?>">
-                                <!-- Hidden inputs -->
+                                <!-- Hidden input -->
                                 <input type="hidden" name="form_type" value="self_delete_user" hidden>
                                 <!-- Checkbox 1 -->
                                 <div class="form-check mb-3">

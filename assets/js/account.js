@@ -1,37 +1,20 @@
 import(window.API.jsCheckboxes).then(({ validateCheckboxes }) => {
     document.addEventListener("DOMContentLoaded", function () {  
-        // Event Listeners for delete account checkboxes
+        // Checkboxes & delete btn
         const checkboxes = document.querySelectorAll('.required-checkbox');
         const deleteBtn = document.getElementById('delete-btn');
-        //checkboxes.forEach(cb => cb.addEventListener('change', validateCheckboxes(deleteBtn, checkboxes)));
+        checkboxes.forEach(cb => cb.addEventListener('change', () => validateCheckboxes(deleteBtn, checkboxes)));
 
-        checkboxes.forEach(cb => 
-            cb.addEventListener('change', () => validateCheckboxes(deleteBtn, checkboxes))
-        );
-
-        
-        /*function validateCheckboxes() {
-            const allChecked = Array.from(checkboxes).every(cb => cb.checked);
-            
-            if (allChecked) {
-                deleteBtn.classList.remove("disabled");
-            } else {
-                deleteBtn.classList.add("disabled");
-            }
-        }*/
-
-        // AJAX request for updating email address
+        // AJAX request for updating email
         document.getElementById("update-email-form").addEventListener("submit", function(event) {
             event.preventDefault();
             const formData = new FormData(this);
-
             fetch(API.updateEmail, {
                 method: "POST",
                 body: formData
             })
             .then(response => response.text())
             .then(data => {
-                console.log("Server Response:", data); 
                 location.reload();
                 sessionStorage.setItem("openPanel", "collapse-email");
             })
@@ -42,14 +25,12 @@ import(window.API.jsCheckboxes).then(({ validateCheckboxes }) => {
         document.getElementById("update-pw-form").addEventListener("submit", function(event) {
             event.preventDefault(); 
             const formData = new FormData(this);
-
             fetch(API.updatePassword, {
                 method: "POST",
                 body: formData
             })
             .then(response => response.text())
             .then(data => {
-                console.log("Server Response:", data);
                 location.reload();
                 sessionStorage.setItem("openPanel", "collapse-pw");
             })
