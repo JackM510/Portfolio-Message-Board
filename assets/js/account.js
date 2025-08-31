@@ -1,12 +1,15 @@
 import(window.API.jsCheckboxes).then(({ validateCheckboxes }) => {
     document.addEventListener("DOMContentLoaded", function () {  
+        const updateEmail = document.getElementById('update-email-form');
+        const updatePassword = document.getElementById('update-pw-form');
+
         // Checkboxes & delete btn
         const checkboxes = document.querySelectorAll('.required-checkbox');
         const deleteBtn = document.getElementById('delete-btn');
         checkboxes.forEach(cb => cb.addEventListener('change', () => validateCheckboxes(deleteBtn, checkboxes)));
 
         // AJAX request for updating email
-        document.getElementById("update-email-form").addEventListener("submit", function(event) {
+        updateEmail.addEventListener("submit", function(event) {
             event.preventDefault();
             const formData = new FormData(this);
             fetch(API.updateEmail, {
@@ -22,7 +25,7 @@ import(window.API.jsCheckboxes).then(({ validateCheckboxes }) => {
         });
 
         // AJAX request for updating password
-        document.getElementById("update-pw-form").addEventListener("submit", function(event) {
+        updatePassword.addEventListener("submit", function(event) {
             event.preventDefault(); 
             const formData = new FormData(this);
             fetch(API.updatePassword, {
