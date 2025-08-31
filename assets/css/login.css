@@ -15,12 +15,21 @@
     opacity: 1;
 }
 
+#signup-tab,
+.login-tab {
+    cursor: pointer;
+}
+
 #profile-picture-img {
     object-position: center;
     object-fit: cover;
     aspect-ratio: 1 / 1;
     border-radius: 50%;
     width: 100%;
+}
+
+#profile-picture-btn i {
+    font-size: 18px;
 }
 
 @media (min-width: 768px) {

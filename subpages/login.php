@@ -3,17 +3,14 @@
     session_start();
     require_once(DB_INC);
     require_once(UTIL_INC);
-
     // If a user is already logged in
-    if (isset($_SESSION['user_id']) && isset($_SESSION['first_name'])) {
+    if (isLoggedIn() === true) {
         header("Location: ". INDEX_URL);
         exit();
     }
 
     $email = isset($_COOKIE['user_login']) ? $_COOKIE["user_login"] : ""; // Cookie for email address
-
-    // Logic to keep the current form active after selecting a submit button
-    $displayForm = isset($_SESSION['display_form']) ? $_SESSION['display_form'] : "login";
+    $displayForm = isset($_SESSION['display_form']) ? $_SESSION['display_form'] : "login"; // Keep the current form active after a form submit
     unset($_SESSION['display_form']);
 ?>
 <!DOCTYPE html>
@@ -33,13 +30,13 @@
 <body>
     <!-- Navbar -->
     <?php require_once (NAV_INC); ?>
-    <!-- Login form -->
-    <div class="container mt-5 fade-in" id="login-container" style="<?= $displayForm === 'login' ? 'display:block;' : 'display:none;' ?>">
+    <!-- Login -->
+    <div id="login-container" class="container mt-5 fade-in" style="<?= $displayForm === 'login' ? 'display:block;' : 'display:none;' ?>">
         <div class="d-flex justify-content-center mt-5 mb-3">
             <h1 class="display-5">Login</h1>
         </div>
         <div class="d-flex justify-content-center">
-            <form id="login-form" action="<?= ACTION_LOGIN_USER ?>" method="POST">
+            <form id="login-form" method="POST" action="<?= ACTION_LOGIN_USER ?>">
                 <div class="row">
                     <div class="col-12 mb-3">
                     <?php if (isset($_SESSION['login-email-error'])) { echo "<p class='error-flash'>".$_SESSION['login-email-error']."</p>"; unset($_SESSION['login-email-error']); } ?>
@@ -57,7 +54,7 @@
                     </label>
                     </div>
                     <div class="col-12 d-flex justify-content-center mt-2">
-                        <button class="btn btn btn-primary" type="submit" name="login">Login</button>
+                        <button class="btn btn-primary" type="submit" name="login">Login</button>
                     </div>
                 </div>   
             </form>
@@ -65,8 +62,8 @@
         <div id="signup-tab" class="text-center mt-3" style="cursor:pointer;">Don't have an account? Sign Up</div>
     </div>
 
-    <!-- Signup form -->
-    <div class="container mt-5" id="signup-container" style="<?= $displayForm === 'signup' ? 'display:block;' : 'display:none;' ?>">
+    <!-- Signup -->
+    <div id="signup-container" class="container mt-5" style="<?= $displayForm === 'signup' ? 'display:block;' : 'display:none;' ?>">
         <div class="d-flex justify-content-center mt-3 mb-3">
             <h1 class="display-5">Sign Up</h1>
         </div>
@@ -75,16 +72,16 @@
                 <div id="signup-form-container" class="row">
                     <div class="col-12 mb-3">
                         <label class="pb-1" for="first_name">First Name</label>
-                        <input class="form-control" type="text" maxlength="25" name="first_name" required>
+                        <input class="form-control" type="text" name="first_name" maxlength="25" required>
                     </div>
                     <div class="col-12 mb-3">
                         <label class="pb-1" for="last_name">Last Name</label>
-                        <input class="form-control" type="text" maxlength="25" name="last_name" required>
+                        <input class="form-control" type="text" name="last_name" maxlength="25" required>
                     </div>
                     <div class="col-12 mb-3">
                     <?php if (isset($_SESSION['signup-email-error'])) { echo "<p class='error-flash'>".$_SESSION['signup-email-error']."</p>"; unset($_SESSION['signup-email-error']); } ?>
                         <label class="pb-1" for="email">Email</label>
-                        <input class="form-control" type="email" maxlength="50" name="email" required>
+                        <input class="form-control" type="email" name="email" maxlength="50" required>
                     </div>
                     <div class="col-12 mb-3">
                     <?php if (isset($_SESSION['signup-date-error'])) { echo "<p class='error-flash'>".$_SESSION['signup-date-error']."</p>"; unset($_SESSION['signup-date-error']); } ?>
@@ -94,11 +91,11 @@
                     <div class="col-12 mb-3">
                     <?php if (isset($_SESSION['signup-password-error'])) { echo "<p class='error-flash'>".$_SESSION['signup-password-error']."</p>"; unset($_SESSION['signup-password-error']); } ?>
                         <label class="pb-1" for="password">New Password</label>    
-                        <input class="form-control" type="password" maxlength="25" name="password" required>
+                        <input class="form-control" type="password" name="password" maxlength="25" required>
                     </div>
                     <div class="col-12 mb-3">
                         <label class="pb-1" for="confirm_password">Confirm Password</label>    
-                        <input class="form-control" type="password" maxlength="25" name="confirm_password" required>
+                        <input class="form-control" type="password" name="confirm_password" maxlength="25" required>
                     </div>
                     <div class="col-12 d-flex justify-content-center">
                         <button id="signup-btn" class="btn btn-primary" type="submit" name="signup">Sign Up</button>
@@ -106,11 +103,11 @@
                 </div> 
             </form>
         </div>
-        <div class="login-tab text-center mt-3" style="cursor:pointer;">Already have an account? Login</div>
+        <div class="login-tab text-center mt-3">Already have an account? Login</div>
     </div>
 
-    <!-- Complete Profile form -->
-    <div class="container mt-5" id="profile-container" style="<?= $displayForm === 'profile' ? 'display:block;' : 'display:none;' ?>">
+    <!-- Complete Profile -->
+    <div id="profile-container" class="container mt-5"  style="<?= $displayForm === 'profile' ? 'display:block;' : 'display:none;' ?>">
         <div class="d-flex justify-content-center mt-3 mb-3">
             <h1 class="display-5">Complete Profile</h1>
         </div>
@@ -124,12 +121,11 @@
                             <div class="d-flex flex-column justify-content-center w-25 h-100 mb-2">
                                 <img id="profile-picture-img" class="mb-2" src="<?= !empty($profile_picture) ? APP_BASE_PATH . '/' . htmlspecialchars($profile_picture) : DEFAULT_PROFILE_PIC ?>" alt="Profile Picture">
                                 <button id="profile-picture-btn" type="button" class="btn btn-sm btn-light mx-auto" title="Upload Profile Picture">
-                                    <i class="bi bi-card-image" style="font-size: 18px;"></i>
+                                    <i class="bi bi-card-image"></i>
                                 </button>
                             </div>
                         </label>
                     </div>
-
                     <!-- Location -->
                     <div class="col-12 mb-3">
                         <label class="pb-1" for="location">Location</label>
@@ -143,16 +139,16 @@
                     <!-- Bio -->
                     <div class="col-12 mb-4">
                         <label class="pb-1" for="bio">Bio</label>
-                        <textarea id="bio-textarea" class="form-control responsive-textarea" name="bio" maxlength="255" rows="1" required></textarea>
+                        <textarea id="bio-textarea" class="form-control responsive-textarea" name="bio" rows="1" maxlength="255" required></textarea>
                     </div>
-                    <!-- Complete profile btn -->
+                    <!-- Submit -->
                     <div class="col-12 d-flex justify-content-center">
                         <button id="create-profile-btn" class="btn btn-primary mx-1" type="submit" name="create_profile">Create Profile</button>
                     </div>
                 </div>  
             </form>
         </div>
-        <div class="login-tab text-center mt-3" style="cursor:pointer;">Already have an account? Login</div>
+        <div class="login-tab text-center mt-3">Already have an account? Login</div>
     </div>
 </body>
 </html>
