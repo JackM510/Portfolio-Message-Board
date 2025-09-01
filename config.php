@@ -27,6 +27,7 @@ define('ACTION_DELETE_USER', APP_BASE_PATH . '/actions/delete_user.php');
 define('ACTION_EDIT_COMMENT', APP_BASE_PATH . '/actions/edit_comment.php');
 define('ACTION_EDIT_POST', APP_BASE_PATH . '/actions/edit_post.php');
 define('ACTION_EDIT_PROFILE', APP_BASE_PATH . '/actions/edit_profile.php');
+define('ACTION_GET_ALL_PROFILES', APP_ROOT . '/actions/get_all_profiles.php');
 define('ACTION_GET_PROFILE', APP_BASE_PATH . '/actions/get_profile.php');
 define('ACTION_LIKE_COMMENT', APP_BASE_PATH . '/actions/like_comment.php');
 define('ACTION_LIKE_POST', APP_BASE_PATH . '/actions/like_post.php');

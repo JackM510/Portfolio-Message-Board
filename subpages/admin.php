@@ -5,22 +5,8 @@
     if (isLoggedIn() === false && !isset($_SESSION['role'])) {
         header("Location: ".LOGIN_URL);
     }
-
-    require_once(DB_INC);
-    
-    // Retrieve all users from mysql - FOR SEARCH -------TEMPORARY STATEMENT FOR UI DESIGN---------------------
-    $sql = "SELECT
-        u.user_id,
-        u.email,
-        u.role,
-        p.profile_id
-        FROM users AS u
-        LEFT JOIN profiles AS p
-        ON p.user_id = u.user_id;";
-    $stmt = $pdo->prepare($sql);
-    $stmt->execute();
-    $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    
+    require_once(DB_INC); 
+    require(ACTION_GET_ALL_PROFILES);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -33,17 +19,18 @@
             updateEmail: "<?= ACTION_UPDATE_EMAIL ?>",
             updatePassword: "<?= ACTION_UPDATE_PASSWORD ?>",
             deleteUser: "<?= ACTION_DELETE_USER ?>",
+            jsFadeEl: "<?= JS_PAGE_TRANSITIONS ?>",
+            jsCheckboxes: "<?= JS_VALIDATE_CHECKBOXES ?>",
         };
     </script>
+    <script src="<?= JS_ACCORDIAN ?>" defer></script>
     <script src="<?= JS_ADMIN ?>" type="module"></script>
     <title>Admin Panel</title>
 </head>
 <body>
     <!-- Navbar -->
     <?php require_once (NAV_INC); ?>
-    
-    <section class="container d-flex flex-column justify-content-center">
-        
+    <div class="container d-flex flex-column justify-content-center">
         <!-- View a list of all users -->
         <div id="user-search" class="fade-in">
             <div class="mt-5 mb-5 text-center">
@@ -51,17 +38,17 @@
             </div>
             <!-- Delete success flash -->
             <?php if (isset($_SESSION['delete-success'])) { echo "<p class='success-flash'>".$_SESSION['delete-success']."</p>"; unset($_SESSION['delete-success']); } ?>
-            <div class="scrollbox-wrapper">
+            <div id="scrollbox-wrapper">
                 <!-- Search Input -->
-                <input type="text" id="user-search-input" class="form-control rounded-0" placeholder="Search users by profile id or email">
-                <div class="scrollbox-header d-flex">
+                <input id="user-search-input" class="form-control rounded-0" type="text" placeholder="Search users by profile id or email">
+                <div id="scrollbox-header" class="d-flex">
                     <div class="header-uid">User ID</div>
                     <div class="header-pid">Profile ID</div>
                     <div class="header-email">Email</div>
                     <div class="header-role">Role</div>
                 </div>
-
-                <div class="scrollbox-container">
+                <!-- User Scrollbox -->
+                <div id="scrollbox-container">
                     <?php foreach ($users as $user): ?>
                     <div class="user-row" data-user-id="<?= $user['user_id'] ?>">
                         <div class="user-id"><?= htmlspecialchars($user['user_id']) ?></div>
@@ -76,11 +63,10 @@
 
         <!-- View a users profile -->
         <div id="view-profile" class="fade-in" style="display:none;">
-
             <div class="view-profile-wrapper">
+                <!-- Heading & Return Btn -->
                 <div class="position-relative d-flex justify-content-center align-items-center text-center mt-5 mb-5">
-                    <!-- Return btn -->
-                    <span class="position-absolute" style="top: 50%; transform: translateY(-50%); left:0;">
+                    <span id="return-span">
                         <button id="return-btn" class="btn btn-sm btn-secondary" title="Return to user list">
                             <i id="return-btn" class="bi bi-arrow-left"></i>
                         </button>           
@@ -93,39 +79,38 @@
                 <div class="row">
                     <!-- First Name -->
                     <div class="col-12 col-md-6 col-lg-4 mb-3">
-                        <label class="pb-1" for="last_name"><strong>First Name</strong></label>
-                        <input id="first-name-input" class="form-control" type="text" name="" maxlength="25" disabled required>
+                        <label class="pb-1"><strong>First Name</strong></label>
+                        <input id="first-name-input" class="form-control" type="text" disabled>
                     </div>
                     <!-- Last Name -->
                     <div class="col-12 col-md-6 col-lg-4 mb-3">
-                        <label class="pb-1" for=""><strong>Last Name</strong></label>
-                        <input id="last-name-input" class="form-control" type="text" name="" maxlength="25" disabled required>
+                        <label class="pb-1"><strong>Last Name</strong></label>
+                        <input id="last-name-input" class="form-control" type="text" disabled>
                     </div>
                     <!-- Email -->
                     <div class="col-12 col-md-6 col-lg-4 mb-3">
-                        <label class="pb-1" for=""><strong>Email</strong></label>
-                        <input id="email-input" class="form-control" type="text" name="" maxlength="50" disabled required>
+                        <label class="pb-1"><strong>Email</strong></label>
+                        <input id="email-input" class="form-control" type="text" disabled>
                     </div>
                     <!-- User ID -->
                     <div class="col-12 col-md-6 col-lg-4 mb-3">
-                        <label class="pb-1" for=""><strong>User ID</strong></label>
-                        <input id="userid-input" class="form-control" type="text" name="" disabled required>
+                        <label class="pb-1"><strong>User ID</strong></label>
+                        <input id="userid-input" class="form-control" type="text" disabled>
                     </div>
                     <!-- Profile ID -->
                     <div class="col-12 col-md-6 col-lg-4 mb-3">
-                        <label class="pb-1" for=""><strong>Profile ID</strong></label>
-                        <input id="profileid-input" class="form-control" type="text" name="" disabled required>
+                        <label class="pb-1"><strong>Profile ID</strong></label>
+                        <input id="profileid-input" class="form-control" type="text" disabled>
                     </div>
                     <!-- Joined Date -->
                     <div class="col-12 col-md-6 col-lg-4 mb-3">
-                        <label class="pb-1" for=""><strong>Joined Date:</strong></label>
-                        <input id="joined-date-input" class="form-control" type="text" name="" disabled required>
+                        <label class="pb-1"><strong>Joined Date:</strong></label>
+                        <input id="joined-date-input" class="form-control" type="text" disabled>
                     </div>
                 </div>
         
                 <!-- BS5 Accordian --> 
-                <div id="accordian" class="mt-4 mb-2 accordian">
-
+                <div id="accordian" class="accordian mt-4 mb-2">
                     <!-- Update email container-->
                     <div class="card">
                         <div class="card-header text-center">
@@ -142,7 +127,7 @@
                                         <row>
                                             <!-- Hidden inputs -->
                                             <input type="hidden" name="form_type" value="admin_update_email" hidden>
-                                            <input type="hidden" id="hidden-email-input" name="user_id" value="" hidden>
+                                            <input id="hidden-email-input" type="hidden" name="user_id" value="" hidden>
                                             <!-- New email -->
                                             <div class="col-12 mb-3">
                                                 <?php if (isset($_SESSION['new-email-error'])) { echo "<p class='error-flash'>".$_SESSION['new-email-error']."</p>"; unset($_SESSION['new-email-error']); } ?>
@@ -173,8 +158,7 @@
                             </a>
                         </div>
                         <div id="collapse-pw" class="collapse" data-bs-parent="#accordian">
-                            <div class="card-body">
-                                
+                            <div class="card-body">               
                                 <!-- Update password -->
                                 <div id="update-pw-body" class="mt-3 mx-auto">
                                     <h1 class="display-5 text-center mb-4">Update Password</h1>
@@ -183,7 +167,7 @@
                                         <div class="row">
                                             <!-- Hidden inputs -->
                                             <input type="hidden" name="form_type" value="admin_update_pw" hidden>
-                                            <input type="number" id="hidden-pw-input" name="user_id" value="" hidden>
+                                            <input id="hidden-pw-input" type="number" name="user_id" value="" hidden>
                                             <!-- New password -->
                                             <div class="col-12 mb-3">
                                             <?php if (isset($_SESSION['update-password-error'])) { echo "<p class='error-flash'>".$_SESSION['update-password-error']."</p>"; unset($_SESSION['update-password-error']); } ?>
@@ -222,8 +206,7 @@
                                     <form id="delete-user-form" method="POST" action="<?= ACTION_DELETE_USER ?>">
                                         <!-- Hidden inputs -->
                                         <input type="hidden" name="form_type" value="admin_delete_user" hidden>
-                                        <input type="number" id="hidden-delete-input-user" name="user_id" value="" hidden>
-                                        <input type="number" id="hidden-delete-input-profile" name="profile_id" value="" hidden>
+                                        <input id="hidden-delete-input" type="number" name="user_id" value="" hidden>
                                         <!-- Checkbox 1-->
                                         <div class="d-flex justify-content-center form-check mb-3">
                                             <input class="form-check-input required-checkbox me-2" type="checkbox" name="delete_checkbox_1">
@@ -238,15 +221,9 @@
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>
-    </div>        
-   
-    </div>
-                        
-    </section></br>
-
+    </div></br>        
 </body>
 </html>

@@ -1,3 +1,11 @@
+// Hide all accordian panels
+function closeAllPanels() {
+    document.querySelectorAll('.collapse').forEach(panel => {
+        if (panel.classList.contains('show')) {
+            panel.classList.remove('show');
+        }
+    });
+}
 // Keep track of any open accordian cards
 window.addEventListener("DOMContentLoaded", () => {
     const id = sessionStorage.getItem("openPanel");
