@@ -1,5 +1,5 @@
 <?php
-    if (isLoggedIn() === false && !isset($_SESSION['role'])) {
+    if (!isAdmin()) {
         header("Location: ".LOGIN_URL);
     }
     // Retrieve all users from mysql
