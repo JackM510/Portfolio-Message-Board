@@ -68,7 +68,7 @@
                 <div class="position-relative d-flex justify-content-center align-items-center text-center mt-5 mb-5">
                     <span id="return-span">
                         <button id="return-btn" class="btn btn-sm btn-secondary" title="Return to user list">
-                            <i id="return-btn" class="bi bi-arrow-left"></i>
+                            <i class="bi bi-arrow-left"></i>
                         </button>           
                     </span>
                     <div>
