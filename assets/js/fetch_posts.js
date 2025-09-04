@@ -98,13 +98,13 @@ document.addEventListener("DOMContentLoaded", function() {
     // Event listener for 'cancel' button when editing a post
     document.querySelectorAll(".edit-post-cancel-btn").forEach(button => {
         button.addEventListener("click", function() {
-            const postId = button.getAttribute("data-post-id"); // Get post ID from button
+            const postId = button.getAttribute("data-post-id");
             const img = document.querySelector(`#post-picture-${postId}`);
             const imgUploadBtn = document.querySelector(`#post-image-upload-btn-${postId}`);
             const likeBtn = document.querySelector(`#post-like-btn-${postId}`);
             const commentsBtn = document.querySelector(`#post-comment-btn-${postId}`);
             const paragraph = document.querySelector(`#post-description-${postId}`);
-            const textarea = document.querySelector(`#post-textarea-${postId}`); // Find correct textarea
+            const textarea = document.querySelector(`#post-textarea-${postId}`);
             const buttonGroup = document.querySelector(`#edit-post-btn-group-${postId}`);
 
             if (textarea) {
@@ -161,7 +161,6 @@ document.addEventListener("DOMContentLoaded", function() {
             const commentSection = document.querySelector(`.comment-section-${postId}`);
             const comments = commentSection.querySelectorAll(`.comment-${postId}`);
             const viewMoreWrapper = document.querySelector(`#view-more-comments-wrapper-${postId}`);
-            //const viewMoreBtn = document.querySelector(`#view-more-comments-btn-${postId}`);
     
             // Show/Hide comment section on post
             const isVisible = commentSection.style.display === "block";
@@ -263,8 +262,8 @@ document.addEventListener("DOMContentLoaded", function() {
     // Add event listener to each cancel comment btn on each post
     document.querySelectorAll(".cancel-btn").forEach(button => {
         button.addEventListener("click", function() {
-            const postId = button.getAttribute("data-post-id"); // Get post ID from button
-            const textarea = document.querySelector(`#add-comment-textarea-${postId}`); // Find correct textarea
+            const postId = button.getAttribute("data-post-id");
+            const textarea = document.querySelector(`#add-comment-textarea-${postId}`);
             const buttonGroup = document.querySelector(`#add-comment-btns-${postId}`);
 
             if (textarea) {
@@ -364,7 +363,7 @@ document.addEventListener("DOMContentLoaded", function() {
     // Edit post AJAX for edit_post.php
     document.querySelectorAll("[id^=edit-post-form]").forEach(form => {
         form.addEventListener("submit", function(event) {
-            event.preventDefault(); // Stop default form submission
+            event.preventDefault();
             const formData = new FormData(this);
     
             fetch(API.editPost, {
@@ -373,7 +372,6 @@ document.addEventListener("DOMContentLoaded", function() {
             })
             .then(response => response.text())
             .then(data => {
-                console.log("Server Response:", data); // Log server response
                 if (data.trim() === "success") {
                    location.reload();
                 } else {
@@ -387,7 +385,7 @@ document.addEventListener("DOMContentLoaded", function() {
     // Delete post AJAX for delete_post.php
     document.querySelectorAll("[id^=post-options-form]").forEach(form => {
         form.addEventListener("submit", function(event) {
-            event.preventDefault(); // Stop default form submission
+            event.preventDefault();
             const formData = new FormData(this);
     
             fetch(API.deletePost, {
@@ -396,7 +394,6 @@ document.addEventListener("DOMContentLoaded", function() {
             })
             .then(response => response.text())
             .then(data => {
-                console.log("Server Response:", data); // Log server response
                 if (data.trim() === "success") {
                     location.reload();
                 } else {
@@ -427,7 +424,6 @@ document.addEventListener("DOMContentLoaded", function() {
             if (data.success) {
               // Update like count
               button.querySelector(".post-like-count").textContent = data.like_count;
-      
               // Toggle heart icon
               const icon = button.querySelector("i");
               icon.classList.toggle("bi-hand-thumbs-up-fill", data.liked);
@@ -445,7 +441,7 @@ document.addEventListener("DOMContentLoaded", function() {
     // Add comment AJAX for add_comment.php
     document.querySelectorAll("[id^=add-comment-form]").forEach(form => {
         form.addEventListener("submit", function(event) {
-            event.preventDefault(); // Stop default form submission
+            event.preventDefault();
             
             const postId = this.getAttribute("data-post-id");
             const formData = new FormData(this);
@@ -456,7 +452,6 @@ document.addEventListener("DOMContentLoaded", function() {
             })
             .then(response => response.text())
             .then(data => {
-                console.log("Server Response:", data); // Log server response
                 if (data.trim() === "success") {
                     sessionStorage.setItem("showCommentsFor", postId);
                     sessionStorage.setItem("scrollToNewComment", "true");
@@ -472,7 +467,7 @@ document.addEventListener("DOMContentLoaded", function() {
     // Edit comment AJAX for edit_comment.php
     document.querySelectorAll("[id^=edit-comment-form]").forEach(form => {
         form.addEventListener("submit", function(event) {
-            event.preventDefault(); // Stop default form submission
+            event.preventDefault();
     
             const postId = this.getAttribute("data-post-id");
             const formData = new FormData(this);
@@ -483,7 +478,6 @@ document.addEventListener("DOMContentLoaded", function() {
             })
             .then(response => response.text())
             .then(data => {
-                console.log("Server Response:", data); // Log server response
                 if (data.trim() === "success") {
                     sessionStorage.setItem("showCommentsFor", postId);
                     location.reload();
@@ -498,7 +492,7 @@ document.addEventListener("DOMContentLoaded", function() {
     // Delete comment AJAX for delete_comment.php
     document.querySelectorAll("[id^=comment-options-form]").forEach(form => {
         form.addEventListener("submit", function(event) {
-            event.preventDefault(); // Stop default form submission
+            event.preventDefault();
 
             const postId = this.getAttribute("data-post-id");
             const formData = new FormData(this);
@@ -509,7 +503,6 @@ document.addEventListener("DOMContentLoaded", function() {
             })
             .then(response => response.text())
             .then(data => {
-                console.log("Server Response:", data); // Log server response
                 if (data.trim() === "success") {
                     sessionStorage.setItem("showCommentsFor", postId);
                     location.reload();

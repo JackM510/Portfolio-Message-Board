@@ -1,4 +1,4 @@
-/* Default styles for XS devices */
+/* Post styles */
 .post-container {
     border-top: #DEE2E6 solid 2px;
     border-bottom: #DEE2E6 solid 2px;
@@ -16,9 +16,9 @@
 }
 
 .break-text{
-    word-wrap: break-word;       /* legacy support */
-    overflow-wrap: break-word;   /* modern standard */
-    word-break: break-word;      /* optional for aggressive breaking */
+    word-wrap: break-word;      
+    overflow-wrap: break-word;   
+    word-break: break-word;
 }
 
 .post-picture {
@@ -78,10 +78,23 @@
     text-decoration: none;
     color: inherit;
     cursor: pointer;
-    white-space: normal; /* Allows wrapping instead of one-line behavior */
+    white-space: normal;
 }
 
-/* Existing Comment & Edit comment styles */
+/* Existing Comments & Edit comment styles */
+.comment-dropdown {
+    height: 20px;
+}
+
+.comment-options {
+    cursor: pointer;
+}
+
+.comment-options i {
+    color: grey; 
+    font-size: 20px;
+}
+
 .edit-comment-dropdown-item:hover {
     background-color: #f8f9fa !important;
 }
@@ -91,7 +104,11 @@
     color: #fff !important;
 }
 
-/* Tablets (small screens) */
+.comment-timestamp {
+    color: grey;
+}
+
+/* Small devices */
 @media (min-width: 576px) {
     .post-container {
         border: #DEE2E6 solid 2px;
@@ -99,7 +116,7 @@
     }
 }
 
-/* Larger tablets & small laptops */
+/* Medium devices */
 @media (min-width: 768px) {
     .post-profile-picture,
     .comment-profile-picture {
@@ -108,7 +125,7 @@
     }
 }
 
-/* Standard laptops & desktops */
+/* Large devices */
 @media (min-width: 992px) {
     .post-picture {
         aspect-ratio: 4 / 3;

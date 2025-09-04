@@ -1,7 +1,7 @@
 <?php 
-
-// Render comments on posts
+// Render comments section
 function renderComment(PDO $pdo, array $comment, int $postId): string {
+    // Comment data
     $commentorName = htmlspecialchars($comment['first_name'] . ' ' . $comment['last_name']);
     $commentorPic = htmlspecialchars($comment['profile_picture']);
     $commentId = htmlspecialchars($comment['comment_id']);
@@ -9,47 +9,48 @@ function renderComment(PDO $pdo, array $comment, int $postId): string {
     $postIdEscaped = htmlspecialchars($postId);
     $userId = $comment['user_id'];
     $profileId = $comment['profile_id'];
-
-    // Like count
+    $timestamp = date('g:iA j/n/y', strtotime($comment['comment_created'])); // Timestamp
+    $commentTimestamp = !empty($comment['comment_edited']) ? "$timestamp (edited)" : $timestamp; // Check if comment edited
+    
+    // Get comment like count
     $likeStmt = $pdo->prepare("SELECT COUNT(*) FROM comment_likes WHERE comment_id = ?");
     $likeStmt->execute([$commentId]);
     $likeCount = $likeStmt->fetchColumn();
-
-    // Like status
+    // Check if user liked the comment
     $liked = false;
-    if (isset($_SESSION['user_id'])) {
+    if (isLoggedIn()) {
         $likedStmt = $pdo->prepare("SELECT 1 FROM comment_likes WHERE comment_id = ? AND user_id = ?");
         $likedStmt->execute([$commentId, $_SESSION['user_id']]);
         $liked = $likedStmt->fetchColumn() ? true : false;
     }
 
-    // Timestamp
-    $timestamp = date('g:iA j/n/y', strtotime($comment['comment_created']));
-    $commentTimestamp = !empty($comment['comment_edited']) ? "$timestamp (edited)" : $timestamp;
-
     ob_start(); ?>
-    
+    <!-- Comment start -->
     <div class="comment comment-<?= $postId ?>">
-    <hr>
+        <hr>
         <div class="d-flex align-items-start">
+            <!-- Commentor profile pic & full name -->
             <a class="post-profile-link d-flex" href="<?= PROFILE_URL . '?profile_id=' . urlencode($profileId) ?>">
                 <img class="me-2 rounded-pill comment-profile-picture" 
                     src="<?= APP_BASE_PATH . "/" . $commentorPic ?>" alt="Profile Picture">
                 <p class="break-text mb-2"><strong><?= $commentorName ?></strong></p>
             </a>
             
-            <?php if (isset($_SESSION['user_id']) && $_SESSION['user_id'] == $userId): ?>
-                <div id="comment-dropdown-<?= $commentId ?>" class="dropdown ms-auto" style="height:20px;">
-                    <span id="comment-options-<?= $commentId ?>" data-bs-toggle="dropdown" aria-expanded="false" role="button" style="cursor: pointer;">
-                        <i class="bi bi-three-dots-vertical" style="color:grey; font-size:20px;"></i>
+            <!-- Comment dropdown options -->
+            <?php if (isLoggedIn() && $_SESSION['user_id'] == $userId): ?>
+                <div id="comment-dropdown-<?= $commentId ?>" class="dropdown comment-dropdown ms-auto">
+                    <!-- Comment three-dot -->
+                    <span id="comment-options-<?= $commentId ?>" class="comment-options" data-bs-toggle="dropdown" aria-expanded="false" role="button">
+                        <i class="bi bi-three-dots-vertical"></i>
                     </span>
+                    <!-- Dropdown options -->
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="post-options-<?= $commentId ?>">
-                        <li><button type="button" class="dropdown-item edit-btn edit-comment-dropdown-item" data-post-id="<?= $commentId ?>">Edit</button></li>
+                        <li><button class="dropdown-item edit-btn edit-comment-dropdown-item" type="button" data-post-id="<?= $commentId ?>">Edit</button></li>
                         <li>
                             <form id="comment-options-form-<?= $commentId ?>" data-post-id="<?= $postIdEscaped ?>" method="POST">
                                 <input type="hidden" name="delete_comment" value="true">
                                 <input type="hidden" name="comment_id" value="<?= $commentId ?>">
-                                <button type="submit" class="dropdown-item edit-comment-dropdown-item text-danger">Delete</button>
+                                <button class="dropdown-item edit-comment-dropdown-item text-danger" type="submit">Delete</button>
                             </form>
                         </li>
                     </ul>
@@ -57,35 +58,36 @@ function renderComment(PDO $pdo, array $comment, int $postId): string {
             <?php endif; ?>
         </div>
 
+        <!-- Comment data -->
         <div class="mt-2">
-            <form id="edit-comment-form-<?= $commentId ?>" data-post-id="<?= $postIdEscaped ?>" class="w-100" method="POST">
-                
+            <form id="edit-comment-form-<?= $commentId ?>" class="w-100" data-post-id="<?= $postIdEscaped ?>" method="POST" action="<?= ACTION_EDIT_COMMENT ?>">
+                <!-- Comment text -->
                 <p id="comment-description-<?= $commentId ?>" class="break-text mb-2"><?= $commentText ?></p>
-                <textarea id="comment-textarea-<?= $commentId ?>" class="form-control comment-textarea rounded mb-1 responsive-textarea" name="edit_comment" data-post-id="<?= $commentId ?>" maxlength="255" rows="1" hidden required disabled><?= $commentText ?></textarea>
+                <textarea id="comment-textarea-<?= $commentId ?>" class="form-control comment-textarea rounded mb-1 responsive-textarea" name="edit_comment" data-post-id="<?= $commentId ?>" rows="1"  maxlength="255" hidden required disabled><?= $commentText ?></textarea>
                 <input type="hidden" name="comment_id" value="<?= $commentId ?>">
-
+                <!-- Comment timestamp & cancel/submit btns -->
                 <div class="d-flex">
-                    <p class="mb-0" style="color:grey;"><?= $commentTimestamp ?></p>
+                    <p class="comment-timestamp mb-0"><?= $commentTimestamp ?></p>
                     <div id="edit-comment-btns-<?= $commentId ?>" class="edit-comment-btns ms-auto mt-1">
                         <button class="btn btn-sm btn-secondary edit-cancel-btn" type="button" data-post-id="<?= $commentId ?>">Cancel</button>
                         <button class="btn btn-sm btn-primary ms-1" type="submit">Comment</button>
                     </div>
                 </div>
-
+                <!-- Comment like btn -->
                 <div class="comment-like-container mb-2" data-post-id="<?= $commentId ?>">
-                    <button id="comment-like-btn-<?= $commentId ?>" type="button" class="comment-like-btn btn btn-outline-primary btn-sm">
+                    <button id="comment-like-btn-<?= $commentId ?>" class="comment-like-btn btn btn-outline-primary btn-sm" type="button">
                         <i class="bi bi-hand-thumbs-up<?= $liked ? '-fill' : '' ?>"></i>
                         <span class="comment-like-count"><?= htmlspecialchars($likeCount) ?></span>
                     </button>
                 </div>
             </form>
         </div>
-    </div>
+    </div> <!-- Comment end -->
     <?php
     return ob_get_clean();
 }
 
-// Render 'add comment' section
+// Render add comment section
 function renderAddComment(PDO $pdo, int $postId): string {
     if (!isset($_SESSION['user_id'])) return '';
 
@@ -142,19 +144,24 @@ function renderPost(PDO $pdo, array $post): string {
     $userName = htmlspecialchars($userData['first_name'] . ' ' . $userData['last_name']);
     $profilePic = htmlspecialchars($userData['profile_picture']);
 
-    // Like and comment counts
+    // Timestamp
+    $timestamp = date('g:iA j/n/y', strtotime($post['post_created']));
+    $postTimestamp = !empty($post['post_edited']) ? "$timestamp (edited)" : $timestamp;
+
+    // Get post like count
     $postLikes = $pdo->prepare("SELECT COUNT(*) FROM post_likes WHERE post_id = ?");
     $postLikes->execute([$postId]);
     $likeCount = $postLikes->fetchColumn();
-
+    // Get post comment count
     $commentCount = $pdo->prepare("SELECT COUNT(*) FROM comments WHERE post_id = ?");
     $commentCount->execute([$postId]);
     $commentCount = $commentCount->fetchColumn();
 
-    // Has user liked/commented
+    // Check if user liked or commented on the post
     $liked = false;
     $commented = false;
-    if (isset($_SESSION['user_id'])) {
+    if (isLoggedIn()) {
+
         $checkLike = $pdo->prepare("SELECT 1 FROM post_likes WHERE post_id = ? AND user_id = ?");
         $checkLike->execute([$postId, $_SESSION['user_id']]);
         $liked = $checkLike->fetchColumn() ? true : false;
@@ -164,11 +171,8 @@ function renderPost(PDO $pdo, array $post): string {
         $commented = $checkComment->fetchColumn() ? true : false;
     }
 
-    // Timestamp
-    $timestamp = date('g:iA j/n/y', strtotime($post['post_created']));
-    $postTimestamp = !empty($post['post_edited']) ? "$timestamp (edited)" : $timestamp;
-
     ob_start(); ?>
+    <!-- Post start -->
     <div class="post-container">
         <div class="d-flex align-items-start pt-1">
             <a class="post-profile-link d-flex" href="<?= PROFILE_URL . '?profile_id=' . urlencode($profileId) ?>">
@@ -177,7 +181,7 @@ function renderPost(PDO $pdo, array $post): string {
                 <h5 class="break-text mb-0"><?= $userName ?></h5>
             </a>
 
-            <?php if (isset($_SESSION['user_id']) && $_SESSION['user_id'] == $userId): ?>
+            <?php if (isLoggedIn() && $_SESSION['user_id'] == $userId): ?>
             <div id="post-dropdown-<?= $postId ?>" class="dropdown ms-auto h-100 d-flex align-items-start">
                 <span id="post-options-<?= $postId ?>" data-bs-toggle="dropdown" aria-expanded="false" role="button" style="cursor: pointer;">
                     <i class="bi bi-three-dots-vertical" style="color:grey; font-size:20px;"></i>
@@ -264,13 +268,14 @@ function renderPost(PDO $pdo, array $post): string {
                 <button id="view-more-comments-btn-<?= $postId ?>" class="btn btn-sm btn-secondary view-more-comments-btn" data-post-id="<?= $postId ?>">View more comments</button>
             </div>
         </div>
-    </div><br>
+    </div><br> <!-- Post end -->
     <?php
     return ob_get_clean();
 }
 
-// If user_id is not provided fetch ALL posts, else fetch only posts made by the specified user
+// Get posts
 function getPosts($pdo, $profile_id = null) {
+    // Get specific users posts
     if ($profile_id) {
         $stmt = $pdo->prepare("
             SELECT p.*, pr.profile_id
@@ -280,13 +285,16 @@ function getPosts($pdo, $profile_id = null) {
             ORDER BY p.post_created DESC
         ");
         $stmt->bindParam(':profile_id', $profile_id, PDO::PARAM_INT);
-    } else {
+    } 
+    // Get all posts on message board
+    else {
         $stmt = $pdo->prepare("SELECT * FROM posts ORDER BY post_created DESC");
     }
 
     $stmt->execute();
     $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+    // Render posts if data else display no posts
     if ($posts) {
         foreach ($posts as $post) {
             echo renderPost($pdo, $post);
