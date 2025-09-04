@@ -2,28 +2,26 @@
 require_once __DIR__ . '/../config.php';
 session_start();
 require_once(DB_INC);
+require_once(UTIL_INC);
 
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_SESSION['user_id']) && isset($_POST['post_id']) && isset($_POST['delete_post'])) {
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isLoggedIn() && isset($_POST['post_id']) && isset($_POST['delete_post'])) {
     $post_id = $_POST['post_id'];
-
-    //Retrieve the image path before deleting the post
+    // Retrieve post img pathway (if exists)
     $stmt = $pdo->prepare("SELECT post_picture FROM posts WHERE post_id = :post_id");
     $stmt->bindParam(':post_id', $post_id, PDO::PARAM_INT);
     $stmt->execute();
     $post = $stmt->fetch(PDO::FETCH_ASSOC);
 
+    // If post exists with an img
     if ($post && !empty($post['post_picture'])) {
-         $currentImageURL = $post['post_picture'];
+        $currentImageURL = $post['post_picture']; // Get web URL
+        $imagePath = str_replace(URL_PROFILE_UPLOADS, DIR_PROFILE_UPLOADS, $currentImageURL); // Convert web URL to filesystem path
 
-        // Convert web URL to filesystem path
-        $imagePath = str_replace(URL_PROFILE_UPLOADS, DIR_PROFILE_UPLOADS, $currentImageURL);
-
-        // Delete the image file if it exists
+        // Delete the img file if exists
         if (file_exists($imagePath)) {
             unlink($imagePath);
         }
-
-        // Remove post folder if empty
+        // Remove post DIR if empty
         $postFolder = dirname($imagePath);
         if (is_dir($postFolder)) {
             $files = array_diff(scandir($postFolder), ['.', '..']);
@@ -33,9 +31,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_SESSION['user_id']) && isset
         }
     }
 
+    // DELETE the entire post
     $stmt = $pdo->prepare("DELETE FROM posts WHERE post_id = :post_id");
     $stmt->bindParam(':post_id', $post_id, PDO::PARAM_INT);
-
     if ($stmt->execute()) {
         echo "success";
     } else {
