@@ -20,6 +20,7 @@
             likePost: "<?= ACTION_LIKE_POST ?>",
             likeComment: "<?= ACTION_LIKE_COMMENT ?>",
             loggedOutLike: "<?= LOGIN_URL ?>",
+            jsPredictLines: "<?= JS_TEXTAREA ?>",
         };
     </script>
     <!-- CSS & JS to create posts if user logged in -->

@@ -16,6 +16,11 @@
 
 #image-upload-btn {
     display: none;
+    border: none;
+}
+
+#image-upload-btn i {
+    font-size: 18px;
 }
 
 #new-post-textarea {
@@ -27,7 +32,7 @@
     display: none;
 }
 
-/* Tablets (small screens) */
+/* Small devices */
 @media (min-width: 576px) {
     #new-post-container {
         margin-top: 48px;
@@ -37,24 +42,9 @@
     }
 }
 
-/* Larger tablets & small laptops */
-@media (min-width: 768px) {
-
-}
-
-/* Standard laptops & desktops */
-@media (min-width: 1024px) {
+/* Large devices */
+@media (min-width: 992px) {
     #new-post-img {
         aspect-ratio: 4 / 3;
     }
-}
-
-/* Large screens */
-@media (min-width: 1280px) {
-
-}
-
-/* Extra large screens (4K monitors) */
-@media (min-width: 1600px) {
-
 }
