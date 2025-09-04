@@ -6,7 +6,7 @@
         header("Location: ".LOGIN_URL);
     }
     require_once(DB_INC); 
-    require(ACTION_GET_ALL_PROFILES);
+    require(ACTION_GET_ALL_USERS);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -15,7 +15,7 @@
     <link href="<?= CSS_ADMIN ?>" rel="stylesheet">
     <script>
         window.API = {
-            getProfile: "<?= ACTION_GET_PROFILE ?>",
+            getUser: "<?= ACTION_GET_USER ?>",
             updateEmail: "<?= ACTION_UPDATE_EMAIL ?>",
             updatePassword: "<?= ACTION_UPDATE_PASSWORD ?>",
             deleteUser: "<?= ACTION_DELETE_USER ?>",

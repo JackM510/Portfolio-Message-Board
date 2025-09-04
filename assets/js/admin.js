@@ -59,7 +59,7 @@ document.querySelectorAll(".user-row").forEach(row => {
     row.addEventListener("click", () => {
     const userId = row.dataset.userId;
 
-    fetch(API.getProfile, {
+    fetch(API.getUser, {
         method: "POST",
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
         body: new URLSearchParams({ user_id: userId })
@@ -95,7 +95,7 @@ document.querySelectorAll(".user-row").forEach(row => {
 // AJAX for returning a users profile information after their profile_id is stored in session data
 const storedId = sessionStorage.getItem("selectedProfileId");
 if (storedId) {
-    fetch(API.getProfile, {
+    fetch(API.getUser, {
         method: "POST",
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
         body: new URLSearchParams({ user_id: storedId })
