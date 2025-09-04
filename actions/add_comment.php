@@ -2,10 +2,11 @@
 require_once __DIR__ . '/../config.php';
 session_start();
 require_once(DB_INC);
+require_once(UTIL_INC);
 
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_SESSION['user_id']) && isset($_POST['comment_text'])) {
-    $post_id = $_POST['post_id'];
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isLoggedIn() && isset($_POST['post_id']) && isset($_POST['comment_text'])) {
     $user_id = $_SESSION['user_id'];
+    $post_id = $_POST['post_id'];
     $comment_text = trim($_POST['comment_text']);
 
     if (!empty($comment_text)) {
@@ -17,7 +18,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_SESSION['user_id']) && isset
         $stmt->bindParam(':comment_text', $comment_text, PDO::PARAM_STR);
 
         if ($stmt->execute()) {
-            echo "success"; // Send success response
+            echo "success";
         } else {
             echo "Error adding comment.";
         }
