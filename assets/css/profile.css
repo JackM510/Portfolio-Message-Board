@@ -3,7 +3,6 @@
     padding: 0;
 }
 
-/* transitions */
 #profile-details, 
 #update-profile {
     opacity: 0;
@@ -15,7 +14,7 @@
     opacity: 1;
 }
 
-/* Profile Details */
+/* Profile details styles */
 #profile-details {
     display: flex;
     flex-direction: column;
@@ -25,10 +24,10 @@
 
 #profile-picture-container {
     display: flex;
-    justify-content: center; /* Centers horizontally */
-    align-items: center; /* Centers vertically */
-    width: 50%; /* Ensures it takes up full space */
-    height: 50%; /* Adjust as needed */
+    justify-content: center;
+    align-items: center;
+    width: 50%;
+    height: 50%;
     margin: 0 auto;
 }
 
@@ -43,7 +42,7 @@
 
 #profile-details-container {
     flex: 1;
-    min-width: 0; /* allows wrapping instead of forcing overflow */
+    min-width: 0;
     max-width: 100%;
 }
 
@@ -75,9 +74,17 @@
     cursor: pointer;
 }
 
-/* Update Profile */
+#edit-icon i {
+    color: grey;
+}
+
+/* Update profile styles */
+#update-profile {
+    display: none;
+}
+
 #profile-form {
-    background-color: rgb(255, 255, 255);
+    background-color: #FAFAFA;
     width: 100%;
 }
 
@@ -96,50 +103,46 @@
     width: 100%;
 }
 
+#profile-picture-btn i {
+    font-size: 18px;
+}
 
-/* Profile posts (new posts and existing posts) */
+/* Profile posts */
 #profile-posts-container {
     width: 100%;
     padding: 0px;
 }
 
-/* All users posts container */
+/* All users posts */
 #profile-users-posts {
     margin-top: 24px;
 }
 
-
-/* Tablets (small screens) */
+/* Small devices */
 @media (min-width: 576px) {
     #profile-container {
         padding: auto;
-    }
-    
+    }    
     #profile-details-container {
         width:80%;
         margin: 0 auto;
     }
-
     #profile-picture {
         width: 250px;
         height: 250px;
     }
-
     #profile-form {
         width: 75%;
     }
-
     #profile-posts-container {
         padding: auto;
     }
-
     #profile-users-posts {
         margin-top: 48px;
     }
-
 }
 
-/* Larger tablets & small laptops */
+/* Medium devices */
 @media (min-width: 768px) {
     #profile-form, 
     #profile-posts-container {
@@ -147,38 +150,30 @@
     }
 }
 
-/* Standard laptops & desktops */
+/* Large devices */
 @media (min-width: 992px) {
     #profile-details {
         width: 90%;
         flex-direction: row;
         margin: 0;
     }
-
     #profile-picture-container {
         display: block;
         width: auto;
         height: auto;
         padding-right: 3rem;
     }
-
     #profile-form {
         width: 50%;
     }
-
     #profile-posts-container {
         width: 40%;
     }
 }
 
-/* Large screens */
+/* XL devices */
 @media (min-width: 1280px) {
     #profile-details {
         width: 75%;
     }  
-}
-
-/* Extra large screens (4K monitors) */
-@media (min-width: 1600px) {
-    
 }

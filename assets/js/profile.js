@@ -1,55 +1,60 @@
-import { fadeEl } from "./utils/page_transitions.js";
-import { predictLines } from "./utils/textarea.js";
-
 document.addEventListener("DOMContentLoaded", function () {
+    // Declare module variables
+    let predictLines;
+    let fadeEl;
+    // Load JS modules dynamically
+    import(window.API.jsPredictLines)
+        .then(mod => predictLines = mod.predictLines)
+        .catch(err => console.error("Predict lines module failed to load:", err));
 
-    // Profile container elements
+    import(window.API.jsFadeEl)
+        .then(mod => fadeEl = mod.fadeEl)
+        .catch(err => console.error("FadeEl module failed to load:", err));
+
+    // Profile details elements
     const details = document.getElementById("profile-details");
-    const form = document.getElementById("update-profile");
-    // Profile Details elements
-    let editIcon = document.getElementById("edit-icon");
+    const profileForm = document.getElementById("profile-form");
+    const editIcon = document.getElementById("edit-icon");
     
-    // Profile form elements
-    let cancelBtn = document.getElementById("profile-cancel-btn");
-    let profilePicBtn = document.getElementById("profile-picture-btn");
-    let profilePicInput = document.getElementById("profile-picture-input");
-    let profileForm = document.getElementById("profile-form");
-
-    // Profile form input elements
-    let profilePictureInput = document.getElementById("profile-picture-input");
-    let firstNameInput = document.getElementById("first-name-input");
-    let lastNameInput = document.getElementById("last-name-input");
-    let occupationInput = document.getElementById("occupation-input");
-    let locationInput = document.getElementById("location-input");
-    let bioTextarea = document.getElementById("bio-textarea");
+    // Update profile elements
+    const updateForm = document.getElementById("update-profile");
+    const cancelBtn = document.getElementById("profile-cancel-btn");
+    const profilePicImg = document.getElementById("profile-picture-img");
+    const profilePicBtn = document.getElementById("profile-picture-btn");
+    const profilePicInput = document.getElementById("profile-picture-input");  
+    const firstNameInput = document.getElementById("first-name-input");
+    const lastNameInput = document.getElementById("last-name-input");
+    const occupationInput = document.getElementById("occupation-input");
+    const locationInput = document.getElementById("location-input");
+    const bioTextarea = document.getElementById("bio-textarea");
     let originalValues = {};
 
+    // Cancel editing update profile details
     function cancelEdit() {
-         // Add disabled attribute to form elements
-         firstNameInput.setAttribute("disabled", "true");
-         lastNameInput.setAttribute("disabled", "true");
-         occupationInput.setAttribute("disabled", "true");
-         locationInput.setAttribute("disabled", "true");
-         bioTextarea.setAttribute("disabled", "true");
- 
-         firstNameInput.value = originalValues.first;
-         lastNameInput.value = originalValues.last;
-         occupationInput.value = originalValues.occupation;
-         locationInput.value = originalValues.location;
-         bioTextarea.value = originalValues.bio;
- 
-        details.style.display = 'block'; // Display profile details
+        // Add disabled attribute to form elements
+        firstNameInput.setAttribute("disabled", "true");
+        lastNameInput.setAttribute("disabled", "true");
+        occupationInput.setAttribute("disabled", "true");
+        locationInput.setAttribute("disabled", "true");
+        bioTextarea.setAttribute("disabled", "true");
+        // Assign original values
+        firstNameInput.value = originalValues.first;
+        lastNameInput.value = originalValues.last;
+        occupationInput.value = originalValues.occupation;
+        locationInput.value = originalValues.location;
+        bioTextarea.value = originalValues.bio;
+        // Hide Update profile
+        updateForm.style.display = 'none';
+        updateForm.classList.remove("d-flex", "flex-column", "justify-content-center");
+        // Display profile details
+        details.style.display = 'block'; 
         details.classList.add("d-flex");
-        
-        fadeEl(details);
-
-         form.style.display = 'none'; // Hide 'Update Profile' form
-         form.classList.remove("d-flex", "flex-column", "justify-content-center");
+        fadeEl(details);   
     }
     
+    // If click outside update profile
     function editOutsideClick(e) {
-        // If click target is NOT inside the form or the edit icon...
-        if (!form.contains(e.target)) {
+        if (!updateForm.contains(e.target)) {
             cancelEdit();
         }
     }
@@ -58,7 +63,6 @@ document.addEventListener("DOMContentLoaded", function () {
     if (editIcon) {
         editIcon.addEventListener("click", function (e) {
             e.stopPropagation();
-            
             // Get original values of inputs
             originalValues = {
                 first: firstNameInput.value,
@@ -78,22 +82,19 @@ document.addEventListener("DOMContentLoaded", function () {
             // Hide profile details
             details.style.display = 'none';
             details.classList.remove("d-flex");
-            // Show the 'update profile' form and hide the profile details div
-            form.style.display = 'block'; // Display 'Update Profile' form
-            form.classList.add("d-flex", "flex-column", "justify-content-center");
-
-            fadeEl(form);
-
+            // Show update profile
+            updateForm.style.display = 'block';
+            updateForm.classList.add("d-flex", "flex-column", "justify-content-center");
+            fadeEl(updateForm);
             // Textarea height
             const lines = predictLines(bioTextarea);
             bioTextarea.setAttribute("rows", lines);
-
-            // Listen for clicks outside of the profile form area to hide the layout
+            // Listen for clicks outside of profile form
             document.addEventListener("click", editOutsideClick);
         });
     }
 
-    // Cancel button when editing profile details
+    // Cancel btn when editing profile details
     if (cancelBtn) {
         cancelBtn.addEventListener("click", cancelEdit);
     }    
@@ -101,20 +102,19 @@ document.addEventListener("DOMContentLoaded", function () {
     // Event listener for profile picture image btn
     if (profilePicBtn) {
         profilePicBtn.addEventListener('click', function () {
-            profilePictureInput.removeAttribute("disabled");
-            profilePictureInput.click();
+            profilePicInput.removeAttribute("disabled");
+            profilePicInput.click();
         });
     }
     
-    // Event listener for profile picture file input
+    // Event listener for profile picture input
     if (profilePicInput) {
-        document.getElementById("profile-picture-input").addEventListener("change", function(event) {
+        profilePicInput.addEventListener("change", function(event) {
             const file = event.target.files[0];
-
             if (file) {
                 const reader = new FileReader();
                 reader.onload = function(e) {
-                    document.getElementById("profile-picture-img").src = e.target.result; // Update image preview
+                    profilePicImg.src = e.target.result; // Update image preview
                 };
                 reader.readAsDataURL(file);
             }
@@ -123,9 +123,8 @@ document.addEventListener("DOMContentLoaded", function () {
     
     // Edit profile AJAX for edit_profile.php
     if (profileForm) {
-        document.getElementById("profile-form").addEventListener("submit", function(event) {
-            event.preventDefault(); // Stop default form submission
-
+        profileForm.addEventListener("submit", function(event) {
+            event.preventDefault();
             const formData = new FormData(this);
 
             fetch(API.editProfile, {
@@ -134,18 +133,13 @@ document.addEventListener("DOMContentLoaded", function () {
             })
             .then(response => response.text())
             .then(data => {
-                console.log("Server Response:", data); // Log server response
                 if (data.trim() === "success") {
-                    //details.scrollIntoView({ behavior: 'smooth'});
                     location.reload();
-                    //window.scrollTo({ top: 0, behavior: 'smooth' });
-                    
-
                 } else {
                     alert("Error editing profile: " + data);
                 }
             })
             .catch(error => console.error("Fetch Error:", error));
-    });
+        });
     }
 });
