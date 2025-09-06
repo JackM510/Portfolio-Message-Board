@@ -2,24 +2,31 @@
 require_once __DIR__ . '/../config.php';
 session_start();
 require_once(DB_INC);
+require_once(UTIL_INC);
 
-// Update password function
-function updateUserPassword($pdo, $user_id, $newPW) {
-    // Validation
-    if (strlen($newPW) < 8) {
-        $_SESSION['update-password-error'] = "Password must be at least 8 characters";
-        return false;
-    }
-    if (!preg_match('/\d/', $newPW)) {
-        $_SESSION['update-password-error'] = "Password must contain at least 1 number";
-        return false;
-    }
-    if (!preg_match('/[A-Z]/', $newPW)) {
-        $_SESSION['update-password-error'] = "Password must contain at least 1 capital letter";
-        return false;
-    }
+// Verify current password 
+function verifyUserPassword(PDO $pdo, int $user_id, string $currentPW) {
+    $stmt = $pdo->prepare("SELECT password FROM users WHERE user_id = :uid");
+    $stmt->bindParam(':uid', $user_id, PDO::PARAM_INT);
+    $stmt->execute();
+    $storedHash = $stmt->fetchColumn();
 
-    // Hash and update
+    // Verify current password with stored hash 
+    if (!password_verify($currentPW, $storedHash)) {
+        $_SESSION['invalid-password-error'] = "Current password invalid";
+        exit();
+    } 
+}
+
+// Validate & update new password
+function updateUserPassword(PDO $pdo, int $user_id, string $newPW) {
+    // Validate the new password
+    $error = validatePassword($newPW);
+    if ($error !== null) {
+        $_SESSION['update-password-error'] = $error;
+        return false;
+    }
+    // Validated - hash and update new password
     $hashedPassword = password_hash($newPW, PASSWORD_DEFAULT);
     $stmt = $pdo->prepare("UPDATE users SET password = :new_pw WHERE user_id = :uid");
     $stmt->bindParam(':new_pw', $hashedPassword, PDO::PARAM_STR);
@@ -27,69 +34,59 @@ function updateUserPassword($pdo, $user_id, $newPW) {
     return $stmt->execute();
 }
 
-
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['form_type'])) {
     // Reset password from account.php
-    if ($_POST['form_type'] === 'self_update_pw' && isset($_SESSION['user_id'])) {
-        
-        // Get password values
+    if ($_POST['form_type'] === 'self_update_pw' && isLoggedIn()) {
+        $user_id = $_SESSION['user_id'];
         $currentPW = $_POST['current_pw'];
         $newPW = $_POST['new_pw'];
         $confirmPW = $_POST['confirm_pw'];
+        $isMatch = ($newPW === $confirmPW); // Check new passwords match
+        verifyUserPassword($pdo, $user_id, $currentPW); // Verify users current password
 
-        // Need to check the current password matches the password stored in the DB
-        $stmt = $pdo->prepare("SELECT password FROM users WHERE user_id = :uid");
-        $stmt->bindParam(':uid', $_SESSION['user_id'], PDO::PARAM_INT);
-        $stmt->execute();
-        $storedHash = $stmt->fetchColumn();
-
-        // Verify the current password
-        if (!password_verify($currentPW, $storedHash)) {
-            $_SESSION['invalid-password-error'] = "Current password invalid";
-            exit();
-        } 
-        // Check the new passwords are the same
-        else if ($newPW !== $confirmPW) {
-            $_SESSION['update-password-error'] = "New passwords don't match";
-            exit();
-        } 
-
-        // Default else to update the users password
-        else {
+        if ($isMatch) {
+            // Attempt to update password
             if (updateUserPassword($pdo, $_SESSION['user_id'], $newPW)) {
                 $_SESSION['pw-success'] = "Password updated";
                 echo "success";
+                exit();
             } else {
                 echo $_SESSION['update-password-error'] ?? "Error updating password.";
+                exit();
             }
-        }   
-    } 
-
-    // Reset a users password as an admin from admin.php
-    else if ($_POST['form_type'] === 'admin_update_pw' && isset($_POST['user_id']) && isset($_SESSION['role']) && $_SESSION['role'] === 'admin') {
-        
-        // Stay on the view_profile view after the POST form submission
-        $_SESSION['display_form'] = "view_profile"; 
-        
-        // Get password & profile_id values
-        $newPW = $_POST['new_pw'];
-        $confirmPW = $_POST['confirm_pw'];
-        $user_id = $_POST['user_id'];
-        
-        // Check the new passwords are the same
-        if ($newPW !== $confirmPW) {
+        }
+        // Password mismatch
+        else {
             $_SESSION['update-password-error'] = "New passwords don't match";
             exit();
         } 
+    } 
 
-        if (updateUserPassword($pdo, $user_id, $newPW)) {
-            $_SESSION['pw-success'] = "Password updated";
-            echo "success";
-        } else {
-            echo $_SESSION['update-password-error'] ?? "Error updating password.";
-        }
+    // Reset user password as an admin from admin.php
+    else if ($_POST['form_type'] === 'admin_update_pw' && isAdmin() && isset($_POST['user_id'])) {
+        $_SESSION['display_form'] = "view_profile"; // Stay on view_profile after POST
+        $user_id = $_POST['user_id'];
+        $newPW = $_POST['new_pw'];
+        $confirmPW = $_POST['confirm_pw'];
+        $isMatch = ($newPW === $confirmPW); // Check new passwords match
+        
+        if ($isMatch) {
+            // Attempt to update password
+            if (updateUserPassword($pdo, $user_id, $newPW)) {
+                $_SESSION['pw-success'] = "Password updated";
+                echo "success";
+                exit();
+            } else {
+                echo $_SESSION['update-password-error'] ?? "Error updating password.";
+                exit();
+            }
+        } 
+        // Password mismatch
+        else {
+            $_SESSION['update-password-error'] = "New passwords don't match";
+            exit();
+        }   
     }
-    
     // Default else
     else {
         echo "Invalid request.";
