@@ -206,7 +206,8 @@
                                     <form id="delete-user-form" method="POST" action="<?= ACTION_DELETE_USER ?>">
                                         <!-- Hidden inputs -->
                                         <input type="hidden" name="form_type" value="admin_delete_user" hidden>
-                                        <input id="hidden-delete-input" type="number" name="user_id" value="" hidden>
+                                        <input id="hidden-delete-userid" type="number" name="user_id" value="" hidden>
+                                        <input id="hidden-delete-profileid" type="number" name="profile_id" value="" hidden>
                                         <!-- Checkbox 1-->
                                         <div class="d-flex justify-content-center form-check mb-3">
                                             <input class="form-check-input required-checkbox me-2" type="checkbox" name="delete_checkbox_1">

@@ -43,7 +43,8 @@ const emailField = document.getElementById("email-input");
 const joinedDateField = document.getElementById("joined-date-input");
 const hiddenEmailInput = document.getElementById("hidden-email-input");
 const hiddenPasswordInput = document.getElementById("hidden-pw-input");
-const hiddenDeleteInput = document.getElementById("hidden-delete-input");
+const hiddenDeleteUserInput = document.getElementById("hidden-delete-userid");
+const hiddenDeleteProfileInput = document.getElementById("hidden-delete-profileid");
 
 // search bar event listener
 userSearch.addEventListener("input", function() {
@@ -78,7 +79,8 @@ document.querySelectorAll(".user-row").forEach(row => {
             // Pass users user_id to each form
             hiddenEmailInput.value = u.user_id;
             hiddenPasswordInput.value = u.user_id;
-            hiddenDeleteInput.value = u.user_id;
+            hiddenDeleteUserInput.value = u.user_id;
+            hiddenDeleteProfileInput.value = u.profile_id
             attachEvents(); // Event Listeners for delete account checkboxes
             profileSearch.style.display = "none";
             profileView.style.display = "block";
@@ -114,7 +116,8 @@ if (storedId) {
             // Pass users user_id to each form
             hiddenEmailInput.value = u.user_id;
             hiddenPasswordInput.value = u.user_id;
-            hiddenDeleteInput.value = u.user_id;
+            hiddenDeleteUserInput.value = u.user_id;
+            hiddenDeleteProfileInput.value = u.profile_id
             attachEvents(); // Event Listeners for delete account checkboxes
             profileSearch.style.display = "none";
             profileView.style.display = "block";
@@ -183,7 +186,7 @@ deleteUserForm.addEventListener("submit", function(event) {
         if (result.success) {
             location.reload(); // Back to search
         } else {
-            const userId = hiddenDeleteInput.value;
+            const userId = hiddenDeleteUserInput.value;
             sessionStorage.setItem("selectedProfileId", userId);
             location.reload(); // Stay on user profile and flash echo
             sessionStorage.setItem("openPanel", "collapse-delete-account");
