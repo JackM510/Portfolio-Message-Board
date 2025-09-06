@@ -28,7 +28,7 @@ function deleteUserDirectory($userID) {
 }
 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['form_type'])) {
-    // Delete your account from account.php
+    // Delete account from account.php
     if ($_POST['form_type'] === 'self_delete_user' && isLoggedIn() && !empty($_POST['delete_checkbox_1']) && !empty($_POST['delete_checkbox_2'])) {
         $user_id = (int) $_SESSION['user_id'];
         deleteUser($pdo, $user_id); // Delete user from DB
@@ -52,5 +52,4 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['form_type'])) {
         exit();
     }
 }
-
 ?>
