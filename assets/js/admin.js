@@ -18,6 +18,16 @@ function hideEchoFlash() {
     document.querySelectorAll('.error-flash').forEach(el => el.style.display = 'none');
 }
 
+// Format joined date field
+function formatJoinedDate(dateString) {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+    });
+}
+
 // Add checkbox and delete button event listener
 function attachEvents() {
     const checkboxes = document.querySelectorAll('.required-checkbox');
@@ -75,7 +85,7 @@ document.querySelectorAll(".user-row").forEach(row => {
             userIdField.value = u.user_id;
             profileIdField.value = u.profile_id;
             emailField.value = u.email;
-            joinedDateField.value = u.created_at;
+            joinedDateField.value = formatJoinedDate(u.created_at);
             // Pass users user_id to each form
             hiddenEmailInput.value = u.user_id;
             hiddenPasswordInput.value = u.user_id;
@@ -112,7 +122,7 @@ if (storedId) {
             userIdField.value = u.user_id;
             profileIdField.value = u.profile_id;
             emailField.value = u.email;
-            joinedDateField.value = u.created_at;
+            joinedDateField.value = formatJoinedDate(u.created_at);
             // Pass users user_id to each form
             hiddenEmailInput.value = u.user_id;
             hiddenPasswordInput.value = u.user_id;
@@ -193,5 +203,5 @@ deleteUserForm.addEventListener("submit", function(event) {
         }
     })
     .catch(error => console.error("Fetch Error:", error));
-});
+    });
 });
