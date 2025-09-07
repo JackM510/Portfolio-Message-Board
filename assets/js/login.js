@@ -1,6 +1,5 @@
-import { fadeEl } from './utils/page_transitions.js';
-import { predictLines } from "./utils/textarea.js";
 document.addEventListener("DOMContentLoaded", function() {
+    
     const signup = document.getElementById("signup-container");
     const login = document.getElementById("login-container");
     const profile = document.getElementById("profile-container");
@@ -10,6 +9,33 @@ document.addEventListener("DOMContentLoaded", function() {
     const profilePictureInput = document.getElementById("profile-picture-input");
     const profilePictureBtn = document.getElementById("profile-picture-btn");
     const profilePictureImg = document.getElementById("profile-picture-img");
+
+    // Declare module variables
+    let predictLines;
+    let fadeEl;
+    import(window.API.jsPredictLines)
+        .then(mod => predictLines = mod.predictLines)
+        .catch(err => console.error("Predict lines module failed to load:", err));
+    
+    // FadeEl after page load
+    import(window.API.jsFadeEl)
+        .then(mod => {
+        fadeEl = mod.fadeEl;
+            // Check which tab to fade in
+            const target = sessionStorage.getItem("fadeEl");
+            if (target) {
+                switch (target) {
+                    case "signup":
+                        fadeEl(signup);
+                        break;
+                    case "profile":
+                        fadeEl(profile);
+                        break;
+                }
+                sessionStorage.removeItem("fadeEl");
+            }
+        })
+        .catch(err => console.error("FadeEl module failed to load:", err));
     
     // Show signup tab
     signupTab.addEventListener("click", () => {
@@ -68,7 +94,8 @@ document.addEventListener("DOMContentLoaded", function() {
             if (data.trim() === "success") {
                 location.reload();
             } else {
-                alert("Error adding user: " + data);
+                sessionStorage.setItem("fadeEl", "signup");
+                location.reload();
             }
         })
         .catch(error => console.error("Fetch Error:", error));
@@ -94,7 +121,8 @@ document.addEventListener("DOMContentLoaded", function() {
             if (data.trim() === "success") {
                 location.reload();
             } else {
-                alert("Error adding profile: " + data);
+                sessionStorage.setItem("fadeEl", "profile");
+                location.reload();
             }
         })
         .catch(error => console.error("Fetch Error:", error));

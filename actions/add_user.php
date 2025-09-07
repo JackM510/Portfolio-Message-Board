@@ -11,7 +11,6 @@ function checkEmailExists(PDO $pdo, string $email): void {
     $stmt->execute();
     if ($stmt->fetchColumn()) {
         $_SESSION['signup-email-error'] = "Email Address Already Exists";
-        header("Location: " . LOGIN_URL);
         exit();
     }
 }
@@ -21,7 +20,6 @@ function validateAge(string $date_of_birth): void {
     $age = date_diff(date_create($date_of_birth), date_create('today'))->y;
     if ($age < 18) {
         $_SESSION['signup-date-error'] = "You must be 18 or older to create an account";
-        header("Location: " . LOGIN_URL);
         exit();
     }
 }
@@ -63,7 +61,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $error = validatePassword($newPW);
     if ($error !== null) {
         $_SESSION['signup-password-error'] = $error;
-        header("Location: " . LOGIN_URL);
         exit();
     }
 

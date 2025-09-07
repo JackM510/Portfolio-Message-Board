@@ -4,7 +4,7 @@
     require_once(DB_INC);
     require_once(UTIL_INC);
     // If a user is already logged in
-    if (isLoggedIn() === true) {
+    if (isLoggedIn()) {
         header("Location: ". INDEX_URL);
         exit();
     }
@@ -22,6 +22,8 @@
         window.API = {
             addUser: "<?= ACTION_ADD_USER ?>",
             addProfile: "<?= ACTION_ADD_PROFILE ?>",
+            jsFadeEl: "<?= JS_PAGE_TRANSITIONS ?>",
+            jsPredictLines: "<?= JS_TEXTAREA ?>",
         };
     </script>
     <script type="module" src="<?= JS_LOGIN ?>" defer></script>
