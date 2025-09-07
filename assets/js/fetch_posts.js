@@ -166,7 +166,7 @@ document.addEventListener("DOMContentLoaded", function() {
             const isVisible = commentSection.style.display === "block";
             commentSection.style.display = isVisible ? "none" : "block";
     
-
+            alert("here");
             if (!isVisible) {
                 comments.forEach(comment => comment.style.display = "none");
     

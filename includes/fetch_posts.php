@@ -89,21 +89,12 @@ function renderComment(PDO $pdo, array $comment, int $postId): string {
 
 // Render add comment section
 function renderAddComment(PDO $pdo, int $postId): string {
-    if (!isset($_SESSION['user_id'])) return '';
-
-    $sql = "SELECT profile_picture FROM profiles WHERE user_id = :user_id";
-    $stmt = $pdo->prepare($sql);
-    $stmt->bindParam(':user_id', $_SESSION['user_id'], PDO::PARAM_INT);
-    $stmt->execute();
-    $data = $stmt->fetch(PDO::FETCH_ASSOC);
-
-    if (!$data) return ''; // No profile pic found
-
-    $profilePic = htmlspecialchars($data['profile_picture']);
+    $profilePic = $_SESSION['avatar']; 
     $postIdEscaped = htmlspecialchars($postId);
-
     ob_start(); // Start output buffering
     ?>
+
+    <!-- Add comment section -->
     <hr>
     <div class="add-comment d-flex pt-3">
         <div>
@@ -147,7 +138,6 @@ function renderPost(PDO $pdo, array $post): string {
     // Timestamp
     $timestamp = date('g:iA j/n/y', strtotime($post['post_created']));
     $postTimestamp = !empty($post['post_edited']) ? "$timestamp (edited)" : $timestamp;
-
     // Get post like count
     $postLikes = $pdo->prepare("SELECT COUNT(*) FROM post_likes WHERE post_id = ?");
     $postLikes->execute([$postId]);
@@ -175,12 +165,14 @@ function renderPost(PDO $pdo, array $post): string {
     <!-- Post start -->
     <div class="post-container">
         <div class="d-flex align-items-start pt-1">
+            <!-- Postee profile pic & full name -->
             <a class="post-profile-link d-flex" href="<?= PROFILE_URL . '?profile_id=' . urlencode($profileId) ?>">
                 <img class="me-2 rounded-pill post-profile-picture"
                     src="<?= APP_BASE_PATH . "/" . $profilePic ?>" alt="Post Image">
                 <h5 class="break-text mb-0"><?= $userName ?></h5>
             </a>
-
+            
+            <!-- Edit post dropdown -->
             <?php if (isLoggedIn() && $_SESSION['user_id'] == $userId): ?>
             <div id="post-dropdown-<?= $postId ?>" class="dropdown ms-auto h-100 d-flex align-items-start">
                 <span id="post-options-<?= $postId ?>" data-bs-toggle="dropdown" aria-expanded="false" role="button" style="cursor: pointer;">
@@ -199,7 +191,10 @@ function renderPost(PDO $pdo, array $post): string {
             </div>
             <?php endif; ?>
         </div>
+
+        <!-- Post data -->
         <form id="edit-post-form-<?= $postId ?>" method="POST">
+            <!-- Post img -->
             <div>
                 <img id="post-picture-<?= $postId ?>"
                     class="post-picture mt-3"
@@ -207,7 +202,8 @@ function renderPost(PDO $pdo, array $post): string {
                     alt="Post Image"
                     style="<?= empty($post['post_picture']) ? 'display:none;' : '' ?>">
             </div>
-
+            
+            <!-- Post img upload -->
             <div>
                 <input type="file" name="post-image-upload" id="post-image-upload-<?= $postId ?>" class="post-image-upload" accept="image/*" hidden>
                 <button type="button" class="btn btn-sml btn-light mt-3" id="post-image-upload-btn-<?= $postId ?>" onclick="document.getElementById('post-image-upload-<?= $postId ?>').click()" style="border:none; display:none;">
@@ -215,10 +211,12 @@ function renderPost(PDO $pdo, array $post): string {
                 </button>
             </div>
 
-            <div class="mt-3">           
+            <div class="mt-3">
+                <!-- Post text -->      
                 <p id="post-description-<?= $postId ?>" class="break-text mb-2"><?= htmlspecialchars($post['post_text']) ?></p>
                 <textarea id="post-textarea-<?= $postId ?>" class="form-control post-textarea rounded mb-1 responsive-textarea" name="post_textarea" rows="1" maxlength="255" hidden required disabled><?= htmlspecialchars($post['post_text']) ?></textarea>
 
+                <!-- Post edit btns -->
                 <div class="d-flex">
                     <p class="mb-1" style="color:grey;"><?= $postTimestamp ?></p>
                     <div id="edit-post-btn-group-<?= $postId ?>" class="ms-auto edit-post-btn-group mt-1">
@@ -228,6 +226,7 @@ function renderPost(PDO $pdo, array $post): string {
                     </div>
                 </div>
 
+                <!-- Post like & comment btns -->
                 <div class="post-like-container d-flex" data-post-id="<?= $postId ?>">
                     <button id="post-like-btn-<?= $postId ?>" type="button" class="post-like-btn btn btn-outline-primary btn-sm">
                         <i class="bi bi-hand-thumbs-up<?= $liked ? '-fill' : '' ?>"></i>
@@ -243,27 +242,29 @@ function renderPost(PDO $pdo, array $post): string {
         
         <!-- Comment section -->
         <div class="comment-section-<?= $postId ?>" style="display:none">
-            <?= renderAddComment($pdo, $postId) ?>
-
             <?php
-            // Fetch comments for this post
-            $stmt = $pdo->prepare("
-                SELECT c.comment_id, c.comment_text, c.comment_created, comment_edited, u.user_id, u.first_name, u.last_name, p.profile_id, p.profile_picture 
-                FROM comments c 
-                INNER JOIN users u ON c.user_id = u.user_id 
-                INNER JOIN profiles p ON c.user_id = p.user_id 
-                WHERE c.post_id = :pid
-            ");
-            $stmt->bindParam(':pid', $postId, PDO::PARAM_INT);
-            $stmt->execute();
-            $comments = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-            if ($comments) {
-                foreach ($comments as $comment) {
-                    echo renderComment($pdo, $comment, $postId);
+                if (isLoggedIn()) {
+                    echo renderAddComment($pdo, $postId); // Render 'add comment' section
                 }
-            }
+                // Fetch all post comment
+                $stmt = $pdo->prepare("
+                    SELECT c.comment_id, c.comment_text, c.comment_created, comment_edited, u.user_id, u.first_name, u.last_name, p.profile_id, p.profile_picture 
+                    FROM comments c 
+                    INNER JOIN users u ON c.user_id = u.user_id 
+                    INNER JOIN profiles p ON c.user_id = p.user_id 
+                    WHERE c.post_id = :pid
+                ");
+                $stmt->bindParam(':pid', $postId, PDO::PARAM_INT);
+                $stmt->execute();
+                $comments = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                // If the post has comments
+                if ($comments) {
+                    foreach ($comments as $comment) {
+                        echo renderComment($pdo, $comment, $postId); // Render each comment
+                    }
+                }
             ?>
+            <!-- View more comments btn -->
             <div id="view-more-comments-wrapper-<?= $postId ?>" class="justify-content-center view-more-comments-wrapper mt-3" style="display: none;">
                 <button id="view-more-comments-btn-<?= $postId ?>" class="btn btn-sm btn-secondary view-more-comments-btn" data-post-id="<?= $postId ?>">View more comments</button>
             </div>
@@ -294,12 +295,14 @@ function getPosts($pdo, $profile_id = null) {
     $stmt->execute();
     $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    // Render posts if data else display no posts
+    // Render posts (if any in DB)
     if ($posts) {
         foreach ($posts as $post) {
             echo renderPost($pdo, $post);
         }
-    } else {
+    } 
+    // No posts in DB
+    else {
         echo('<p class="text-center">No Posts Available</p>');
     }
 }
