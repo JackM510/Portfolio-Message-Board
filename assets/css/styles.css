@@ -29,6 +29,13 @@ h5 {
     color: green;
 }
 
+/* Shared classes */
+.break-text{
+    word-wrap: break-word;      
+    overflow-wrap: break-word;   
+    word-break: break-word;
+}
+
 @media (min-width: 576px) {
     h5 {
         font-size: 20px !important;

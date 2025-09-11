@@ -16,7 +16,7 @@ define('PROFILE_URL', APP_BASE_PATH . '/subpages/profile.php');
 define('ADMIN_URL', APP_BASE_PATH . '/subpages/admin.php');
 define('ACCOUNT_URL', APP_BASE_PATH . '/subpages/account.php');
 define('LOGOUT_URL', APP_BASE_PATH . '/actions/logout_user.php');
-// Actions
+// Actions 
 define('ACTION_ADD_COMMENT', APP_BASE_PATH . '/actions/add_comment.php');
 define('ACTION_ADD_POST', APP_BASE_PATH . '/actions/add_post.php');
 define('ACTION_ADD_PROFILE', APP_BASE_PATH . '/actions/add_profile.php');
@@ -30,6 +30,8 @@ define('ACTION_EDIT_PROFILE', APP_BASE_PATH . '/actions/edit_profile.php');
 define('ACTION_GET_ALL_USERS', APP_ROOT . '/actions/get_all_users.php');
 define('ACTION_GET_USER', APP_BASE_PATH . '/actions/get_user.php');
 define('ACTION_GET_PROFILE', APP_ROOT . '/actions/get_profile.php');
+define('ACTION_GET_COMMENTS', APP_ROOT . '/actions/get_comments.php');
+define('ACTION_GET_POSTS', APP_ROOT . '/actions/get_posts.php');
 define('ACTION_LIKE_COMMENT', APP_BASE_PATH . '/actions/like_comment.php');
 define('ACTION_LIKE_POST', APP_BASE_PATH . '/actions/like_post.php');
 define('ACTION_LOGIN_USER', APP_BASE_PATH . '/actions/login_user.php');

@@ -15,33 +15,54 @@
     width: 30px;
 }
 
-.break-text{
-    word-wrap: break-word;      
-    overflow-wrap: break-word;   
-    word-break: break-word;
-}
-
-.post-picture {
+[class^="post-picture-"] {
     object-position: center;
     object-fit: cover;
     aspect-ratio: 1 / 1;
     width: 100%;
 }
 
-.post-picture[src=""] {
+.post-profile-link {
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
+    white-space: normal;
+}
+
+[class^="post-picture-"][src=""] {
     display: none !important;
 }
 
-.post-like-btn,
-.comment-like-btn,
-.view-comments-btn {
+[class^="post-options-"] ,
+[class^="comment-options-"] {
+    cursor: pointer;
+}
+
+[class^="post-options-"] i,
+[class^="comment-options-"] i {
+    color: grey; 
+    font-size: 20px;
+}
+
+[class^="post-img-upload-btn-"] {
+    border: none;
+    display: none;
+}
+
+[class^="post-img-upload-btn-"] i {
+    font-size: 16px !important;
+}
+
+[class^="post-like-btn-"],
+[class^="comment-like-btn-"],
+[class^="post-comment-btn-"] {
     border: none !important;
     padding: 4px !important;
     font-size: 16px !important;
 }
 
-.post-textarea, 
-.comment-textarea {
+[class^="post-textarea-"], 
+[class^="comment-textarea-"] {
     width: 100%;
     color: #212529;
     padding: 5px;
@@ -58,41 +79,29 @@
     color: #fff !important;
 }
 
-.edit-post-btn-group {
+[class^="edit-post-btn-group-"] {
     display: none;
 }
 
 /* Add Comment styles */
-.add-comment-textarea {
+[class^="add-comment-textarea-"] {
     border-color: #DEE2E6;
     padding: 5px;
     transition: height 0.2s ease;
 }
 
-.add-comment-btns,
-.edit-comment-btns {
+[class^="add-comment-btns-"],
+[class^="edit-comment-btns-"] {
     display: none;
 }
 
-.post-profile-link {
-    text-decoration: none;
-    color: inherit;
-    cursor: pointer;
-    white-space: normal;
-}
-
 /* Existing Comments & Edit comment styles */
-.comment-dropdown {
+[class^="comment-section-"] {
+    display: none;
+}
+
+[class^="comment-dropdown-"] {
     height: 20px;
-}
-
-.comment-options {
-    cursor: pointer;
-}
-
-.comment-options i {
-    color: grey; 
-    font-size: 20px;
 }
 
 .edit-comment-dropdown-item:hover {
@@ -104,8 +113,13 @@
     color: #fff !important;
 }
 
+.post-timestamp,
 .comment-timestamp {
     color: grey;
+}
+
+[class^=".view-more-comments-wrapper-"] {
+    display: none;
 }
 
 /* Small devices */
@@ -127,7 +141,7 @@
 
 /* Large devices */
 @media (min-width: 992px) {
-    .post-picture {
+    [class^="post-picture-"] {
         aspect-ratio: 4 / 3;
     }
 }

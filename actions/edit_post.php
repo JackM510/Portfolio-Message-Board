@@ -21,13 +21,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isLoggedIn() && isset($_POST['post_i
     $currentImageURL = $post['post_picture'];
 
     // If new img uploaded
-    if (!empty($_FILES["post-image-upload"]["name"])) {
+    if (!empty($_FILES["post-img-upload"]["name"])) {
         // Check post upload DIR exists
         if (!is_dir($uploadDir)) {
             mkdir($uploadDir, 0777, true);
         }
         // Generate unique filename for img
-        $newImageName = uniqid() . "_" . basename($_FILES["post-image-upload"]["name"]);
+        $newImageName = uniqid() . "_" . basename($_FILES["post-img-upload"]["name"]);
         $newImagePath = $uploadDir . $newImageName;
 
         // Post img already exists
@@ -39,7 +39,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isLoggedIn() && isset($_POST['post_i
             }
         }
         // Add the new img to post DIR
-        if (move_uploaded_file($_FILES["post-image-upload"]["tmp_name"], $newImagePath)) {
+        if (move_uploaded_file($_FILES["post-img-upload"]["tmp_name"], $newImagePath)) {
             $imageForDB = URL_PROFILE_UPLOADS . "/{$profile_id}/posts/{$post_id}/{$newImageName}"; // Web URL for DB
         } else {
             echo "Error uploading image.";

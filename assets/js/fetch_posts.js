@@ -1,207 +1,106 @@
-import { predictLines } from "./utils/textarea.js";
-
 document.addEventListener("DOMContentLoaded", function() {
-    // TA responsive height testing
-    document.querySelectorAll(".responsive-textarea").forEach(textarea => {
+    // Declare module variables
+    let predictLines;
+    // Load JS modules dynamically
+    import(window.API.jsPredictLines)
+        .then(mod => predictLines = mod.predictLines)
+        .catch(err => console.error("Predict lines module failed to load:", err));
+
+    // Edit post 'cancel' btn & outside click handler
+    function cancelEditPost(postId) {
+        const img = document.querySelector(`.post-picture-${postId}`);
+        const imgUploadBtn = document.querySelector(`.post-img-upload-btn-${postId}`);
+        const likeBtn = document.querySelector(`.post-like-btn-${postId}`);
+        const commentsBtn = document.querySelector(`.post-comment-btn-${postId}`);
+        const paragraph = document.querySelector(`.post-description-${postId}`);
+        const textarea = document.querySelector(`.post-textarea-${postId}`);
+        const buttonGroup = document.querySelector(`.edit-post-btn-group-${postId}`);
+
+        // Restore original img
+        if (img && img.dataset.hasOriginalImage === "true") {
+                    img.src = img.dataset.originalSrc;
+                    img.style.display = "block";
+        } else if (img) {
+            img.src = "";
+            img.style.display = "none";
+        }
+
+        // Display
+        likeBtn.style.display = "block";
+        commentsBtn.style.display = "block";
+        paragraph.style.display = "block";
+        // Hide
+        textarea.value = textarea.dataset.originalValue;
+        textarea.setAttribute("hidden", "true");
+        textarea.setAttribute("disabled", "true");
+        imgUploadBtn.style.display ="none";
+        buttonGroup.style.display = "none";
+        buttonGroup.classList.remove("d-flex", "float-end");
+    }
+
+    // Add comment 'cancel' btn & outside click handler
+    function cancelAddComment(postId) {
+        const textarea = document.querySelector(`.add-comment-textarea-${postId}`);
+        const buttonGroup = document.querySelector(`.add-comment-btns-${postId}`);
+        if (textarea) {
+            textarea.value = "";
+            buttonGroup.style.display = "none";
+            buttonGroup.classList.remove("d-flex", "float-end");
+        }
+    }
+
+    // Edit comment 'cancel' btn & outside click handler
+    function cancelEditComment(postId) {
+        const paragraph = document.querySelector(`.comment-description-${postId}`);
+        const textarea = document.querySelector(`.comment-textarea-${postId}`);
+        const buttonGroup = document.querySelector(`.edit-comment-btns-${postId}`);
+        const commentLikeBtn = document.querySelector(`.comment-like-btn-${postId}`);
+
+        if (textarea) {
+            // Display
+            commentLikeBtn.style.display = "block";
+            paragraph.style.display = "block";
+            // Hide
+            textarea.setAttribute("hidden", "true");
+            textarea.setAttribute("disabled", "true");
+            textarea.value = textarea.dataset.originalValue;
+            textarea.style.display = "none";
+            buttonGroup.style.display = "none";
+            buttonGroup.classList.remove("d-flex", "float-end");
+        }
+    }
+
+
+
+
+
+
+
+    // Textarea predict lines
+    document.querySelectorAll("textarea").forEach(textarea => {
         textarea.addEventListener("input", () => {
             const lines = predictLines(textarea);
             textarea.setAttribute("rows", lines);
         });
-    });    
-  
-    // Add an event listener to each posts dropdown edit button
-    document.querySelectorAll(".edit-post-btn").forEach(button => {
-        const postId = button.getAttribute("data-post-id"); // Get post ID from button
-        const postForm = document.querySelector(`#edit-post-form-${postId}`);
-        const postDropdown = document.querySelector(`#post-dropdown-${postId}`);
-        const img = document.querySelector(`#post-picture-${postId}`);
-        const imgUploadBtn = document.querySelector(`#post-image-upload-btn-${postId}`);
-        const paragraph = document.querySelector(`#post-description-${postId}`);
-        const textarea = document.querySelector(`#post-textarea-${postId}`);
-        const btnGroup = document.querySelector(`#edit-post-btn-group-${postId}`);
-        const postLikeBtn = document.querySelector(`#post-like-btn-${postId}`);
-        const viewCommentsBtn = document.querySelector(`#post-comment-btn-${postId}`);
-        
-        // Show form elements and buttons to update the post
-        button.addEventListener("click", function() {
-            
-            if (img) {
-                const imgSrc = img.getAttribute("src")?.trim();
-                // Only treat it as valid if it's a real image file (not fallback or preview)
-                const isValidImage = imgSrc &&
-                    !imgSrc.includes("index.php") &&
-                    !imgSrc.includes("profile.php") &&
-                    !imgSrc.includes("Post Image") &&
-                    !imgSrc.startsWith("data:") && // prevent preview from being stored
-                    /\.(jpg|jpeg|png|gif|webp)$/i.test(imgSrc);
-                
-                img.dataset.hasOriginalImage = isValidImage ? "true" : "false";
-                
-                if (isValidImage) {
-                    img.dataset.originalSrc = imgSrc;
-                    img.style.display = "block";
-                } else {
-                    img.style.display = "none";
-                }
-            }    
-              
-            textarea.dataset.originalValue = textarea.value;
-            
-            imgUploadBtn.style.display ="block"; // Show img upload btn
-            paragraph.style.display = "none";
-            postLikeBtn.style.display = "none";
-            viewCommentsBtn.style.display = "none";
-
-            textarea.removeAttribute("hidden"); // Make textarea active
-            textarea.removeAttribute("disabled"); // Make textarea active
-            textarea.style.display = "block";
-            textarea.focus();
-
-            const lines = predictLines(textarea);
-            textarea.setAttribute("rows", lines);
-            
-            btnGroup.style.display = "block";
-            btnGroup.classList.add("d-flex", "float-end");
-
-            // Hide/restore elements if the user clicks outside of the edit post layout
-            const outsideClickHandler = function (event) {
-                if (!postDropdown.contains(event.target) && !postForm.contains(event.target)) {
-                    
-                    if (img && img.dataset.hasOriginalImage === "true") {
-                        img.src = img.dataset.originalSrc;
-                        img.style.display = "block";
-                    } else {
-                        img.src = ""; // clear anything accidental
-                        img.style.display = "none";
-                    }
-                    
-                    paragraph.style.display = "block";
-                    textarea.setAttribute("hidden", "true");
-                    textarea.setAttribute("disabled", "true");
-                    textarea.value = textarea.dataset.originalValue;
-                    
-                    // Hide buttons
-                    postLikeBtn.style.display = "block";
-                    viewCommentsBtn.style.display = "block";
-                    imgUploadBtn.style.display = "none";
-                    btnGroup.style.display = "none";
-                    btnGroup.classList.remove("d-flex", "float-end");
-    
-                    // Remove this listener so it doesn't fire again
-                    document.removeEventListener("click", outsideClickHandler);
-                }
-            };
-            document.addEventListener("click", outsideClickHandler);
-        });
-    });
-
-    // Event listener for 'cancel' button when editing a post
-    document.querySelectorAll(".edit-post-cancel-btn").forEach(button => {
-        button.addEventListener("click", function() {
-            const postId = button.getAttribute("data-post-id");
-            const img = document.querySelector(`#post-picture-${postId}`);
-            const imgUploadBtn = document.querySelector(`#post-image-upload-btn-${postId}`);
-            const likeBtn = document.querySelector(`#post-like-btn-${postId}`);
-            const commentsBtn = document.querySelector(`#post-comment-btn-${postId}`);
-            const paragraph = document.querySelector(`#post-description-${postId}`);
-            const textarea = document.querySelector(`#post-textarea-${postId}`);
-            const buttonGroup = document.querySelector(`#edit-post-btn-group-${postId}`);
-
-            if (textarea) {
-
-                if (img && img.dataset.hasOriginalImage === "true") {
-                    img.src = img.dataset.originalSrc;
-                    img.style.display = "block";
-                } else if (img) {
-                    img.src = "";
-                    img.style.display = "none";
-                }
-                
-                
-                likeBtn.style.display = "block";
-                commentsBtn.style.display = "block";
-                paragraph.style.display = "block";
-
-                textarea.value = textarea.dataset.originalValue; // Restore the original comment text
-                textarea.setAttribute("hidden", "true");
-                textarea.setAttribute("disabled", "true");
-                
-                
-                imgUploadBtn.style.display ="none";
-                buttonGroup.style.display = "none";
-                buttonGroup.classList.remove("d-flex", "float-end");
-            }
-        });
-    });
-
-    // Event listener if image uploaded when editing a post
-    document.querySelectorAll(".post-image-upload").forEach(input => {
-        input.addEventListener("change", function(event) {
-            const postId = input.id.replace("post-image-upload-", ""); // Extract post ID
-            const imgTag = document.querySelector(`#post-picture-${postId}`);
-
-            const file = event.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-    
-                reader.onload = function(e) {
-                    imgTag.src = e.target.result; // Update image preview
-                    imgTag.style.display = "block"; // Make sure image is visible
-                };
-    
-                reader.readAsDataURL(file);
-            }
-        });
     });
     
-    // Event listener for comment icon btn
-    document.querySelectorAll(".view-comments-btn").forEach(btn => {
-        btn.addEventListener("click", function () {
-            const postId = this.getAttribute("data-post-id");
-            const commentSection = document.querySelector(`.comment-section-${postId}`);
-            const comments = commentSection.querySelectorAll(`.comment-${postId}`);
-            const viewMoreWrapper = document.querySelector(`#view-more-comments-wrapper-${postId}`);
-    
-            // Show/Hide comment section on post
-            const isVisible = commentSection.style.display === "block";
-            commentSection.style.display = isVisible ? "none" : "block";
-    
-            alert("here");
-            if (!isVisible) {
-                comments.forEach(comment => comment.style.display = "none");
-    
-                // Show first 10 comments when comment button clicked
-                for (let i = 0; i < Math.min(10, comments.length); i++) {
-                    comments[i].style.display = "block";
-                }
-
-                viewMoreWrapper.setAttribute("data-visible-count", "10");
-                viewMoreWrapper.style.display = comments.length > 10 ? "flex" : "none";
-            }
-        });
-    });
-
-    // Remember the comment section on a post is visible
+    // Remember post 'comment section' should be visible
     window.addEventListener("DOMContentLoaded", () => {
-        const postIdToShow = sessionStorage.getItem("showCommentsFor");
-    
+        const postIdToShow = sessionStorage.getItem("showCommentsFor"); // Get postId of post
         if (postIdToShow) {
+            // Get the post 'comment' section elements
             const section = document.querySelector(`.comment-section-${postIdToShow}`);
             const comments = section?.querySelectorAll(`.comment-${postIdToShow}`);
-            const viewMoreWrapper = document.querySelector(`#view-more-comments-wrapper-${postIdToShow}`);
-    
+            const viewMoreWrapper = document.querySelector(`.view-more-comments-wrapper-${postIdToShow}`);
+            // Scroll to comment
             if (section) {
                 section.style.display = "block";
-    
                 if (sessionStorage.getItem("scrollToNewComment") === "true") {
-                    // Show all comments
-                    comments.forEach(comment => comment.style.display = "block");
-    
+                    comments.forEach(comment => comment.style.display = "block"); // Show all comments
                     // Hide view more wrapper & view more button
                     if (viewMoreWrapper) {
                         viewMoreWrapper.style.display = "none";
                     }
-    
                     // Scroll to last comment element
                     if (comments && comments.length) {
                         const lastCommentEl = comments[comments.length - 1];
@@ -211,161 +110,226 @@ document.addEventListener("DOMContentLoaded", function() {
                     }
                 }
             }
-    
-            // Clean up both keys
+            // Clear session keys
             sessionStorage.removeItem("showCommentsFor");
             sessionStorage.removeItem("scrollToNewComment");
         }
     });
+
+    // Edit post btn
+    document.querySelectorAll(".edit-post-btn").forEach(button => {
+        const postId = button.getAttribute("data-post-id"); // Get post ID
+        const postForm = document.querySelector(`.edit-post-form-${postId}`);
+        const postDropdown = document.querySelector(`.post-dropdown-${postId}`);
+        const img = document.querySelector(`.post-picture-${postId}`);
+        const imgUploadBtn = document.querySelector(`.post-img-upload-btn-${postId}`);
+        const paragraph = document.querySelector(`.post-description-${postId}`);
+        const textarea = document.querySelector(`.post-textarea-${postId}`);
+        const btnGroup = document.querySelector(`.edit-post-btn-group-${postId}`);
+        const postLikeBtn = document.querySelector(`.post-like-btn-${postId}`);
+        const viewCommentsBtn = document.querySelector(`.post-comment-btn-${postId}`);
+        
+        // Show form elements to update the post
+        button.addEventListener("click", function() {
+            if (img) {
+                const imgSrc = img.getAttribute("src")?.trim(); // Get img src
+                const isValidImage = imgSrc &&
+                    !imgSrc.includes("index.php") &&
+                    !imgSrc.includes("profile.php") &&
+                    !imgSrc.includes("Post Image") &&
+                    !imgSrc.startsWith("data:") &&
+                    /\.(jpg|jpeg|png|gif|webp)$/i.test(imgSrc);
+                img.dataset.hasOriginalImage = isValidImage ? "true" : "false";
+                // Display img if valid
+                if (isValidImage) {
+                    img.dataset.originalSrc = imgSrc;
+                    img.style.display = "block";
+                } else {
+                    img.style.display = "none";
+                }
+            }    
+            // Hide
+            paragraph.style.display = "none";
+            postLikeBtn.style.display = "none";
+            viewCommentsBtn.style.display = "none";
+            // Display  
+            textarea.dataset.originalValue = textarea.value;
+            imgUploadBtn.style.display ="block";
+            btnGroup.style.display = "block";
+            btnGroup.classList.add("d-flex", "float-end");
+            textarea.removeAttribute("hidden"); 
+            textarea.removeAttribute("disabled"); 
+            textarea.style.display = "block";
+            textarea.focus();
+            const lines = predictLines(textarea);
+            textarea.setAttribute("rows", lines);
+
+            // Outside click handler
+            const outsideClickHandler = function (event) {
+                if (!postDropdown.contains(event.target) && !postForm.contains(event.target)) {
+                    cancelEditPost(postId);
+                }
+            };
+            document.addEventListener("click", outsideClickHandler);
+        });
+    });
+
+    // Edit post 'cancel' btn
+    document.querySelectorAll(".edit-post-cancel-btn").forEach(button => {
+        button.addEventListener("click", function() {
+            const postId = button.getAttribute("data-post-id");
+            cancelEditPost(postId);                
+        });
+    });
+
+    // Edit post 'img upload' btn
+    document.querySelectorAll('[class^="post-img-upload-btn-"]').forEach(btn => {
+        btn.addEventListener('click', function () {
+            const postId = this.dataset.postId;
+            const fileInput = document.querySelector(`.post-img-upload-${postId}`);
+            // Trigger the img input
+            if (fileInput) {
+                fileInput.click(); 
+            }
+        });
+    });
+
+    // Edit post 'img upload' input listener
+    document.querySelectorAll('[class^="post-img-upload-"]').forEach(input => {
+        input.addEventListener("change", function(event) {
+            const postId = input.dataset.postId; // Extract post ID
+            const imgTag = document.querySelector(`.post-picture-${postId}`);
+            const file = event.target.files[0]; // Get the uploaded img
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    imgTag.src = e.target.result; // Update img preview
+                    imgTag.style.display = "block"; // Make sure img is visible
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    });
     
-    // Event listner for view more comments buttons
+    // Post 'comment icon' btn (expand comment section on a post)
+    document.querySelectorAll('[class^="post-comment-btn-"]').forEach(btn => {
+        btn.addEventListener("click", function () {
+            const postId = this.getAttribute("data-post-id");
+            const commentSection = document.querySelector(`.comment-section-${postId}`);
+            const comments = commentSection.querySelectorAll(`.comment-${postId}`);
+            const viewMoreWrapper = document.querySelector(`.view-more-comments-wrapper-${postId}`);
+    
+            // Show/Hide comment section on post
+            const isVisible = commentSection.style.display === "block";
+            commentSection.style.display = isVisible ? "none" : "block";
+            if (!isVisible) {
+                comments.forEach(comment => comment.style.display = "none");
+                // Show first 5 comments when comment button clicked
+                for (let i = 0; i < Math.min(5, comments.length); i++) {
+                    comments[i].style.display = "block";
+                }
+                viewMoreWrapper.setAttribute("data-visible-count", "5");
+                viewMoreWrapper.style.display = comments.length > 5 ? "flex" : "none";
+            }
+        });
+    }); 
+    
+    // Post 'view more comments' btn
     document.querySelectorAll(".view-more-comments-btn").forEach(btn => {
         btn.addEventListener("click", function () {
             const postId = this.getAttribute("data-post-id");
             const commentSection = document.querySelector(`.comment-section-${postId}`);
             const comments = commentSection.querySelectorAll(`.comment-${postId}`);
-            const viewMoreWrapper = document.querySelector(`#view-more-comments-wrapper-${postId}`);
+            const viewMoreWrapper = document.querySelector(`.view-more-comments-wrapper-${postId}`);
             let visibleCount = parseInt(viewMoreWrapper.getAttribute("data-visible-count"));
-    
-            for (let i = visibleCount; i < Math.min(visibleCount + 10, comments.length); i++) {
+            
+            // Get comment count and display another 5 comments
+            for (let i = visibleCount; i < Math.min(visibleCount + 5, comments.length); i++) {
                 comments[i].style.display = "block";
             }
-    
-            visibleCount += 10;
-            viewMoreWrapper.setAttribute("data-visible-count", visibleCount);
-    
+            visibleCount += 5;
+            viewMoreWrapper.setAttribute("data-visible-count", visibleCount); // Keep track of comments visible
             if (visibleCount >= comments.length) {
                 viewMoreWrapper.style.display = "none";
             }
         });
     });
     
-    // Add an event listener to each add comment textarea on each post
-     document.querySelectorAll(".add-comment-textarea").forEach(textarea => {
-        const id = textarea.getAttribute("id").replace("add-comment-textarea-", "");
-        const buttonGroup = document.querySelector(`#add-comment-btns-${id}`);
+    // Add a comment textarea
+     document.querySelectorAll('[class^="add-comment-textarea-"]').forEach(textarea => {
+        const postId = textarea.dataset.postId;
+        const buttonGroup = document.querySelector(`.add-comment-btns-${postId}`);
 
         textarea.addEventListener("click", function() {
             buttonGroup.style.display = "block";
             buttonGroup.classList.add("d-flex", "float-end");
         });
 
-        document.addEventListener("click", function(event) {
-            if (!textarea.contains(event.target) && !buttonGroup.contains(event.target)) {
-                textarea.value = "";
-                buttonGroup.style.display = "none";
-                buttonGroup.classList.remove("d-flex", "float-end");
+        // Outside click handler
+        const outsideClickHandler = function (event) {
+             if (!textarea.contains(event.target) && !buttonGroup.contains(event.target)) {
+                cancelAddComment();
             }
-        });
+        };
+        document.addEventListener("click", outsideClickHandler);
     });
 
-    // Add event listener to each cancel comment btn on each post
-    document.querySelectorAll(".cancel-btn").forEach(button => {
+    // Add a comment 'cancel' btn
+    document.querySelectorAll(".add-comment-cancel-btn").forEach(button => {
         button.addEventListener("click", function() {
             const postId = button.getAttribute("data-post-id");
-            const textarea = document.querySelector(`#add-comment-textarea-${postId}`);
-            const buttonGroup = document.querySelector(`#add-comment-btns-${postId}`);
-
-            if (textarea) {
-                textarea.value = "";
-                buttonGroup.style.display = "none";
-                buttonGroup.classList.remove("d-flex", "float-end");
-            }
+            cancelAddComment(postId);
         });
     });
 
-    // Event listener for edit btn in comment dropdown
-    document.querySelectorAll(".edit-btn").forEach(button => {
+    // Comment 'edit' btn
+    document.querySelectorAll(".edit-comment-btn").forEach(button => {
         const postId = button.getAttribute("data-post-id");
-        const paragraph = document.querySelector(`#comment-description-${postId}`);
-        const textarea = document.querySelector(`#comment-textarea-${postId}`);
-        const commentDropdown = document.querySelector(`#comment-dropdown-${postId}`);
-        const buttonGroup = document.querySelector(`#edit-comment-btns-${postId}`);
-        const commentLikeBtn = document.querySelector(`#comment-like-btn-${postId}`);
+        const paragraph = document.querySelector(`.comment-description-${postId}`);
+        const textarea = document.querySelector(`.comment-textarea-${postId}`);
+        const commentDropdown = document.querySelector(`.comment-dropdown-${postId}`);
+        const buttonGroup = document.querySelector(`.edit-comment-btns-${postId}`);
+        const commentLikeBtn = document.querySelector(`.comment-like-btn-${postId}`);
 
-        // Store the original value before editing - used when edit-cancel-btn selected
-        textarea.dataset.originalValue = textarea.value;
-
+        textarea.dataset.originalValue = textarea.value; // Store original value
         button.addEventListener("click", function() {
-
+            // Hide
             commentLikeBtn.style.display = "none";
             paragraph.style.display = "none";
-
-            // Make textarea active
+            // Display
             textarea.removeAttribute("disabled");
             textarea.removeAttribute("hidden");
             textarea.style.display = "block";
             textarea.focus();
-
             const lines = predictLines(textarea);
             textarea.setAttribute("rows", lines);
-
-            // Show the button group
             buttonGroup.style.display = "block";
             buttonGroup.classList.add("d-flex", "float-end");
-            
         });
 
-        document.addEventListener("click", function(event) {
+        // Outside click handler
+        const outsideClickHandler = function (event) {
             if (!textarea.contains(event.target) && !commentDropdown.contains(event.target) && !buttonGroup.contains(event.target)) {
-
-                commentLikeBtn.style.display = "block";
-                paragraph.style.display = "block";
-
-                textarea.setAttribute("hidden", "true");
-                textarea.setAttribute("disabled", "true");
-                textarea.value = textarea.dataset.originalValue;
-                textarea.style.display = "none";
-
-                buttonGroup.style.display = "none";
-                buttonGroup.classList.remove("d-flex", "float-end");
+                cancelEditComment(postId);
             }
-        });  
+        };
+        document.addEventListener("click", outsideClickHandler);
     });
 
-    // Event listener for cancel btn when editing a comment
-    document.querySelectorAll(".edit-cancel-btn").forEach(button => {
+    // Comment 'cancel' btn
+    document.querySelectorAll(".edit-comment-cancel-btn").forEach(button => {
         button.addEventListener("click", function() {
             const postId = button.getAttribute("data-post-id"); // Get post ID from button
-            const paragraph = document.querySelector(`#comment-description-${postId}`);
-            const textarea = document.querySelector(`#comment-textarea-${postId}`); // Find correct textarea
-            const buttonGroup = document.querySelector(`#edit-comment-btns-${postId}`);
-            const commentLikeBtn = document.querySelector(`#comment-like-btn-${postId}`);
-
-            if (textarea) {
-                
-                commentLikeBtn.style.display = "block";
-                paragraph.style.display = "block";
-
-                textarea.setAttribute("hidden", "true");
-                textarea.setAttribute("disabled", "true");
-                textarea.value = textarea.dataset.originalValue;
-                textarea.style.display = "none";
-
-                buttonGroup.style.display = "none";
-                buttonGroup.classList.remove("d-flex", "float-end");
-                textarea.setAttribute("disabled", "true");
-            }
-        });
-    });
-
-    // Event listener for 'view more' comments btn
-    document.querySelectorAll(".post-comment-btn").forEach(btn => {
-        btn.addEventListener("click", function () {
-            const postId = this.getAttribute("data-post-id");
-            document.querySelectorAll(".extra-comment-" + postId).forEach(el => {
-                el.classList.remove("d-none");
-            });
-            this.remove();
+            cancelEditComment(postId);
         });
     });
 
     // Edit post AJAX for edit_post.php
-    document.querySelectorAll("[id^=edit-post-form]").forEach(form => {
+    document.querySelectorAll("[class^=edit-post-form-]").forEach(form => {
         form.addEventListener("submit", function(event) {
             event.preventDefault();
             const formData = new FormData(this);
-    
+            
             fetch(API.editPost, {
                 method: "POST",
                 body: formData
@@ -383,11 +347,11 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 
     // Delete post AJAX for delete_post.php
-    document.querySelectorAll("[id^=post-options-form]").forEach(form => {
+    document.querySelectorAll("[class^=post-options-form-]").forEach(form => {
         form.addEventListener("submit", function(event) {
             event.preventDefault();
             const formData = new FormData(this);
-    
+            
             fetch(API.deletePost, {
                 method: "POST",
                 body: formData
@@ -404,45 +368,43 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     });
 
+    
     // Like post AJAX for like_post.php
-    document.querySelectorAll(".post-like-btn").forEach(button => {
+    document.querySelectorAll("[class^=post-like-btn-]").forEach(button => {
         button.addEventListener("click", () => {
-          const container = button.closest(".post-like-container");
-          const postId = container.dataset.postId;
-      
-          fetch(API.likePost, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/x-www-form-urlencoded"
-            },
-            body: new URLSearchParams({
-              post_id: postId
+            const postId = button.getAttribute("data-post-id"); // Get post ID
+           
+            fetch(API.likePost, {
+                method: "POST",
+                headers: {
+                "Content-Type": "application/x-www-form-urlencoded"
+                },
+                body: new URLSearchParams({
+                post_id: postId
+                })
             })
-          })
-          .then(res => res.json())
-          .then(data => {
-            if (data.success) {
-              // Update like count
-              button.querySelector(".post-like-count").textContent = data.like_count;
-              // Toggle heart icon
-              const icon = button.querySelector("i");
-              icon.classList.toggle("bi-hand-thumbs-up-fill", data.liked);
-              icon.classList.toggle("bi-hand-thumbs-up", !data.liked);
-            } else if (data.unauthorized) {
-                window.location.href = API.loggedOutLike;
-                return;
-            } else {
-              alert("Something went wrong with liking.");
-            }
-          });
+            .then(res => res.json())
+            .then(data => {
+                // Toggle heart icon
+                if (data.success) {
+                    button.querySelector(".post-like-count").textContent = data.like_count; // Update like count
+                    const icon = button.querySelector(`.post-like-btn-${postId} i`);
+                    icon.classList.toggle("bi-hand-thumbs-up-fill", data.liked);
+                    icon.classList.toggle("bi-hand-thumbs-up", !data.liked);
+                } else if (data.unauthorized) {
+                    window.location.href = API.loggedOutLike; // Redirect to login.php
+                    return;
+                } else {
+                alert("Something went wrong with liking.");
+                }
+            });
         });
       });
 
     // Add comment AJAX for add_comment.php
-    document.querySelectorAll("[id^=add-comment-form]").forEach(form => {
+    document.querySelectorAll("[class^=add-comment-form-]").forEach(form => {
         form.addEventListener("submit", function(event) {
             event.preventDefault();
-            
             const postId = this.getAttribute("data-post-id");
             const formData = new FormData(this);
   
@@ -453,8 +415,8 @@ document.addEventListener("DOMContentLoaded", function() {
             .then(response => response.text())
             .then(data => {
                 if (data.trim() === "success") {
-                    sessionStorage.setItem("showCommentsFor", postId);
-                    sessionStorage.setItem("scrollToNewComment", "true");
+                    sessionStorage.setItem("showCommentsFor", postId); // Display post comment section
+                    sessionStorage.setItem("scrollToNewComment", "true"); // Scroll to the new comment
                     location.reload();
                 } else {
                     alert("Error adding comment: " + data);
@@ -465,10 +427,9 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 
     // Edit comment AJAX for edit_comment.php
-    document.querySelectorAll("[id^=edit-comment-form]").forEach(form => {
+    document.querySelectorAll("[class^=edit-comment-form-]").forEach(form => {
         form.addEventListener("submit", function(event) {
             event.preventDefault();
-    
             const postId = this.getAttribute("data-post-id");
             const formData = new FormData(this);
     
@@ -479,7 +440,7 @@ document.addEventListener("DOMContentLoaded", function() {
             .then(response => response.text())
             .then(data => {
                 if (data.trim() === "success") {
-                    sessionStorage.setItem("showCommentsFor", postId);
+                    sessionStorage.setItem("showCommentsFor", postId); // Display post comment section
                     location.reload();
                 } else {
                     alert("Error adding comment: " + data);
@@ -490,10 +451,9 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 
     // Delete comment AJAX for delete_comment.php
-    document.querySelectorAll("[id^=comment-options-form]").forEach(form => {
+    document.querySelectorAll("[class^=comment-options-form-]").forEach(form => {
         form.addEventListener("submit", function(event) {
             event.preventDefault();
-
             const postId = this.getAttribute("data-post-id");
             const formData = new FormData(this);
     
@@ -504,7 +464,7 @@ document.addEventListener("DOMContentLoaded", function() {
             .then(response => response.text())
             .then(data => {
                 if (data.trim() === "success") {
-                    sessionStorage.setItem("showCommentsFor", postId);
+                    sessionStorage.setItem("showCommentsFor", postId); // Display post comment section
                     location.reload();
                 } else {
                     alert("Error deleting comment: " + data);
@@ -515,10 +475,9 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 
     // Like post AJAX for like_comment.php
-    document.querySelectorAll(".comment-like-btn").forEach(button => {
+    document.querySelectorAll('[class^="comment-like-btn-"]').forEach(button => {
         button.addEventListener("click", () => {
-          const container = button.closest(".comment-like-container");
-          const commentId = container.dataset.postId;
+           const commentId = button.getAttribute("data-post-id"); // Get post ID
       
           fetch(API.likeComment, {
             method: "POST",
@@ -530,21 +489,20 @@ document.addEventListener("DOMContentLoaded", function() {
             })
           })
           .then(res => res.json())
+          // Toggle heart icon
           .then(data => {
             if (data.success) {
-              // Update like count
-              button.querySelector(".comment-like-count").textContent = data.like_count;
-              // Toggle heart icon
-              const icon = button.querySelector("i");
+              button.querySelector(".comment-like-count").textContent = data.like_count; // Update like count
+              const icon = button.querySelector(`.comment-like-btn-${commentId} i`);
               icon.classList.toggle("bi-hand-thumbs-up-fill", data.liked);
               icon.classList.toggle("bi-hand-thumbs-up", !data.liked);
             } else if (data.unauthorized) {
-                window.location.href = API.loggedOutLike;
+                window.location.href = API.loggedOutLike; // Redirect to login.php
                 return;
             } else {
               alert("Something went wrong with liking this comment.");
             }
           });
         });
-      });
+    });
 });
