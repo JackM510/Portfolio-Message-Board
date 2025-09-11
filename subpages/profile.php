@@ -140,7 +140,7 @@
                         <!-- Bio -->
                         <div class="col-12 mb-4">
                             <label class="pb-1" for="bio"><strong>Bio</strong></label>
-                            <textarea id="bio-textarea" class="form-control responsive-textarea" name="bio" rows="1" maxlength="255" disabled required><?php echo !empty($bio) ? htmlentities($bio) : "N/A"; ?></textarea>
+                            <textarea id="bio-textarea" class="form-control" name="bio" rows="1" maxlength="255" disabled required><?php echo !empty($bio) ? htmlentities($bio) : "N/A"; ?></textarea>
                         </div>
                         <!-- Form Buttons -->
                         <div class="col-12 d-flex justify-content-center">
