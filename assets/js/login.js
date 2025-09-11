@@ -74,7 +74,7 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 
     // Responsive textarea (#bio-textarea)
-    document.querySelectorAll(".responsive-textarea").forEach(textarea => {
+    document.querySelectorAll("textarea").forEach(textarea => {
         textarea.addEventListener("input", () => {
             const lines = predictLines(textarea);
             textarea.setAttribute("rows", lines);

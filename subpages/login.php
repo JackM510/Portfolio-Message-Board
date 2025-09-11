@@ -141,7 +141,7 @@
                     <!-- Bio -->
                     <div class="col-12 mb-4">
                         <label class="pb-1" for="bio">Bio</label>
-                        <textarea id="bio-textarea" class="form-control responsive-textarea" name="bio" rows="1" maxlength="255" required></textarea>
+                        <textarea id="bio-textarea" class="form-control" name="bio" rows="1" maxlength="255" required></textarea>
                     </div>
                     <!-- Submit -->
                     <div class="col-12 d-flex justify-content-center">
