@@ -11,7 +11,7 @@
             <ul class="navbar-nav mx-auto">
                 <li id="brand-container" class="nav-item">
                     <a id="brand-link" class="nav-link" href="<?= INDEX_URL; ?>">
-                        <img id="brand-icon" src="<?= ICON_HOME; ?>" alt="Brand icon">Message Board
+                        <img id="brand-icon" src="<?= ICON_HOME; ?>" alt="Brand icon">Messageboard
                     </a>
                 </li>
             </ul>
