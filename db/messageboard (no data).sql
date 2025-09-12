@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 31, 2025 at 02:10 AM
+-- Generation Time: Sep 11, 2025 at 01:02 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -92,13 +92,6 @@ CREATE TABLE `profiles` (
   `profile_picture` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
---
--- Dumping data for table `profiles`
---
-
-INSERT INTO `profiles` (`profile_id`, `user_id`, `location`, `occupation`, `bio`, `profile_picture`) VALUES
-(1, 1, 'Ballarat, VIC', 'Web Developer / IT Systems Manager', 'Welcome to my profile!', '/uploads/profiles/1/profile_picture/68b3925041538_pexels-phalgunnmaharishi-33539378.jpg');
-
 -- --------------------------------------------------------
 
 --
@@ -115,13 +108,6 @@ CREATE TABLE `users` (
   `role` enum('admin','user') NOT NULL DEFAULT 'user',
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
-
---
--- Dumping data for table `users`
---
-
-INSERT INTO `users` (`user_id`, `first_name`, `last_name`, `date_of_birth`, `email`, `password`, `role`, `created_at`) VALUES
-(1, 'Jack', 'Marshall', '2000-11-11', 'admin@test.com', '$2y$10$l0NjKsMYUF8ZeYmRA/4n6OgYs6o/dBeg2xWuspBgSgRFKQ2etYZPi', 'admin', '2025-08-31 00:06:22');
 
 --
 -- Indexes for dumped tables
@@ -204,13 +190,13 @@ ALTER TABLE `post_likes`
 -- AUTO_INCREMENT for table `profiles`
 --
 ALTER TABLE `profiles`
-  MODIFY `profile_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `profile_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- Constraints for dumped tables
