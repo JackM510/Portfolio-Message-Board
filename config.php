@@ -1,6 +1,6 @@
 <?php
 // Root pathways
-define('APP_BASE_PATH', '/Portfolio-Message-Board');
+define('APP_BASE_PATH', '/Portfolio-Messageboard');
 define('APP_ROOT', __DIR__);
 // Includes (server-side)
 define('HEAD_INC', APP_ROOT . '/includes/head.php');
