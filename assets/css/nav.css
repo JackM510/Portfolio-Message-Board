@@ -1,5 +1,9 @@
-nav {
-    padding: 0px !important;
+nav .container-fluid {
+    padding: 0px 6px;
+}
+
+.navbar-brand {
+    padding: 0 !important;
 }
 
 #brand-container {
@@ -42,6 +46,10 @@ nav {
 
 /* Small devices */
 @media (min-width: 576px) {
+    nav .container-fluid {
+        padding: 0px 12px;
+    }
+    
     #brand-icon {
         width: 22px;
     }
