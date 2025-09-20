@@ -156,7 +156,7 @@
         <!-- Posts -->
         <div id="profile-posts-container" class="container mx-auto">
             <!-- Create post -->
-            <?php if (isLoggedIn()): ?>
+            <?php if (isLoggedIn() && $profile_id == $_SESSION['profile_id']): ?>
                 <div id="profile-new-post">
                     <?php 
                         include (CREATE_POST_INC);

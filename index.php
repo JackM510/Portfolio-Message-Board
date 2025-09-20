@@ -49,7 +49,7 @@
                     </div>';
 
                 // Include create post section if logged in
-                if (isset($_SESSION['user_id'])) {
+                if (isLoggedIn()) {
                     include (CREATE_POST_INC);
                 }
             ?>    
