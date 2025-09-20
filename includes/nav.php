@@ -5,7 +5,7 @@
 ?>
 
 <nav class="navbar navbar-expand-lg sticky-top bg-light shadow-lg">
-    <div class="container-fluid d-flex m-0">
+    <div class="container-fluid d-flex m-0 p-0">
         <!-- Messageboard icon & home link -->
         <div class="d-flex">
             <ul class="navbar-nav mx-auto">
