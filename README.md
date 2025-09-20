@@ -23,7 +23,7 @@ A fully-featured PHP Messageboard application with complete CRUD functionality f
 
 # Installation
 1. Clone the repository to your local machine.
-2. Create a new database in MySQL named 'messageboard'.
+2. Create a new database in MySQL named 'messageboard' and set the collation to `utf8mb4_general_ci` (for full UTF‑8 support, including emojis).
 3. Import the schmea/data from 'db/messageboard.sql' into the new database.
 4. Create a local MySQL user and grant permissions by running:
 - CREATE USER 'jackm'@'localhost' IDENTIFIED BY 'Zr8!vLx@29eQ#fT1';
