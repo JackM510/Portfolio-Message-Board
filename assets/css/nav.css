@@ -1,5 +1,5 @@
 nav {
-    padding: 6px 6px !important;
+    padding: 5px 6px !important;
 }
 
 .navbar-brand {
@@ -47,7 +47,7 @@ nav {
 /* Small devices */
 @media (min-width: 576px) {
     nav {
-        padding: 6px 12px !important;
+        padding: 5px 12px !important;
     }
     
     #brand-icon {
