@@ -70,12 +70,6 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     }
 
-
-
-
-
-
-
     // Textarea predict lines
     document.querySelectorAll("textarea").forEach(textarea => {
         textarea.addEventListener("input", () => {
@@ -97,16 +91,17 @@ document.addEventListener("DOMContentLoaded", function() {
                 section.style.display = "block";
                 if (sessionStorage.getItem("scrollToNewComment") === "true") {
                     comments.forEach(comment => comment.style.display = "block"); // Show all comments
-                    // Hide view more wrapper & view more button
-                    if (viewMoreWrapper) {
-                        viewMoreWrapper.style.display = "none";
+                    if (viewMoreWrapper) viewMoreWrapper.style.display = "none"; // Hide 'View more comments' btn
+                } else {
+                    comments.forEach(comment => comment.style.display = "none"); // Initially hide all  comments
+                    // Display only the first 5 comments
+                    for (let i = 0; i < Math.min(5, comments.length); i++) { 
+                        comments[i].style.display = "block"; 
                     }
-                    // Scroll to last comment element
-                    if (comments && comments.length) {
-                        const lastCommentEl = comments[comments.length - 1];
-                        requestAnimationFrame(() => {
-                            lastCommentEl.scrollIntoView({ behavior: "smooth", block: "center" });
-                        });
+                    // Display the 'View more comments' btn
+                    if (viewMoreWrapper) { 
+                        viewMoreWrapper.setAttribute("data-visible-count", "5");
+                        viewMoreWrapper.style.display = comments.length > 5 ? "flex" : "none";
                     }
                 }
             }
