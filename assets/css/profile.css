@@ -51,8 +51,8 @@
     width: 100%;
     max-width: 90%;
     white-space: normal;
-    overflow-wrap: anywhere;
-    word-break: break-all;
+    overflow-wrap: normal;
+    word-break: normal;
 }
 
 #profile-location,
@@ -65,8 +65,8 @@
     width: 100%;
     max-width: 100%;
     white-space: normal;
-    overflow-wrap: anywhere;
-    word-break: break-all;
+    overflow-wrap: normal;
+    word-break: normal;
 }
 
 #edit-icon {
